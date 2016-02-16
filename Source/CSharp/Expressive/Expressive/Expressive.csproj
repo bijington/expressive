@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{64525626-8340-4F9C-9A19-F26E40D1F496}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Expressive</RootNamespace>
+    <AssemblyName>Expressive</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Expression.cs" />
+    <Compile Include="ExpressionParser.cs" />
+    <Compile Include="Expressions\BinaryExpression.cs" />
+    <Compile Include="Expressions\ConstantValueExpression.cs" />
+    <Compile Include="Expressions\FunctionExpression.cs" />
+    <Compile Include="Expressions\IExpression.cs" />
+    <Compile Include="Expressions\ParenthesisedExpression.cs" />
+    <Compile Include="Expressions\UnaryExpression.cs" />
+    <Compile Include="Expressions\VariableExpression.cs" />
+    <Compile Include="ExpressiveOptions.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Functions\AbsFunction.cs" />
+    <Compile Include="Functions\AcosFunction.cs" />
+    <Compile Include="Functions\AsinFunction.cs" />
+    <Compile Include="Functions\AtanFunction.cs" />
+    <Compile Include="Functions\AverageFunction.cs" />
+    <Compile Include="Functions\CeilingFunction.cs" />
+    <Compile Include="Functions\CosFunction.cs" />
+    <Compile Include="Functions\CountFunction.cs" />
+    <Compile Include="Functions\FunctionBase.cs" />
+    <Compile Include="Functions\IFunction.cs" />
+    <Compile Include="Functions\SumFunction.cs" />
+    <Compile Include="Helpers\Numbers.cs" />
+    <Compile Include="Operators\Additive\PlusOperator.cs" />
+    <Compile Include="Operators\Additive\SubtractOperator.cs" />
+    <Compile Include="Operators\Bitwise\BitwiseAndOperator.cs" />
+    <Compile Include="Operators\Bitwise\BitwiseOrOperator.cs" />
+    <Compile Include="Operators\Bitwise\BitwiseXOrOperator.cs" />
+    <Compile Include="Operators\Bitwise\LeftShiftOperator.cs" />
+    <Compile Include="Operators\Bitwise\RightShiftOperator.cs" />
+    <Compile Include="Operators\Grouping\ParenthesisCloseOperator.cs" />
+    <Compile Include="Operators\Grouping\ParenthesisOpenOperator.cs" />
+    <Compile Include="Operators\IOperator.cs" />
+    <Compile Include="Operators\Logic\AndOperator.cs" />
+    <Compile Include="Operators\Logic\OrOperator.cs" />
+    <Compile Include="Operators\Multiplicative\DivideOperator.cs" />
+    <Compile Include="Operators\Multiplicative\ModulusOperator.cs" />
+    <Compile Include="Operators\Multiplicative\MultiplyOperator.cs" />
+    <Compile Include="Operators\OperatorBase.cs" />
+    <Compile Include="Operators\OperatorPrecedence.cs" />
+    <Compile Include="Operators\Relational\EqualOperator.cs" />
+    <Compile Include="Operators\Relational\GreaterThanOperator.cs" />
+    <Compile Include="Operators\Relational\GreaterThanOrEqualOperator.cs" />
+    <Compile Include="Operators\Relational\LessThanOperator.cs" />
+    <Compile Include="Operators\Relational\LessThanOrEqualOperator.cs" />
+    <Compile Include="Operators\Relational\NotEqualOperator.cs" />
+    <Compile Include="Operators\Logic\NotOperator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
