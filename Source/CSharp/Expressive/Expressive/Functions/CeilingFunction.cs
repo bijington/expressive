@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Expressive.Expressions;
+using System;
 
 namespace Expressive.Functions
 {
@@ -12,19 +9,21 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Ceiling"; } }
 
-        public override object Evaluate(object[] values)
+        public override object Evaluate(IExpression[] participants)
         {
-            this.ValidateParameterCount(values, 1, 1);
+            this.ValidateParameterCount(participants, 1, 1);
 
-            if (values[0] is double)
+            var value = participants[0].Evaluate(Arguments);
+
+            if (value is double)
             {
-                return Math.Ceiling((double)values[0]);
+                return Math.Ceiling((double)value);
             }
-            else if (values[0] is decimal)
+            else if (value is decimal)
             {
-                return Math.Ceiling((decimal)values[0]);
+                return Math.Ceiling((decimal)value);
             }
-            return Math.Ceiling(Convert.ToDouble(values[0]));
+            return Math.Ceiling(Convert.ToDouble(value));
         }
 
         #endregion

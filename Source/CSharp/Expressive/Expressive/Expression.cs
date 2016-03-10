@@ -29,7 +29,12 @@ namespace Expressive
 
         #region Public Methods
 
-        public object Evaluate(IDictionary<string, object> parameters = null)
+        public object Evaluate()
+        {
+            return Evaluate(null);
+        }
+
+        public object Evaluate(IDictionary<string, object> parameters)
         {
             object result = null;
 
@@ -55,7 +60,12 @@ namespace Expressive
             return result;
         }
 
-        public void EvaluateASync(Action<object> callback, IDictionary<string, object> parameters = null)
+        public void EvaluateAsync(Action<object> callback)
+        {
+            EvaluateAsync(callback, null);
+        }
+
+        public void EvaluateAsync(Action<object> callback, IDictionary<string, object> parameters)
         {
             if (callback == null)
             {

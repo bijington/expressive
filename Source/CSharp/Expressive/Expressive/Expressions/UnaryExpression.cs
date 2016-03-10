@@ -27,19 +27,20 @@ namespace Expressive.Expressions
                 case UnaryExpressionType.Minus:
                     return Numbers.Subtract(0, _expression.Evaluate(arguments));
                 case UnaryExpressionType.Not:
-                //switch value
-                //{
-                //    case let boolValue as Bool:
-                //result = !boolValue
-                //case let intValue as Int:
-                //let boolValue = intValue > 0 ? true : false
+                    var value = _expression.Evaluate(arguments);
 
+                    if (value != null)
+                    {
+                        var valueType = Type.GetTypeCode(value.GetType());
 
-                //result = !boolValue
-                //default:
-                //        break
-                //}
-                //break
+                        if (value is bool)
+                        {
+                            return !(bool)value;
+                        }
+
+                        return Convert.ToBoolean(value);
+                    }
+                    break;
                 case UnaryExpressionType.Plus:
                     return Numbers.Add(0, _expression.Evaluate(arguments));
             }

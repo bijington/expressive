@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Expressive.Expressions;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Expressive.Functions
 {
@@ -12,11 +9,11 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Count"; } }
 
-        public override object Evaluate(object[] values)
+        public override object Evaluate(IExpression[] participants)
         {
-            this.ValidateParameterCount(values, -1, 1);
+            this.ValidateParameterCount(participants, -1, 1);
 
-            return values != null ? values.Length : 0;
+            return participants != null ? participants.Length : 0;
         }
 
         #endregion

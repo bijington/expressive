@@ -1,20 +1,19 @@
 ﻿using Expressive.Expressions;
 using System;
-using System.Collections.Generic;
 
 namespace Expressive.Functions
 {
-    internal class AtanFunction : FunctionBase
+    internal class TruncateFunction : FunctionBase
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Atan"; } }
+        public override string Name { get { return "Truncate"; } }
 
         public override object Evaluate(IExpression[] participants)
         {
             this.ValidateParameterCount(participants, 1, 1);
 
-            return Math.Atan(Convert.ToDouble(participants[0].Evaluate(Arguments)));
+            return Math.Truncate(Convert.ToDouble(participants[0].Evaluate(Arguments)));
         }
 
         #endregion

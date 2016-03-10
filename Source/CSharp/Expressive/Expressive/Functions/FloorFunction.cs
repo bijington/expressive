@@ -4,17 +4,17 @@ using System.Collections.Generic;
 
 namespace Expressive.Functions
 {
-    internal class AtanFunction : FunctionBase
+    internal class FloorFunction : FunctionBase
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Atan"; } }
+        public override string Name { get { return "Floor"; } }
 
         public override object Evaluate(IExpression[] participants)
         {
             this.ValidateParameterCount(participants, 1, 1);
 
-            return Math.Atan(Convert.ToDouble(participants[0].Evaluate(Arguments)));
+            return Math.Floor(Convert.ToDouble(participants[0].Evaluate(Arguments)));
         }
 
         #endregion

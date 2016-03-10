@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Expressive
 {
-    public static class ExpressiveOptions
+    [Flags]
+    public enum ExpressiveOptions
     {
         
     }

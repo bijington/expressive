@@ -2,7 +2,7 @@
 
 namespace Expressive.Expressions
 {
-    internal interface IExpression
+    public interface IExpression
     {
         object Evaluate(IDictionary<string, object> arguments);
     }

@@ -1,9 +1,7 @@
-﻿using Expressive.Helpers;
+﻿using Expressive.Expressions;
+using Expressive.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Expressive.Functions
 {
@@ -13,18 +11,18 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Average"; } }
 
-        public override object Evaluate(object[] values)
+        public override object Evaluate(IExpression[] participants)
         {
-            this.ValidateParameterCount(values, -1, 1);
+            this.ValidateParameterCount(participants, -1, 1);
 
             object result = 0;
 
-            foreach (var value in values)
+            foreach (var value in participants)
             {
-                result = Numbers.Add(result, value);
+                result = Numbers.Add(result, value.Evaluate(Arguments));
             }
 
-            return Convert.ToDouble(result) / ((double)values.Length);
+            return Convert.ToDouble(result) / ((double)participants.Length);
         }
 
         #endregion

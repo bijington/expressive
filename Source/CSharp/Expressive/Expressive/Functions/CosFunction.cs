@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Expressive.Expressions;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Expressive.Functions
 {
@@ -12,11 +10,11 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Cos"; } }
 
-        public override object Evaluate(object[] values)
+        public override object Evaluate(IExpression[] participants)
         {
-            this.ValidateParameterCount(values, 1, 1);
+            this.ValidateParameterCount(participants, 1, 1);
             
-            return Math.Cos(Convert.ToDouble(values[0]));
+            return Math.Cos(Convert.ToDouble(participants[0].Evaluate(Arguments)));
         }
 
         #endregion

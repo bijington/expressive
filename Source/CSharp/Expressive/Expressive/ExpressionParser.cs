@@ -11,8 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Expressive
 {
@@ -29,7 +27,7 @@ namespace Expressive
         #region Fields
 
         private readonly char _decimalSeparator;
-        private IDictionary<string, Func<object[], object>> _registeredFunctions;
+        private IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> _registeredFunctions;
         private IDictionary<string, IOperator> _registeredOperators;
 
         #endregion
@@ -62,7 +60,7 @@ namespace Expressive
         internal ExpressionParser()
         {
             _decimalSeparator = Convert.ToChar(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            _registeredFunctions = new Dictionary<string, Func<object[], object>>(StringComparer.OrdinalIgnoreCase);
+            _registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(StringComparer.OrdinalIgnoreCase);
             _registeredOperators = new Dictionary<string, IOperator>(StringComparer.OrdinalIgnoreCase);
 
             #region Operators
@@ -105,7 +103,23 @@ namespace Expressive
             RegisterFunction(new CeilingFunction());
             RegisterFunction(new CosFunction());
             RegisterFunction(new CountFunction());
+            RegisterFunction(new ExpFunction());
+            RegisterFunction(new FloorFunction());
+            RegisterFunction(new IEEERemainderFunction());
+            RegisterFunction(new IfFunction());
+            RegisterFunction(new InFunction());
+            RegisterFunction(new Log10Function());
+            RegisterFunction(new LogFunction());
+            RegisterFunction(new MaxFunction());
+            RegisterFunction(new MinFunction());
+            RegisterFunction(new PowFunction());
+            RegisterFunction(new RoundFunction());
+            RegisterFunction(new SignFunction());
+            RegisterFunction(new SinFunction());
+            RegisterFunction(new SqrtFunction());
             RegisterFunction(new SumFunction());
+            RegisterFunction(new TanFunction());
+            RegisterFunction(new TruncateFunction());
             #endregion
         }
 
@@ -113,15 +127,17 @@ namespace Expressive
 
         #region Public Methods
 
-        public void RegisterFunction(Func<object[], object> function)
+        public void RegisterFunction(Func<IExpression[], object> function)
         {
             RegisterFunction(function);
         }
 
         public void RegisterFunction(IFunction function)
         {
-            _registeredFunctions.Add(function.Name, (p) =>
+            _registeredFunctions.Add(function.Name, (p, a) =>
             {
+                function.Arguments = a;
+
                 return function.Evaluate(p);
             });
         }
@@ -188,7 +204,7 @@ namespace Expressive
 
             while (currentToken != null)
             {
-                Func<object[], object> function = null;
+                Func<IExpression[], IDictionary<string, object>, object> function = null;
                 IOperator op = null;
 
                 if (_registeredOperators.TryGetValue(currentToken, out op)) // Are we an IOperator?
@@ -369,7 +385,7 @@ namespace Expressive
             return leftHandSide;
         }
 
-        private string CleanString(string input)
+        private static string CleanString(string input)
         {
             if (input.Length <= 1) return input;
 
@@ -463,7 +479,7 @@ namespace Expressive
             return expression.Substring(startIndex, index - startIndex);
         }
 
-        private string GetString(string expression, int startIndex, char quoteCharacter)
+        private static string GetString(string expression, int startIndex, char quoteCharacter)
         {
             int index = startIndex;
             bool foundEndingQuote = false;
@@ -493,7 +509,7 @@ namespace Expressive
             return expression.Substring(startIndex, index - startIndex);
         }
 
-        private bool IsQuote(char character)
+        private static bool IsQuote(char character)
         {
             return character == '\'' || character == '\"';
         }
@@ -524,7 +540,7 @@ namespace Expressive
 
                     if (string.Equals(lookAhead, op.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         lengthProcessed = op.Key.Length;
                         tokens.Add(lookAhead);
                         break;
@@ -539,7 +555,7 @@ namespace Expressive
 
                         if (string.Equals(lookAhead, kvp.Key, StringComparison.OrdinalIgnoreCase))
                         {
-                            this.CheckForUnrecognised(unrecognised, tokens);
+                            CheckForUnrecognised(unrecognised, tokens);
                             lengthProcessed = kvp.Key.Length;
                             tokens.Add(lookAhead);
                             break;
@@ -556,7 +572,7 @@ namespace Expressive
                     {
                         var variable = expression.SubstringUpTo(index, ']');
 
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         tokens.Add(variable);
                         lengthProcessed = variable.Length;
                     }
@@ -564,7 +580,7 @@ namespace Expressive
                     {
                         var number = GetNumber(expression, index);
 
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         tokens.Add(number);
                         lengthProcessed = number.Length;
                     }
@@ -572,7 +588,7 @@ namespace Expressive
                     {
                         var text = GetString(expression, index, character);
 
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         tokens.Add(text);
                         lengthProcessed = text.Length;
                     }
@@ -581,19 +597,19 @@ namespace Expressive
                         // Ignore the first # when checking to allow us to find the second.
                         var dateString = "#" + expression.SubstringUpTo(index + 1, DateSeparator);
 
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         tokens.Add(dateString);
                         lengthProcessed = dateString.Length;
                     }
                     else if (character == ParameterSeparator)
                     {
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         tokens.Add(character.ToString());
                         lengthProcessed = 1;
                     }
                     else if (character == 't' || character == 'T')
                     {
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         var trueString = ExtractValue(expression, expressionLength, index, "true");
 
                         if (!string.IsNullOrWhiteSpace(trueString))
@@ -604,7 +620,7 @@ namespace Expressive
                     }
                     else if (character == 'f' || character == 'F')
                     {
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         var falseString = ExtractValue(expression, expressionLength, index, "false");
 
                         if (!string.IsNullOrWhiteSpace(falseString))
@@ -615,7 +631,7 @@ namespace Expressive
                     }
                     else if (character == 'n') // Check for null
                     {
-                        this.CheckForUnrecognised(unrecognised, tokens);
+                        CheckForUnrecognised(unrecognised, tokens);
                         var nullString = ExtractValue(expression, expressionLength, index, "null");
 
                         if (!string.IsNullOrWhiteSpace(nullString))
@@ -640,19 +656,19 @@ namespace Expressive
                 // Clear down the unrecognised buffer;
                 if (!foundUnrecognisedCharacter)
                 {
-                    this.CheckForUnrecognised(unrecognised, tokens);
+                    CheckForUnrecognised(unrecognised, tokens);
                     unrecognised = null;
                 }
                 index += (lengthProcessed == 0) ? 1 : lengthProcessed;
             }
 
             // Double check whether the last part is unrecognised.
-            this.CheckForUnrecognised(unrecognised, tokens);
+            CheckForUnrecognised(unrecognised, tokens);
 
             return tokens;
         }
 
-        private void CheckForUnrecognised(IList<char> unrecognised, IList<string> tokens)
+        private static void CheckForUnrecognised(IList<char> unrecognised, IList<string> tokens)
         {
             if (unrecognised != null)
             {

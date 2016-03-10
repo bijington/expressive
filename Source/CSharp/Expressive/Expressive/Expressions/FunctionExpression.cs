@@ -8,11 +8,11 @@ namespace Expressive.Expressions
 {
     internal class FunctionExpression : IExpression
     {
-        private readonly Func<object[], object> _function;
+        private readonly Func<IExpression[], IDictionary<string, object>, object> _function;
         private readonly string _name;
         private readonly IExpression[] _parameters;
 
-        internal FunctionExpression(string name, Func<object[], object> function, IExpression[] parameters)
+        internal FunctionExpression(string name, Func<IExpression[], IDictionary<string, object>, object> function, IExpression[] parameters)
         {
             _name = name;
             _function = function;
@@ -23,14 +23,14 @@ namespace Expressive.Expressions
 
         public object Evaluate(IDictionary<string, object> arguments)
         {
-            IList<object> evaluatedParameters = new List<object>();
+            //IList<object> evaluatedParameters = new List<object>();
 
-            foreach (var p in _parameters)
-            {
-                evaluatedParameters.Add(p.Evaluate(arguments));
-            }
+            //foreach (var p in _parameters)
+            //{
+            //    evaluatedParameters.Add(p.Evaluate(arguments));
+            //}
 
-            return _function(evaluatedParameters.ToArray());
+            return _function(_parameters, arguments);
         }
 
         #endregion

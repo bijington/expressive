@@ -54,6 +54,16 @@ namespace Expressive.Tests
 
         #endregion
 
+        [TestMethod]
+        public void SimpleBodmas()
+        {
+            Expression expression = new Expression("1-3*2");
+
+            object value = expression.Evaluate();
+
+            Assert.AreEqual(-5, value);
+        }
+
         #region Subtract Operator
 
         [TestMethod]
@@ -95,6 +105,33 @@ namespace Expressive.Tests
         }
 
         #endregion
+        
+        [TestMethod]
+        public void LogicTests()
+        {
+            Assert.AreEqual(true, new Expression("1 && 1").Evaluate());
+            Assert.AreEqual(false, new Expression("false and true").Evaluate());
+            Assert.AreEqual(false, new Expression("not true").Evaluate());
+            Assert.AreEqual(true, new Expression("!false").Evaluate());
+            Assert.AreEqual(true, new Expression("false || 1").Evaluate());
+            Assert.AreEqual(true, new Expression("false || !(true && true)").Evaluate());
+        }
+
+        [TestMethod]
+        public void RelationalTests()
+        {
+            Assert.AreEqual(true, new Expression("1 == 1").Evaluate());
+            Assert.AreEqual(false, new Expression("1 != 1").Evaluate());
+            Assert.AreEqual(true, new Expression("1 <> 2").Evaluate());
+            Assert.AreEqual(true, new Expression("7 >= 2").Evaluate());
+            Assert.AreEqual(false, new Expression("1 >= 2").Evaluate());
+            Assert.AreEqual(true, new Expression("7 > 2").Evaluate());
+            Assert.AreEqual(false, new Expression("2 > 2").Evaluate());
+            Assert.AreEqual(false, new Expression("7 <= 2").Evaluate());
+            Assert.AreEqual(true, new Expression("1 <= 2").Evaluate());
+            Assert.AreEqual(false, new Expression("7 < 2").Evaluate());
+            Assert.AreEqual(true, new Expression("1 < 2").Evaluate());
+        }
 
         #endregion
 
@@ -161,6 +198,107 @@ namespace Expressive.Tests
             new Expression("count()").Evaluate();
         }
 
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Exp() takes only 1 argument(s)")]
+        public void ExpShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(1d, new Expression("exp(0)").Evaluate());
+            Assert.AreEqual(12, new Expression("exp(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Floor() takes only 1 argument(s)")]
+        public void FloorShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(1d, new Expression("Floor(1.5)").Evaluate());
+            Assert.AreEqual(12, new Expression("Floor(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "IEEERemainder() takes only 2 argument(s)")]
+        public void IEEERemainderShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(-1d, new Expression("IEEERemainder(3, 2)").Evaluate());
+            Assert.AreEqual(12, new Expression("IEEERemainder(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "If() takes only 3 argument(s)")]
+        public void IfShouldHandleOnlyThreeArguments()
+        {
+            Assert.AreEqual("Low risk", new Expression("If(1 > 8, 'High risk', 'Low risk')").Evaluate());
+            Assert.AreEqual("Low risk", new Expression("If(1 > 8, 1 / 0, 'Low risk')").Evaluate());
+            Assert.AreEqual(12, new Expression("If(1 > 9, 2, 4, 5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "In() expects at least 2 argument(s)")]
+        public void InShouldHandleAtLeastTwoArguments()
+        {
+            Assert.AreEqual(false, new Expression("in('abc','def','ghi','jkl')").Evaluate());
+            Assert.AreEqual(1, new Expression("in(0)").Evaluate());
+
+            new Expression("count()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Log() takes only 2 argument(s)")]
+        public void LogShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(0d, new Expression("Log(1, 10)").Evaluate());
+            Assert.AreEqual(12, new Expression("Log(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Log10() takes only 1 argument(s)")]
+        public void Log10ShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(0d, new Expression("Log10(1)").Evaluate());
+            Assert.AreEqual(12, new Expression("Log10(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Max() takes only 2 argument(s)")]
+        public void MaxShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(3, new Expression("Max(3, 2)").Evaluate());
+            Assert.AreEqual(12, new Expression("Max(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Min() takes only 2 argument(s)")]
+        public void MinShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(2, new Expression("Min(3, 2)").Evaluate());
+            Assert.AreEqual(12, new Expression("IEEERemainder(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Pow() takes only 2 argument(s)")]
+        public void PowShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(9d, new Expression("Pow(3, 2)").Evaluate());
+            Assert.AreEqual(12, new Expression("Pow(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Round() takes only 2 argument(s)")]
+        public void RoundShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(3.22d, new Expression("Round(3.222222, 2)").Evaluate());
+            Assert.AreEqual(12, new Expression("Round(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Sign() takes only 1 argument(s)")]
+        public void SignShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(-1, new Expression("Sign(-10)").Evaluate());
+            Assert.AreEqual(12, new Expression("Sign(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Sin() takes only 1 argument(s)")]
+        public void SinShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(0d, new Expression("Sin(0)").Evaluate());
+            Assert.AreEqual(12, new Expression("Sin(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Sqrt() takes only 1 argument(s)")]
+        public void SqrtShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(5d, new Expression("Sqrt(25)").Evaluate());
+            Assert.AreEqual(12, new Expression("Sqrt(1,2,4,5)").Evaluate());
+        }
+
         [TestMethod, ExpectedException(typeof(ArgumentException), "Sum() expects at least 1 argument(s)")]
         public void SumShouldHandleAtLeastOneArgument()
         {
@@ -169,6 +307,20 @@ namespace Expressive.Tests
             Assert.AreEqual(72, new Expression("sum(1,2,4,5,10,20,30)").Evaluate());
 
             new Expression("sum()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Tan() takes only 1 argument(s)")]
+        public void TanShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(0d, new Expression("Tan(0)").Evaluate());
+            Assert.AreEqual(12, new Expression("Tan(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "Truncate() takes only 1 argument(s)")]
+        public void TruncateShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(1d, new Expression("Truncate(1.7)").Evaluate());
+            Assert.AreEqual(12, new Expression("Truncate(1,2,4,5)").Evaluate());
         }
 
         #endregion
@@ -184,7 +336,7 @@ namespace Expressive.Tests
 
             object result = null;
 
-            expression.EvaluateASync((r) =>
+            expression.EvaluateAsync((r) =>
             {
                 result = r;
                 waitHandle.Set();

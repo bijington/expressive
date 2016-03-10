@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Expressive.Functions
 {
-    internal class AbsFunction : FunctionBase
+    internal class SignFunction : FunctionBase
     {
-        #region IFunction Members
+        #region FunctionBase Members
 
-        public override string Name { get { return "Abs"; } }
+        public override string Name { get { return "Sign"; } }
 
         public override object Evaluate(IExpression[] participants)
         {
@@ -26,23 +26,23 @@ namespace Expressive.Functions
                 switch (valueType)
                 {
                     case TypeCode.Decimal:
-                        return Math.Abs(Convert.ToDecimal(value));
+                        return Math.Sign(Convert.ToDecimal(value));
                     case TypeCode.Double:
-                        return Math.Abs(Convert.ToDouble(value));
+                        return Math.Sign(Convert.ToDouble(value));
                     case TypeCode.Int16:
-                        return Math.Abs(Convert.ToInt16(value));
+                        return Math.Sign(Convert.ToInt16(value));
                     case TypeCode.UInt16:
-                        return Math.Abs(Convert.ToUInt16(value));
+                        return Math.Sign(Convert.ToUInt16(value));
                     case TypeCode.Int32:
-                        return Math.Abs(Convert.ToInt32(value));
+                        return Math.Sign(Convert.ToInt32(value));
                     case TypeCode.UInt32:
-                        return Math.Abs(Convert.ToUInt32(value));
+                        return Math.Sign(Convert.ToUInt32(value));
                     case TypeCode.Int64:
-                        return Math.Abs(Convert.ToInt64(value));
+                        return Math.Sign(Convert.ToInt64(value));
                     case TypeCode.SByte:
-                        return Math.Abs(Convert.ToSByte(value));
+                        return Math.Sign(Convert.ToSByte(value));
                     case TypeCode.Single:
-                        return Math.Abs(Convert.ToSingle(value));
+                        return Math.Sign(Convert.ToSingle(value));
                     default:
                         break;
                 }

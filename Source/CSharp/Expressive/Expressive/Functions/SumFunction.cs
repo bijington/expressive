@@ -1,9 +1,5 @@
-﻿using Expressive.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Expressive.Expressions;
+using Expressive.Helpers;
 
 namespace Expressive.Functions
 {
@@ -13,15 +9,15 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Sum"; } }
 
-        public override object Evaluate(object[] values)
+        public override object Evaluate(IExpression[] participants)
         {
-            this.ValidateParameterCount(values, -1, 1);
+            this.ValidateParameterCount(participants, -1, 1);
 
             object result = 0;
 
-            foreach (var value in values)
+            foreach (var value in participants)
             {
-                result = Numbers.Add(result, value);
+                result = Numbers.Add(result, value.Evaluate(Arguments));
             }
 
             return result;
