@@ -1,4 +1,5 @@
-﻿using Expressive.Expressions;
+﻿using Expressive.Exceptions;
+using Expressive.Expressions;
 using Expressive.Functions;
 using Expressive.Operators;
 using Expressive.Operators.Additive;
@@ -111,6 +112,9 @@ namespace Expressive
             RegisterFunction(new Log10Function());
             RegisterFunction(new LogFunction());
             RegisterFunction(new MaxFunction());
+            RegisterFunction(new MeanFunction());
+            RegisterFunction(new MedianFunction());
+            RegisterFunction(new ModeFunction());
             RegisterFunction(new MinFunction());
             RegisterFunction(new PowFunction());
             RegisterFunction(new RoundFunction());
@@ -350,7 +354,28 @@ namespace Expressive
                 else if (currentToken.StartsWith(DateSeparator.ToString()) && currentToken.EndsWith(DateSeparator.ToString())) // or a date?
                 {
                     tokens.Dequeue();
-                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.DateTime, DateTime.Parse(currentToken.Replace(DateSeparator.ToString(), "")));
+
+                    string dateToken = currentToken.Replace(DateSeparator.ToString(), "");
+                    DateTime date = DateTime.MinValue;
+                    
+                    // If we can't parse the date let's check for some known tags.
+                    if (!DateTime.TryParse(dateToken, out date))
+                    {
+                        if (string.Equals("TODAY", dateToken, StringComparison.OrdinalIgnoreCase))
+                        {
+                            date = DateTime.Today;
+                        }
+                        else if (string.Equals("NOW", dateToken, StringComparison.OrdinalIgnoreCase))
+                        {
+                            date = DateTime.Now;
+                        }
+                        else
+                        {
+                            throw new UnrecognisedTokenException(dateToken);
+                        }
+                    }
+
+                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.DateTime, date);
                 }
                 else if ((currentToken.StartsWith("'") && currentToken.EndsWith("'")) ||
                     (currentToken.StartsWith("\"") && currentToken.EndsWith("\"")))
@@ -375,7 +400,7 @@ namespace Expressive
                 {
                     tokens.Dequeue();
 
-                    throw new InvalidOperationException("Unrecognised token '" + currentToken + "'");
+                    throw new UnrecognisedTokenException(currentToken);
                 }
 
                 previousToken = currentToken;
@@ -426,6 +451,16 @@ namespace Expressive
             }
 
             return new string(buffer, 0, outIdx);
+        }
+
+        private static bool CanExtractValue(string expression, int expressionLength, int index, string value)
+        {
+            return string.Equals(value, ExtractValue(expression, expressionLength, index, value), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool CanGetString(string expression, int startIndex, char quoteCharacter)
+        {
+            return !string.IsNullOrWhiteSpace(GetString(expression, startIndex, quoteCharacter));
         }
 
         private static string ExtractValue(string expression, int expressionLength, int index, string value)
@@ -506,7 +541,12 @@ namespace Expressive
                 character = expression[index];
             }
 
-            return expression.Substring(startIndex, index - startIndex);
+            if (foundEndingQuote)
+            {
+                return expression.Substring(startIndex, index - startIndex);
+            }
+
+            return null;
         }
 
         private static bool IsQuote(char character)
@@ -570,7 +610,14 @@ namespace Expressive
 
                     if (character == '[') // Apparently NCalc only uses the [ ] characters optionally but Xenplate forces them to be used.
                     {
-                        var variable = expression.SubstringUpTo(index, ']');
+                        char closingCharacter = ']';
+
+                        if (!CanGetString(expression, index, closingCharacter))
+                        {
+                            throw new MissingTokenException($"Missing closing token '{closingCharacter}'", closingCharacter);
+                        }
+
+                        var variable = expression.SubstringUpTo(index, closingCharacter);
 
                         CheckForUnrecognised(unrecognised, tokens);
                         tokens.Add(variable);
@@ -586,6 +633,11 @@ namespace Expressive
                     }
                     else if (IsQuote(character))
                     {
+                        if (!CanGetString(expression, index, character))
+                        {
+                            throw new MissingTokenException($"Missing closing token '{character}'", character);
+                        }
+
                         var text = GetString(expression, index, character);
 
                         CheckForUnrecognised(unrecognised, tokens);
@@ -594,6 +646,11 @@ namespace Expressive
                     }
                     else if (character == DateSeparator)
                     {
+                        if (!CanGetString(expression, index, character))
+                        {
+                            throw new MissingTokenException($"Missing closing token '{character}'", character);
+                        }
+
                         // Ignore the first # when checking to allow us to find the second.
                         var dateString = "#" + expression.SubstringUpTo(index + 1, DateSeparator);
 
@@ -607,7 +664,7 @@ namespace Expressive
                         tokens.Add(character.ToString());
                         lengthProcessed = 1;
                     }
-                    else if (character == 't' || character == 'T')
+                    else if ((character == 't' || character == 'T') && CanExtractValue(expression, expressionLength, index, "true"))
                     {
                         CheckForUnrecognised(unrecognised, tokens);
                         var trueString = ExtractValue(expression, expressionLength, index, "true");
@@ -618,7 +675,7 @@ namespace Expressive
                             lengthProcessed = 4;
                         }
                     }
-                    else if (character == 'f' || character == 'F')
+                    else if ((character == 'f' || character == 'F') && CanExtractValue(expression, expressionLength, index, "false"))
                     {
                         CheckForUnrecognised(unrecognised, tokens);
                         var falseString = ExtractValue(expression, expressionLength, index, "false");
@@ -629,7 +686,7 @@ namespace Expressive
                             lengthProcessed = 5;
                         }
                     }
-                    else if (character == 'n') // Check for null
+                    else if (character == 'n' && CanExtractValue(expression, expressionLength, index, "null")) // Check for null
                     {
                         CheckForUnrecognised(unrecognised, tokens);
                         var nullString = ExtractValue(expression, expressionLength, index, "null");

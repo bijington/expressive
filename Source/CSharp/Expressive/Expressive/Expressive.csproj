@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\MissingTokenException.cs" />
+    <Compile Include="Exceptions\ParameterCountMismatchException.cs" />
+    <Compile Include="Exceptions\UnrecognisedTokenException.cs" />
     <Compile Include="Expression.cs" />
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="Expressions\BinaryExpression.cs" />
@@ -71,7 +74,10 @@
     <Compile Include="Functions\Log10Function.cs" />
     <Compile Include="Functions\LogFunction.cs" />
     <Compile Include="Functions\MaxFunction.cs" />
+    <Compile Include="Functions\MeanFunction.cs" />
+    <Compile Include="Functions\MedianFunction.cs" />
     <Compile Include="Functions\MinFunction.cs" />
+    <Compile Include="Functions\ModeFunction.cs" />
     <Compile Include="Functions\PowFunction.cs" />
     <Compile Include="Functions\RoundFunction.cs" />
     <Compile Include="Functions\SignFunction.cs" />
@@ -110,6 +116,10 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

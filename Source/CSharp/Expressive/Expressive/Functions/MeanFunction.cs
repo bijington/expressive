@@ -4,11 +4,11 @@ using System;
 
 namespace Expressive.Functions
 {
-    internal class AverageFunction : FunctionBase
+    internal class MeanFunction : FunctionBase
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Average"; } }
+        public override string Name { get { return "Mean"; } }
 
         public override object Evaluate(IExpression[] participants)
         {

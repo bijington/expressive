@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using System.Collections.Generic;
+using Expressive.Exceptions;
 
 namespace Expressive.Tests
 {
@@ -137,35 +138,35 @@ namespace Expressive.Tests
 
         #region Functions
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Abs() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Abs() takes only 1 argument(s)")]
         public void AbsShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1, new Expression("abs(-1)").Evaluate());
             Assert.AreEqual(12, new Expression("abs(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Acos() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Acos() takes only 1 argument(s)")]
         public void AcosShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("acos(1)").Evaluate());
             Assert.AreEqual(12, new Expression("acos(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Asin() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Asin() takes only 1 argument(s)")]
         public void AsinShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("asin(0)").Evaluate());
             Assert.AreEqual(12, new Expression("asin(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Atan() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Atan() takes only 1 argument(s)")]
         public void AtanShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("atan(0)").Evaluate());
             Assert.AreEqual(12, new Expression("atan(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Average() expects at least 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Average() expects at least 1 argument(s)")]
         public void AverageShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3d, new Expression("average(1,2,4,5)").Evaluate());
@@ -175,21 +176,21 @@ namespace Expressive.Tests
             new Expression("average()").Evaluate();
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Ceiling() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Ceiling() takes only 1 argument(s)")]
         public void CeilingShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(2M, new Expression("ceiling(1.5)").Evaluate());
             Assert.AreEqual(12, new Expression("ceiling(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Cos() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Cos() takes only 1 argument(s)")]
         public void CosShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("cos(0)").Evaluate());
             Assert.AreEqual(12, new Expression("cos(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Count() expects at least 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Count() expects at least 1 argument(s)")]
         public void CountShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(1, new Expression("count(0)").Evaluate());
@@ -198,28 +199,28 @@ namespace Expressive.Tests
             new Expression("count()").Evaluate();
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Exp() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Exp() takes only 1 argument(s)")]
         public void ExpShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("exp(0)").Evaluate());
             Assert.AreEqual(12, new Expression("exp(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Floor() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Floor() takes only 1 argument(s)")]
         public void FloorShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("Floor(1.5)").Evaluate());
             Assert.AreEqual(12, new Expression("Floor(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "IEEERemainder() takes only 2 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "IEEERemainder() takes only 2 argument(s)")]
         public void IEEERemainderShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(-1d, new Expression("IEEERemainder(3, 2)").Evaluate());
             Assert.AreEqual(12, new Expression("IEEERemainder(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "If() takes only 3 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "If() takes only 3 argument(s)")]
         public void IfShouldHandleOnlyThreeArguments()
         {
             Assert.AreEqual("Low risk", new Expression("If(1 > 8, 'High risk', 'Low risk')").Evaluate());
@@ -227,7 +228,7 @@ namespace Expressive.Tests
             Assert.AreEqual(12, new Expression("If(1 > 9, 2, 4, 5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "In() expects at least 2 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "In() expects at least 2 argument(s)")]
         public void InShouldHandleAtLeastTwoArguments()
         {
             Assert.AreEqual(false, new Expression("in('abc','def','ghi','jkl')").Evaluate());
@@ -236,70 +237,70 @@ namespace Expressive.Tests
             new Expression("count()").Evaluate();
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Log() takes only 2 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Log() takes only 2 argument(s)")]
         public void LogShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(0d, new Expression("Log(1, 10)").Evaluate());
             Assert.AreEqual(12, new Expression("Log(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Log10() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Log10() takes only 1 argument(s)")]
         public void Log10ShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Log10(1)").Evaluate());
             Assert.AreEqual(12, new Expression("Log10(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Max() takes only 2 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Max() takes only 2 argument(s)")]
         public void MaxShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(3, new Expression("Max(3, 2)").Evaluate());
             Assert.AreEqual(12, new Expression("Max(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Min() takes only 2 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Min() takes only 2 argument(s)")]
         public void MinShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(2, new Expression("Min(3, 2)").Evaluate());
             Assert.AreEqual(12, new Expression("IEEERemainder(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Pow() takes only 2 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Pow() takes only 2 argument(s)")]
         public void PowShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(9d, new Expression("Pow(3, 2)").Evaluate());
             Assert.AreEqual(12, new Expression("Pow(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Round() takes only 2 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Round() takes only 2 argument(s)")]
         public void RoundShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(3.22d, new Expression("Round(3.222222, 2)").Evaluate());
             Assert.AreEqual(12, new Expression("Round(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Sign() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Sign() takes only 1 argument(s)")]
         public void SignShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(-1, new Expression("Sign(-10)").Evaluate());
             Assert.AreEqual(12, new Expression("Sign(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Sin() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Sin() takes only 1 argument(s)")]
         public void SinShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Sin(0)").Evaluate());
             Assert.AreEqual(12, new Expression("Sin(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Sqrt() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Sqrt() takes only 1 argument(s)")]
         public void SqrtShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(5d, new Expression("Sqrt(25)").Evaluate());
             Assert.AreEqual(12, new Expression("Sqrt(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Sum() expects at least 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Sum() expects at least 1 argument(s)")]
         public void SumShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(12, new Expression("sum(1,2,4,5)").Evaluate());
@@ -309,14 +310,14 @@ namespace Expressive.Tests
             new Expression("sum()").Evaluate();
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Tan() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Tan() takes only 1 argument(s)")]
         public void TanShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Tan(0)").Evaluate());
             Assert.AreEqual(12, new Expression("Tan(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "Truncate() takes only 1 argument(s)")]
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Truncate() takes only 1 argument(s)")]
         public void TruncateShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("Truncate(1.7)").Evaluate());
@@ -417,7 +418,7 @@ namespace Expressive.Tests
             Assert.AreEqual(0.5, new Expression("3/6").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidOperationException), "Unrecognised token 'blarsh'")]
+        [TestMethod, ExpectedException(typeof(UnrecognisedTokenException), "Unrecognised token 'blarsh'")]
         public void ShouldFailOnUnrecognisedToken()
         {
             Assert.AreEqual(0.5, new Expression("1 + blarsh + 4").Evaluate());

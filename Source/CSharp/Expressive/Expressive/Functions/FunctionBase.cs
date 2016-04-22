@@ -1,4 +1,5 @@
-﻿using Expressive.Expressions;
+﻿using Expressive.Exceptions;
+using Expressive.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,12 +28,12 @@ namespace Expressive.Functions
         {
             if (expectedCount != -1 && (participants == null || !participants.Any() || participants.Length != expectedCount))
             {
-                throw new ArgumentException(this.Name + "() takes only " + expectedCount + " argument(s)");
+                throw new ParameterCountMismatchException(this.Name + "() takes only " + expectedCount + " argument(s)");
             }
 
             if (minimumCount > 0 && (participants == null || !participants.Any() || participants.Length < minimumCount))
             {
-                throw new ArgumentException(this.Name + "() expects at least " + minimumCount + " argument(s)");
+                throw new ParameterCountMismatchException(this.Name + "() expects at least " + minimumCount + " argument(s)");
             }
 
             return true;
