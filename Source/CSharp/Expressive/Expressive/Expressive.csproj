@@ -79,6 +79,7 @@
     <Compile Include="Functions\MinFunction.cs" />
     <Compile Include="Functions\ModeFunction.cs" />
     <Compile Include="Functions\PowFunction.cs" />
+    <Compile Include="Functions\RegexFunction.cs" />
     <Compile Include="Functions\RoundFunction.cs" />
     <Compile Include="Functions\SignFunction.cs" />
     <Compile Include="Functions\SinFunction.cs" />

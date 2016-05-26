@@ -9,6 +9,16 @@ namespace Expressive.Tests
     [TestClass]
     public class ExpressionTests
     {
+        [TestMethod]
+        public void Debugging()
+        {
+            Expression expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$')");
+
+            object value = expression.Evaluate();
+
+            Assert.AreEqual(false, value);
+        }
+
         #region Operators
 
         #region Plus Operator
@@ -141,69 +151,69 @@ namespace Expressive.Tests
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Abs() takes only 1 argument(s)")]
         public void AbsShouldHandleOnlyOneArgument()
         {
-            Assert.AreEqual(1, new Expression("abs(-1)").Evaluate());
-            Assert.AreEqual(12, new Expression("abs(1,2,4,5)").Evaluate());
+            Assert.AreEqual(1, new Expression("Abs(-1)").Evaluate());
+            Assert.AreEqual(12, new Expression("abs(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Acos() takes only 1 argument(s)")]
         public void AcosShouldHandleOnlyOneArgument()
         {
-            Assert.AreEqual(0d, new Expression("acos(1)").Evaluate());
-            Assert.AreEqual(12, new Expression("acos(1,2,4,5)").Evaluate());
+            Assert.AreEqual(0d, new Expression("Acos(1)").Evaluate());
+            Assert.AreEqual(12, new Expression("Acos(1,2,4,5)").Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Asin() takes only 1 argument(s)")]
         public void AsinShouldHandleOnlyOneArgument()
         {
-            Assert.AreEqual(0d, new Expression("asin(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("asin(1,2,4,5)").Evaluate());
+            Assert.AreEqual(0d, new Expression("Asin(0)").Evaluate());
+            Assert.AreEqual(12, new Expression("asin(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Atan() takes only 1 argument(s)")]
         public void AtanShouldHandleOnlyOneArgument()
         {
-            Assert.AreEqual(0d, new Expression("atan(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("atan(1,2,4,5)").Evaluate());
+            Assert.AreEqual(0d, new Expression("Atan(0)").Evaluate());
+            Assert.AreEqual(12, new Expression("atan(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Average() expects at least 1 argument(s)")]
         public void AverageShouldHandleAtLeastOneArgument()
         {
-            Assert.AreEqual(3d, new Expression("average(1,2,4,5)").Evaluate());
-            Assert.AreEqual(1d, new Expression("average(1)").Evaluate());
-            Assert.AreEqual(12.5, new Expression("average(10, 20, 5, 15)").Evaluate());
+            Assert.AreEqual(3d, new Expression("Average(1,2,4,5)").Evaluate());
+            Assert.AreEqual(1d, new Expression("average(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12.5, new Expression("Average(10, 20, 5, 15)").Evaluate());
 
-            new Expression("average()").Evaluate();
+            new Expression("average()", ExpressiveOptions.IgnoreCase).Evaluate();
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Ceiling() takes only 1 argument(s)")]
         public void CeilingShouldHandleOnlyOneArgument()
         {
-            Assert.AreEqual(2M, new Expression("ceiling(1.5)").Evaluate());
-            Assert.AreEqual(12, new Expression("ceiling(1,2,4,5)").Evaluate());
+            Assert.AreEqual(2M, new Expression("Ceiling(1.5)").Evaluate());
+            Assert.AreEqual(12, new Expression("ceiling(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Cos() takes only 1 argument(s)")]
         public void CosShouldHandleOnlyOneArgument()
         {
-            Assert.AreEqual(1d, new Expression("cos(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("cos(1,2,4,5)").Evaluate());
+            Assert.AreEqual(1d, new Expression("Cos(0)").Evaluate());
+            Assert.AreEqual(12, new Expression("Cos(1,2,4,5)").Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Count() expects at least 1 argument(s)")]
         public void CountShouldHandleAtLeastOneArgument()
         {
-            Assert.AreEqual(1, new Expression("count(0)").Evaluate());
-            Assert.AreEqual(4, new Expression("count(1,2,4,5)").Evaluate());
+            Assert.AreEqual(1, new Expression("Count(0)").Evaluate());
+            Assert.AreEqual(4, new Expression("count(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
 
-            new Expression("count()").Evaluate();
+            new Expression("Count()").Evaluate();
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Exp() takes only 1 argument(s)")]
         public void ExpShouldHandleOnlyOneArgument()
         {
-            Assert.AreEqual(1d, new Expression("exp(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("exp(1,2,4,5)").Evaluate());
+            Assert.AreEqual(1d, new Expression("Exp(0)").Evaluate());
+            Assert.AreEqual(12, new Expression("exp(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Floor() takes only 1 argument(s)")]
@@ -231,10 +241,10 @@ namespace Expressive.Tests
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "In() expects at least 2 argument(s)")]
         public void InShouldHandleAtLeastTwoArguments()
         {
-            Assert.AreEqual(false, new Expression("in('abc','def','ghi','jkl')").Evaluate());
-            Assert.AreEqual(1, new Expression("in(0)").Evaluate());
+            Assert.AreEqual(false, new Expression("In('abc','def','ghi','jkl')").Evaluate());
+            Assert.AreEqual(1, new Expression("in(0)", ExpressiveOptions.IgnoreCase).Evaluate());
 
-            new Expression("count()").Evaluate();
+            new Expression("In()", ExpressiveOptions.IgnoreCase).Evaluate();
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Log() takes only 2 argument(s)")]
@@ -303,11 +313,11 @@ namespace Expressive.Tests
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Sum() expects at least 1 argument(s)")]
         public void SumShouldHandleAtLeastOneArgument()
         {
-            Assert.AreEqual(12, new Expression("sum(1,2,4,5)").Evaluate());
-            Assert.AreEqual(1, new Expression("sum(1)").Evaluate());
-            Assert.AreEqual(72, new Expression("sum(1,2,4,5,10,20,30)").Evaluate());
+            Assert.AreEqual(12, new Expression("Sum(1,2,4,5)").Evaluate());
+            Assert.AreEqual(1, new Expression("sum(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(72, new Expression("sum(1,2,4,5,10,20,30)", ExpressiveOptions.IgnoreCase).Evaluate());
 
-            new Expression("sum()").Evaluate();
+            new Expression("Sum()").Evaluate();
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Tan() takes only 1 argument(s)")]
@@ -422,6 +432,26 @@ namespace Expressive.Tests
         public void ShouldFailOnUnrecognisedToken()
         {
             Assert.AreEqual(0.5, new Expression("1 + blarsh + 4").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ArgumentException), "The variable 'a' has not been supplied.")]
+        public void ShouldHandleCaseSensitivity()
+        {
+            new Expression("([a] + [b]) * (4 - 2)", ExpressiveOptions.IgnoreCase).Evaluate(new Dictionary<string, object> { { "A", 2 }, { "b", 3 } });
+            new Expression("IF(true, true, false)", ExpressiveOptions.IgnoreCase).Evaluate();
+
+            try
+            {
+                new Expression("IF(true, true, false)").Evaluate();
+            }
+            catch (UnrecognisedTokenException ute)
+            {
+                Assert.AreEqual("Unrecognised token 'IF'", ute.Message);
+            }
+
+            Expression expression = new Expression("([a] + [b]) * (4 - 2)");
+
+            object value = expression.Evaluate(new Dictionary<string, object> { { "A", 2 }, { "b", 3 } });
         }
 
         #endregion

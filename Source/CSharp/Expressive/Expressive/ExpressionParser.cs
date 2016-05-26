@@ -28,41 +28,21 @@ namespace Expressive
         #region Fields
 
         private readonly char _decimalSeparator;
+        private ExpressiveOptions _options;
         private IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> _registeredFunctions;
         private IDictionary<string, IOperator> _registeredOperators;
 
         #endregion
 
-        #region Properties
-
-        //internal static ExpressionParser Instance
-        //{
-        //    get
-        //    {
-        //        if (_instance == null)
-        //        {
-        //            lock (_instanceLock)
-        //            {
-        //                if (_instance == null)
-        //                {
-        //                    _instance = new ExpressionParser();
-        //                }
-        //            }
-        //        }
-
-        //        return _instance;
-        //    }
-        //}
-
-        #endregion
-
         #region Constructors
 
-        internal ExpressionParser()
+        internal ExpressionParser(ExpressiveOptions options)
         {
+            _options = options;
+
             _decimalSeparator = Convert.ToChar(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            _registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(StringComparer.OrdinalIgnoreCase);
-            _registeredOperators = new Dictionary<string, IOperator>(StringComparer.OrdinalIgnoreCase);
+            _registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(GetDictionaryComparer(options));
+            _registeredOperators = new Dictionary<string, IOperator>(GetDictionaryComparer(options));
 
             #region Operators
             // TODO: Do we allow for turning off operators?
@@ -117,6 +97,7 @@ namespace Expressive
             RegisterFunction(new ModeFunction());
             RegisterFunction(new MinFunction());
             RegisterFunction(new PowFunction());
+            RegisterFunction(new RegexFunction());
             RegisterFunction(new RoundFunction());
             RegisterFunction(new SignFunction());
             RegisterFunction(new SinFunction());
@@ -463,6 +444,13 @@ namespace Expressive
             return !string.IsNullOrWhiteSpace(GetString(expression, startIndex, quoteCharacter));
         }
 
+        private static bool CheckForTag(string tag, string lookAhead, ExpressiveOptions options)
+        {
+            return (options.HasFlag(ExpressiveOptions.IgnoreCase) &&
+                string.Equals(lookAhead, tag, StringComparison.OrdinalIgnoreCase)) ||
+                string.Equals(lookAhead, tag, StringComparison.Ordinal);
+        }
+
         private static string ExtractValue(string expression, int expressionLength, int index, string value)
         {
             string result = null;
@@ -485,6 +473,11 @@ namespace Expressive
             }
 
             return result;
+        }
+
+        private StringComparer GetDictionaryComparer(ExpressiveOptions options)
+        {
+            return options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
         }
 
         private string GetNumber(string expression, int startIndex)
@@ -578,7 +571,7 @@ namespace Expressive
                 {
                     var lookAhead = expression.Substring(index, Math.Min(op.Key.Length, expressionLength - index));
 
-                    if (string.Equals(lookAhead, op.Key, StringComparison.OrdinalIgnoreCase))
+                    if (CheckForTag(op.Key, lookAhead, _options))
                     {
                         CheckForUnrecognised(unrecognised, tokens);
                         lengthProcessed = op.Key.Length;
@@ -593,7 +586,7 @@ namespace Expressive
                     {
                         var lookAhead = expression.Substring(index, Math.Min(kvp.Key.Length, expressionLength - index));
 
-                        if (string.Equals(lookAhead, kvp.Key, StringComparison.OrdinalIgnoreCase))
+                        if (CheckForTag(kvp.Key, lookAhead, _options))
                         {
                             CheckForUnrecognised(unrecognised, tokens);
                             lengthProcessed = kvp.Key.Length;

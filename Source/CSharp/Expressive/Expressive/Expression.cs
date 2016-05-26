@@ -13,6 +13,7 @@ namespace Expressive
         #region Fields
 
         private IExpression _compiledExpression;
+        private ExpressiveOptions _options;
         private string _originalExpression;
         private ExpressionParser _parser;
 
@@ -20,9 +21,14 @@ namespace Expressive
 
         #region Constructors
 
-        public Expression(string expression)
+        public Expression(string expression) : this (expression, ExpressiveOptions.None)
+        {
+        }
+
+        public Expression(string expression, ExpressiveOptions options)
         {
             _originalExpression = expression;
+            _options = options;
         }
 
         #endregion
@@ -40,22 +46,23 @@ namespace Expressive
 
             if (_parser == null)
             {
-                _parser = new ExpressionParser();
+                _parser = new ExpressionParser(_options);
             }
 
             // Cache the expression to save us having to recompile.
-            if (_compiledExpression == null)
+            if (_compiledExpression == null ||
+                _options.HasFlag(ExpressiveOptions.NoCache))
             {
                 _compiledExpression = _parser.CompileExpression(_originalExpression);
             }
-
-            IDictionary<string, object> caseInsensitiveParameters = null;
-            if (parameters != null)
+            
+            if (parameters != null &&
+                _options.HasFlag(ExpressiveOptions.IgnoreCase))
             {
-                caseInsensitiveParameters = new Dictionary<string, object>(parameters, StringComparer.OrdinalIgnoreCase);
+                parameters = new Dictionary<string, object>(parameters, StringComparer.OrdinalIgnoreCase);
             }
 
-            result = _compiledExpression.Evaluate(caseInsensitiveParameters);
+            result = _compiledExpression.Evaluate(parameters);
 
             return result;
         }
