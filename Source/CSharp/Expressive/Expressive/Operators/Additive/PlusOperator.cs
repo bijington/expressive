@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Expressive.Expressions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Expressive.Expressions;
 
 namespace Expressive.Operators.Additive
 {

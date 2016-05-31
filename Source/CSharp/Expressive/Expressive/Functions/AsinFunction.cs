@@ -1,6 +1,5 @@
 ﻿using Expressive.Expressions;
 using System;
-using System.Collections.Generic;
 
 namespace Expressive.Functions
 {

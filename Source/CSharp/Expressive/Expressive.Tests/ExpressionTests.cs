@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Expressive.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
+using System;
 using System.Collections.Generic;
-using Expressive.Exceptions;
+using System.Threading;
 
 namespace Expressive.Tests
 {
