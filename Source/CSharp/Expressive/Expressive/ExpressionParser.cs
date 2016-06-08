@@ -28,9 +28,10 @@ namespace Expressive
         #region Fields
 
         private readonly char _decimalSeparator;
-        private ExpressiveOptions _options;
-        private IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> _registeredFunctions;
-        private IDictionary<string, IOperator> _registeredOperators;
+        private readonly ExpressiveOptions _options;
+        private readonly IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> _registeredFunctions;
+        private readonly IDictionary<string, IOperator> _registeredOperators;
+        private readonly StringComparer _stringComparer;
 
         #endregion
 
@@ -39,6 +40,9 @@ namespace Expressive
         internal ExpressionParser(ExpressiveOptions options)
         {
             _options = options;
+
+            // Initialise the string comparer only once.
+            _stringComparer = _options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
 
             _decimalSeparator = Convert.ToChar(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
             _registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(GetDictionaryComparer(options));
@@ -139,7 +143,7 @@ namespace Expressive
 
         #region Internal Methods
 
-        internal IExpression CompileExpression(string expression)
+        internal IExpression CompileExpression(string expression, IList<string> variables)
         {
             if (expression == null)
             {
@@ -161,7 +165,7 @@ namespace Expressive
                 throw new ArgumentException("There are too many ')' symbols. Expected " + openCount + " but there is " + closeCount);
             }
 
-            return CompileExpression(new Queue<string>(tokens), OperatorPrecedence.Minimum);
+            return CompileExpression(new Queue<string>(tokens), OperatorPrecedence.Minimum, variables);
         }
 
         internal void RegisterOperator(IOperator op)
@@ -176,7 +180,7 @@ namespace Expressive
 
         #region Private Methods
 
-        private IExpression CompileExpression(Queue<string> tokens, OperatorPrecedence minimumPrecedence)
+        private IExpression CompileExpression(Queue<string> tokens, OperatorPrecedence minimumPrecedence, IList<string> variables)
         {
             if (tokens == null)
             {
@@ -215,13 +219,13 @@ namespace Expressive
                             if (captiveTokens.Length > 1)
                             {
                                 var innerTokens = op.GetInnerCaptiveTokens(captiveTokens);
-                                rightHandSide = CompileExpression(new Queue<string>(innerTokens), precedence);
+                                rightHandSide = CompileExpression(new Queue<string>(innerTokens), precedence, variables);
 
                                 currentToken = captiveTokens[captiveTokens.Length - 1];
                             }
                             else
                             {
-                                rightHandSide = CompileExpression(tokens, precedence);
+                                rightHandSide = CompileExpression(tokens, precedence, variables);
                                 // We are at the end of an expression so fake it up.
                                 currentToken = ")";
                             }
@@ -264,13 +268,13 @@ namespace Expressive
                         if (parenCount == 0 &&
                             captiveTokens.Any())
                         {
-                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: OperatorPrecedence.Minimum));
+                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: OperatorPrecedence.Minimum, variables: variables));
                             captiveTokens.Clear();
                         }
                         else if (string.Equals(nextToken, ParameterSeparator.ToString(), StringComparison.Ordinal) && parenCount == 1)
                         {
                             // TODO: Should we expect expressions to be null???
-                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: 0));
+                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: 0, variables: variables));
                             captiveTokens.Clear();
                         }
 
@@ -315,7 +319,13 @@ namespace Expressive
                 else if (currentToken.StartsWith("[") && currentToken.EndsWith("]")) // or a variable?
                 {
                     tokens.Dequeue();
-                    leftHandSide = new VariableExpression(currentToken.Replace("[", "").Replace("]", ""));
+                    string variableName = currentToken.Replace("[", "").Replace("]", "");
+                    leftHandSide = new VariableExpression(variableName);
+
+                    if (!variables.Contains(variableName, _stringComparer))
+                    {
+                        variables.Add(variableName);
+                    }
                 }
                 else if (string.Equals(currentToken, "true", StringComparison.OrdinalIgnoreCase)) // or a boolean?
                 {

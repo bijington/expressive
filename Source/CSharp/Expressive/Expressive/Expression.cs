@@ -16,6 +16,15 @@ namespace Expressive
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Gets a list of the Variable names that are contained within this Expression.
+        /// </summary>
+        public string[] Variables { get; private set; }
+
+        #endregion
+
         #region Constructors
 
         public Expression(string expression) : this (expression, ExpressiveOptions.None)
@@ -50,7 +59,11 @@ namespace Expressive
             if (_compiledExpression == null ||
                 _options.HasFlag(ExpressiveOptions.NoCache))
             {
-                _compiledExpression = _parser.CompileExpression(_originalExpression);
+                var variables = new List<string>();
+
+                _compiledExpression = _parser.CompileExpression(_originalExpression, variables);
+
+                this.Variables = variables.ToArray();
             }
             
             if (parameters != null &&
