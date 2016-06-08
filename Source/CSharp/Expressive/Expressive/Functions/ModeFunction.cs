@@ -1,4 +1,6 @@
 ﻿using Expressive.Expressions;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Expressive.Functions
@@ -12,10 +14,26 @@ namespace Expressive.Functions
         public override object Evaluate(IExpression[] participants)
         {
             this.ValidateParameterCount(participants, -1, 1);
+            
+            IList<object> values = new List<object>();
 
-            object result = 0;
+            foreach (var p in participants)
+            {
+                var value = p.Evaluate(this.Arguments);
+                var enumerable = value as IEnumerable;
 
-            var values = participants.Select(p => p.Evaluate(this.Arguments));
+                if (enumerable != null)
+                {
+                    foreach (var item in enumerable)
+                    {
+                        values.Add(item);
+                    }
+                }
+                else
+                {
+                    values.Add(value);
+                }
+            }
 
             var groups = values.GroupBy(v => v);
             int maxCount = groups.Max(g => g.Count());

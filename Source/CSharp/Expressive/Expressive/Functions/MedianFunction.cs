@@ -1,5 +1,7 @@
 ﻿using Expressive.Expressions;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Expressive.Functions
@@ -15,10 +17,28 @@ namespace Expressive.Functions
             this.ValidateParameterCount(participants, -1, 1);
 
             object result = 0;
+            
+            IList<decimal> decimalValues = new List<decimal>();
 
-            var values = participants.Select(p => p.Evaluate(this.Arguments));
+            foreach (var p in participants)
+            {
+                var value = p.Evaluate(this.Arguments);
+                var enumerable = value as IEnumerable;
+                
+                if (enumerable != null)
+                {
+                    foreach (var item in enumerable)
+                    {
+                        decimalValues.Add(Convert.ToDecimal(item));
+                    }
+                }
+                else
+                {
+                    decimalValues.Add(Convert.ToDecimal(value));
+                }
+            }
 
-            return Median(values.Select(v => Convert.ToDecimal(v)).ToArray());
+            return Median(decimalValues.ToArray());
         }
 
         #endregion

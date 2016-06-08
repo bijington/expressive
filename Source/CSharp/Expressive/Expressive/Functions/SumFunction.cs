@@ -1,5 +1,6 @@
 ﻿using Expressive.Expressions;
 using Expressive.Helpers;
+using System.Collections;
 
 namespace Expressive.Functions
 {
@@ -17,7 +18,20 @@ namespace Expressive.Functions
 
             foreach (var value in participants)
             {
-                result = Numbers.Add(result, value.Evaluate(Arguments));
+                object evaluatedValue = value.Evaluate(Arguments);
+                IEnumerable enumerable = evaluatedValue as IEnumerable;
+
+                if (enumerable != null)
+                {
+                    object enumerableSum = 0;
+                    foreach (var item in enumerable)
+                    {
+                        enumerableSum = Numbers.Add(enumerableSum, item);
+                    }
+                    evaluatedValue = enumerableSum;
+                }
+
+                result = Numbers.Add(result, evaluatedValue);
             }
 
             return result;

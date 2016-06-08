@@ -186,6 +186,12 @@ namespace Expressive.Tests
             new Expression("average()", ExpressiveOptions.IgnoreCase).Evaluate();
         }
 
+        [TestMethod]
+        public void AverageShouldHandleIEnumerable()
+        {
+            Assert.AreEqual(3d, new Expression("Average(1,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 5 } }));
+        }
+
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Ceiling() takes only 1 argument(s)")]
         public void CeilingShouldHandleOnlyOneArgument()
         {
@@ -207,6 +213,13 @@ namespace Expressive.Tests
             Assert.AreEqual(4, new Expression("count(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
 
             new Expression("Count()").Evaluate();
+        }
+
+        [TestMethod]
+        public void CountShouldHandleIEnumerable()
+        {
+            Assert.AreEqual(5, new Expression("Count([array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 0, 1, 2, 3, 4 } }));
+            Assert.AreEqual(5, new Expression("Count([array])").Evaluate(new Dictionary<string, object> { ["array"] = new List<int> { 0, 1, 2, 3, 4 } }));
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Exp() takes only 1 argument(s)")]
@@ -268,11 +281,47 @@ namespace Expressive.Tests
             Assert.AreEqual(12, new Expression("Max(1,2,4,5)").Evaluate());
         }
 
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Mean() expects at least 1 argument(s)")]
+        public void MeanShouldHandleAtLeastOneArgument()
+        {
+            Assert.AreEqual(3d, new Expression("Mean(1,2,4,5)").Evaluate());
+            Assert.AreEqual(1d, new Expression("mean(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12.5, new Expression("Mean(10, 20, 5, 15)").Evaluate());
+
+            new Expression("mean()", ExpressiveOptions.IgnoreCase).Evaluate();
+        }
+
+        [TestMethod]
+        public void MeanShouldHandleIEnumerable()
+        {
+            Assert.AreEqual(3d, new Expression("Mean(1,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 5 } }));
+        }
+
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Median() expects at least 1 argument(s)")]
+        public void MedianShouldHandleAtLeastOneArgument()
+        {
+            Assert.AreEqual(3.0M, new Expression("Median(1,2,4,5)").Evaluate());
+            Assert.AreEqual(1.0M, new Expression("median(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12.5M, new Expression("Median(10, 20, 5, 15)").Evaluate());
+
+            new Expression("median()", ExpressiveOptions.IgnoreCase).Evaluate();
+        }
+
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Min() takes only 2 argument(s)")]
         public void MinShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(2, new Expression("Min(3, 2)").Evaluate());
             Assert.AreEqual(12, new Expression("IEEERemainder(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Mode() expects at least 1 argument(s)")]
+        public void ModeShouldHandleAtLeastOneArgument()
+        {
+            Assert.AreEqual(2, new Expression("Mode(1,2,4,5,2)").Evaluate());
+            Assert.AreEqual(1, new Expression("mode(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(10, new Expression("Mode(10, 20, 5, 15)").Evaluate());
+
+            new Expression("mode()", ExpressiveOptions.IgnoreCase).Evaluate();
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Pow() takes only 2 argument(s)")]
@@ -318,6 +367,12 @@ namespace Expressive.Tests
             Assert.AreEqual(72, new Expression("sum(1,2,4,5,10,20,30)", ExpressiveOptions.IgnoreCase).Evaluate());
 
             new Expression("Sum()").Evaluate();
+        }
+
+        [TestMethod]
+        public void SumShouldHandleIEnumerable()
+        {
+            Assert.AreEqual(10, new Expression("Sum([array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 0, 1, 2, 3, 4 } }));
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Tan() takes only 1 argument(s)")]

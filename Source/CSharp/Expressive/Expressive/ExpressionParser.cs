@@ -576,15 +576,15 @@ namespace Expressive
                 var lengthProcessed = 0;
                 bool foundUnrecognisedCharacter = false;
 
-                // Loop through and find any matching operators.
-                foreach (var op in operators)
+                // Functions would tend to have longer tags so check for these first.
+                foreach (var kvp in _registeredFunctions)
                 {
-                    var lookAhead = expression.Substring(index, Math.Min(op.Key.Length, expressionLength - index));
+                    var lookAhead = expression.Substring(index, Math.Min(kvp.Key.Length, expressionLength - index));
 
-                    if (CheckForTag(op.Key, lookAhead, _options))
+                    if (CheckForTag(kvp.Key, lookAhead, _options))
                     {
                         CheckForUnrecognised(unrecognised, tokens);
-                        lengthProcessed = op.Key.Length;
+                        lengthProcessed = kvp.Key.Length;
                         tokens.Add(lookAhead);
                         break;
                     }
@@ -592,14 +592,15 @@ namespace Expressive
 
                 if (lengthProcessed == 0)
                 {
-                    foreach (var kvp in _registeredFunctions)
+                    // Loop through and find any matching operators.
+                    foreach (var op in operators)
                     {
-                        var lookAhead = expression.Substring(index, Math.Min(kvp.Key.Length, expressionLength - index));
+                        var lookAhead = expression.Substring(index, Math.Min(op.Key.Length, expressionLength - index));
 
-                        if (CheckForTag(kvp.Key, lookAhead, _options))
+                        if (CheckForTag(op.Key, lookAhead, _options))
                         {
                             CheckForUnrecognised(unrecognised, tokens);
-                            lengthProcessed = kvp.Key.Length;
+                            lengthProcessed = op.Key.Length;
                             tokens.Add(lookAhead);
                             break;
                         }

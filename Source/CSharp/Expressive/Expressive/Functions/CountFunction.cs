@@ -1,5 +1,6 @@
 ﻿using Expressive.Expressions;
-using System.Collections.Generic;
+using System;
+using System.Collections;
 
 namespace Expressive.Functions
 {
@@ -13,7 +14,29 @@ namespace Expressive.Functions
         {
             this.ValidateParameterCount(participants, -1, 1);
 
-            return participants != null ? participants.Length : 0;
+            int count = 0;
+
+            foreach (var value in participants)
+            {
+                int increment = 1;
+                object evaluatedValue = value.Evaluate(Arguments);
+                IEnumerable enumerable = evaluatedValue as IEnumerable;
+
+                if (enumerable != null)
+                {
+                    int enumerableCount = 0;
+                    foreach (var item in enumerable)
+                    {
+                        enumerableCount++;
+                    }
+                    
+                    increment = enumerableCount;
+                }
+
+                count += increment;
+            }
+
+            return count;
         }
 
         #endregion
