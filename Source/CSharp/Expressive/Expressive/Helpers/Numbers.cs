@@ -24,6 +24,15 @@ namespace Expressive.Helpers
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
+            if (a is double && double.IsNaN((double)a))
+            {
+                return a;
+            }
+            if (b is double && double.IsNaN((double)b))
+            {
+                return b;
+            }
+
             TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
             TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
 
@@ -256,6 +265,15 @@ namespace Expressive.Helpers
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
+            if (a is double && double.IsNaN((double)a))
+            {
+                return a;
+            }
+            if (b is double && double.IsNaN((double)b))
+            {
+                return b;
+            }
+
             TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
             TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
 
@@ -460,6 +478,15 @@ namespace Expressive.Helpers
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
+            if (a is double && double.IsNaN((double)a))
+            {
+                return a;
+            }
+            if (b is double && double.IsNaN((double)b))
+            {
+                return b;
+            }
+
             TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
             TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
 
@@ -663,6 +690,15 @@ namespace Expressive.Helpers
 
             a = ConvertIfString(a);
             b = ConvertIfString(b);
+
+            if (a is double && double.IsNaN((double)a))
+            {
+                return a;
+            }
+            if (b is double && double.IsNaN((double)b))
+            {
+                return b;
+            }
 
             TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
             TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
@@ -885,6 +921,15 @@ namespace Expressive.Helpers
 
             a = ConvertIfString(a);
             b = ConvertIfString(b);
+
+            if (a is double && double.IsNaN((double)a))
+            {
+                return a;
+            }
+            if (b is double && double.IsNaN((double)b))
+            {
+                return b;
+            }
 
             TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
             TypeCode typeCodeB = Type.GetTypeCode(b.GetType());

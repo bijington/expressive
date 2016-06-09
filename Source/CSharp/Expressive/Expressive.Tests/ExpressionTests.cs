@@ -530,6 +530,16 @@ namespace Expressive.Tests
         }
 
         [TestMethod]
+        public void CheckNaNIsHandledCorrectly()
+        {
+            Assert.AreEqual(double.NaN, new Expression("2 + [a]").Evaluate(new Dictionary<string, object> { ["a"] = double.NaN }));
+            Assert.AreEqual(double.NaN, new Expression("2 * [a]").Evaluate(new Dictionary<string, object> { ["a"] = double.NaN }));
+            Assert.AreEqual(double.NaN, new Expression("2 / [a]").Evaluate(new Dictionary<string, object> { ["a"] = double.NaN }));
+            Assert.AreEqual(double.NaN, new Expression("2 - [a]").Evaluate(new Dictionary<string, object> { ["a"] = double.NaN }));
+            Assert.AreEqual(double.NaN, new Expression("2 % [a]").Evaluate(new Dictionary<string, object> { ["a"] = double.NaN }));
+        }
+
+        [TestMethod]
         public void CheckComplicatedDepth()
         {
             // This was a previous bug (Issue #6) so this is in place to make sure it does not re-occur.
