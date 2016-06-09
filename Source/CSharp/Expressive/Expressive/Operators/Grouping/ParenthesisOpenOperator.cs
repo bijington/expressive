@@ -29,7 +29,7 @@ namespace Expressive.Operators.Grouping
 
             result.Add(token);
 
-            var parenCount = 0;
+            var parenCount = 1;
 
             while (remainingTokens.Any())
             {
@@ -57,7 +57,7 @@ namespace Expressive.Operators.Grouping
 
         public string[] GetInnerCaptiveTokens(string[] allCaptiveTokens)
         {
-            return allCaptiveTokens.Skip(1).ToArray();
+            return allCaptiveTokens.Skip(1).Take(allCaptiveTokens.Length - 2).ToArray();
         }
 
         public OperatorPrecedence GetPrecedence(string previousToken)

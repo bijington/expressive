@@ -1,10 +1,6 @@
 ﻿using Expressive.Helpers;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Expressive.Expressions
 {
@@ -73,7 +69,8 @@ namespace Expressive.Expressions
                 case BinaryExpressionType.Divide:
                     var rhsResult = _rightHandSide.Evaluate(arguments);
 
-                    return (IsReal(lhsResult) || IsReal(rhsResult)) ? Numbers.Divide(lhsResult, rhsResult)
+                    return (lhsResult == null || rhsResult == null || IsReal(lhsResult) || IsReal(rhsResult))
+                                 ? Numbers.Divide(lhsResult, rhsResult)
                                  : Numbers.Divide(Convert.ToDouble(lhsResult), rhsResult);
                 case BinaryExpressionType.Multiply:
                     return Numbers.Multiply(lhsResult, _rightHandSide.Evaluate(arguments));

@@ -12,12 +12,13 @@ namespace Expressive.Tests
         [TestMethod]
         public void Debugging()
         {
-            var expression = new Expression("([a] + [b] * [c])");// + (([d] / [e]) * [f]) - ([a] * [b])");
+            Assert.IsNull(new Expression("2 + [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
+            var expression = new Expression("((1 + 2) * 3)");// + (([d] / [e]) * [f]) - ([a] * [b])");
             //Expression expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$')");
 
             object value = expression.Evaluate(new Dictionary<string, object> { ["a"] = 1, ["b"] = 2, ["c"] = 3, ["d"] = 4, ["e"] = 5, ["f"] = 6 });
 
-            Assert.AreEqual(false, value);
+            Assert.AreEqual(9, value);
         }
 
         #region Operators
@@ -516,6 +517,27 @@ namespace Expressive.Tests
             var expression = new Expression("([a] + [b] * [c]) + ([a] * [b])");
 
             Assert.AreEqual(3, expression.Variables.Length);
+        }
+
+        [TestMethod]
+        public void CheckNullValuesAreHandledCorrectly()
+        {
+            Assert.IsNull(new Expression("2 + [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
+            Assert.IsNull(new Expression("2 * [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
+            Assert.IsNull(new Expression("2 / [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
+            Assert.IsNull(new Expression("2 - [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
+            Assert.IsNull(new Expression("2 % [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
+        }
+
+        [TestMethod]
+        public void CheckComplicatedDepth()
+        {
+            // This was a previous bug (Issue #6) so this is in place to make sure it does not re-occur.
+            var expression = new Expression("((1 + 2) * 3) + (([d] / [e]) * [f]) - ([a] * [b])");
+
+            object value = expression.Evaluate(new Dictionary<string, object> { ["a"] = 1, ["b"] = 2, ["c"] = 3, ["d"] = 6, ["e"] = 2, ["f"] = 6 });
+
+            Assert.AreEqual(25d, value);
         }
 
         #endregion

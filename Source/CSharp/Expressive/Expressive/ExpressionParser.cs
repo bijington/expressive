@@ -219,7 +219,7 @@ namespace Expressive
                             if (captiveTokens.Length > 1)
                             {
                                 var innerTokens = op.GetInnerCaptiveTokens(captiveTokens);
-                                rightHandSide = CompileExpression(new Queue<string>(innerTokens), precedence, variables);
+                                rightHandSide = CompileExpression(new Queue<string>(innerTokens), OperatorPrecedence.Minimum, variables);
 
                                 currentToken = captiveTokens[captiveTokens.Length - 1];
                             }

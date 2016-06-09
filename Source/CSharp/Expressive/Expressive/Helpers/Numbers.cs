@@ -16,6 +16,11 @@ namespace Expressive.Helpers
 
         internal static object Add(object a, object b)
         {
+            if (a == null || b == null)
+            {
+                return null;
+            }
+
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
@@ -243,6 +248,11 @@ namespace Expressive.Helpers
         }
         internal static object Divide(object a, object b)
         {
+            if (a == null || b == null)
+            {
+                return null;
+            }
+
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
@@ -442,6 +452,11 @@ namespace Expressive.Helpers
         }
         internal static object Multiply(object a, object b)
         {
+            if (a == null || b == null)
+            {
+                return null;
+            }
+
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
@@ -641,6 +656,11 @@ namespace Expressive.Helpers
         }
         internal static object Subtract(object a, object b)
         {
+            if (a == null || b == null)
+            {
+                return null;
+            }
+
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
@@ -858,6 +878,11 @@ namespace Expressive.Helpers
 
         internal static object Modulus(object a, object b)
         {
+            if (a == null || b == null)
+            {
+                return null;
+            }
+
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
