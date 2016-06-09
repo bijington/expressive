@@ -12,9 +12,10 @@ namespace Expressive.Tests
         [TestMethod]
         public void Debugging()
         {
-            Expression expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$')");
+            var expression = new Expression("([a] + [b] * [c])");// + (([d] / [e]) * [f]) - ([a] * [b])");
+            //Expression expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$')");
 
-            object value = expression.Evaluate();
+            object value = expression.Evaluate(new Dictionary<string, object> { ["a"] = 1, ["b"] = 2, ["c"] = 3, ["d"] = 4, ["e"] = 5, ["f"] = 6 });
 
             Assert.AreEqual(false, value);
         }
@@ -512,12 +513,7 @@ namespace Expressive.Tests
         [TestMethod]
         public void ShouldReturnCorrectVariables()
         {
-            // TODO this is a breaking test
-            //var expression = new Expression("([a] + [b] * [c]) + (([d] / [e]) * [f]) - ([a] * [b])");
-
             var expression = new Expression("([a] + [b] * [c]) + ([a] * [b])");
-
-            expression.Evaluate(new Dictionary<string, object> { ["a"] = 1, ["b"] = 2, ["c"] = 3, ["d"] = 4, ["e"] = 5, ["f"] = 6 });
 
             Assert.AreEqual(3, expression.Variables.Length);
         }

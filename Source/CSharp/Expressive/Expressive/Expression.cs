@@ -10,9 +10,10 @@ namespace Expressive
         #region Fields
 
         private IExpression _compiledExpression;
-        private ExpressiveOptions _options;
-        private string _originalExpression;
-        private ExpressionParser _parser;
+        private readonly ExpressiveOptions _options;
+        private readonly string _originalExpression;
+        private readonly ExpressionParser _parser;
+        private string[] _variables;
 
         #endregion
 
@@ -21,7 +22,15 @@ namespace Expressive
         /// <summary>
         /// Gets a list of the Variable names that are contained within this Expression.
         /// </summary>
-        public string[] Variables { get; private set; }
+        public string[] Variables
+        {
+            get
+            {
+                this.CompileExpression();
+
+                return _variables;
+            }
+        }
 
         #endregion
 
@@ -35,6 +44,8 @@ namespace Expressive
         {
             _originalExpression = expression;
             _options = options;
+
+            _parser = new ExpressionParser(_options);
         }
 
         #endregion
@@ -49,23 +60,9 @@ namespace Expressive
         public object Evaluate(IDictionary<string, object> parameters)
         {
             object result = null;
-
-            if (_parser == null)
-            {
-                _parser = new ExpressionParser(_options);
-            }
-
-            // Cache the expression to save us having to recompile.
-            if (_compiledExpression == null ||
-                _options.HasFlag(ExpressiveOptions.NoCache))
-            {
-                var variables = new List<string>();
-
-                _compiledExpression = _parser.CompileExpression(_originalExpression, variables);
-
-                this.Variables = variables.ToArray();
-            }
             
+            this.CompileExpression();
+
             if (parameters != null &&
                 _options.HasFlag(ExpressiveOptions.IgnoreCase))
             {
@@ -98,6 +95,24 @@ namespace Expressive
                     callback(result);
                 }
             });
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void CompileExpression()
+        {
+            // Cache the expression to save us having to recompile.
+            if (_compiledExpression == null ||
+                _options.HasFlag(ExpressiveOptions.NoCache))
+            {
+                var variables = new List<string>();
+
+                _compiledExpression = _parser.CompileExpression(_originalExpression, variables);
+
+                _variables = variables.ToArray();
+            }
         }
 
         #endregion
