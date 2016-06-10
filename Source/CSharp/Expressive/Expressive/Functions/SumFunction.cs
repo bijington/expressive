@@ -31,7 +31,8 @@ namespace Expressive.Functions
                     evaluatedValue = enumerableSum;
                 }
 
-                result = Numbers.Add(result, evaluatedValue);
+                // When summing we don't want to bail out early with a null value.
+                result = Numbers.Add(result ?? 0, evaluatedValue ?? 0);
             }
 
             return result;

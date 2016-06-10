@@ -377,6 +377,22 @@ namespace Expressive.Tests
             Assert.AreEqual(10, new Expression("Sum([array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 0, 1, 2, 3, 4 } }));
         }
 
+        [TestMethod]
+        public void SumShouldUseZeroInsteadOfNull()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["Value1"] = 1.1m,
+                ["Value2"] = null
+            };
+            var expression = new Expressive.Expression("Sum([Value1], [Value2])");
+
+            var result = expression.Evaluate(arguments);
+
+            Assert.IsInstanceOfType(result, typeof(decimal?));
+            Assert.AreEqual(1.1m, result);
+        }
+
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Tan() takes only 1 argument(s)")]
         public void TanShouldHandleOnlyOneArgument()
         {
