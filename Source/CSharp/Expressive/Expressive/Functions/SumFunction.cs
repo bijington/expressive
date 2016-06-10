@@ -26,7 +26,8 @@ namespace Expressive.Functions
                     object enumerableSum = 0;
                     foreach (var item in enumerable)
                     {
-                        enumerableSum = Numbers.Add(enumerableSum, item);
+                        // When summing we don't want to bail out early with a null value.
+                        enumerableSum = Numbers.Add(enumerableSum ?? 0, item ?? 0);
                     }
                     evaluatedValue = enumerableSum;
                 }

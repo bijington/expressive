@@ -378,6 +378,22 @@ namespace Expressive.Tests
         }
 
         [TestMethod]
+        public void SumShouldHandleIEnumerableWithNulls()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["Value"] = new List<decimal?> { 1.0m, null, 2.5m },
+                ["Value1"] = 3m
+            };
+            var expression = new Expressive.Expression("Sum([Value], [Value1])");
+
+            var result = expression.Evaluate(arguments);
+
+            Assert.IsInstanceOfType(result, typeof(decimal?));
+            Assert.AreEqual(6.5m, result);
+        }
+
+        [TestMethod]
         public void SumShouldUseZeroInsteadOfNull()
         {
             var arguments = new Dictionary<string, object>
