@@ -38,23 +38,127 @@ namespace Expressive.Expressions
                 case BinaryExpressionType.Or:
                     return Convert.ToBoolean(lhsResult) || Convert.ToBoolean(_rightHandSide.Evaluate(arguments));
                 case BinaryExpressionType.NotEqual:
-                    // Use the type of the left operand to make the comparison
-                    return Comparison.CompareUsingMostPreciseType(lhsResult, _rightHandSide.Evaluate(arguments)) != 0;
+                    {
+                        object rhsResult = null;
+
+                        // Use the type of the left operand to make the comparison
+                        if (lhsResult == null)
+                        {
+                            rhsResult = _rightHandSide.Evaluate(arguments);
+                            if (rhsResult != null)
+                            {
+                                // 2 nulls make a match!
+                                return true;
+                            }
+
+                            return false;
+                        }
+                        else
+                        {
+                            rhsResult = _rightHandSide.Evaluate(arguments);
+
+                            // If we got here then the lhsResult is not null.
+                            if (rhsResult == null)
+                            {
+                                return true;
+                            }
+                        }
+
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) != 0;
+                    }
                 case BinaryExpressionType.LessThanOrEqual:
-                    // Use the type of the left operand to make the comparison
-                    return Comparison.CompareUsingMostPreciseType(lhsResult, _rightHandSide.Evaluate(arguments)) <= 0;
+                    {
+                        // Use the type of the left operand to make the comparison
+                        if (lhsResult == null)
+                        {
+                            return null;
+                        }
+
+                        var rhsResult = _rightHandSide.Evaluate(arguments);
+                        if (rhsResult == null)
+                        {
+                            return null;
+                        }
+
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) <= 0;
+                    }
                 case BinaryExpressionType.GreaterThanOrEqual:
-                    // Use the type of the left operand to make the comparison
-                    return Comparison.CompareUsingMostPreciseType(lhsResult, _rightHandSide.Evaluate(arguments)) >= 0;
+                    {
+                        // Use the type of the left operand to make the comparison
+                        if (lhsResult == null)
+                        {
+                            return null;
+                        }
+
+                        var rhsResult = _rightHandSide.Evaluate(arguments);
+                        if (rhsResult == null)
+                        {
+                            return null;
+                        }
+
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) >= 0;
+                    }
                 case BinaryExpressionType.LessThan:
-                    // Use the type of the left operand to make the comparison
-                    return Comparison.CompareUsingMostPreciseType(lhsResult, _rightHandSide.Evaluate(arguments)) < 0;
+                    {
+                        // Use the type of the left operand to make the comparison
+                        if (lhsResult == null)
+                        {
+                            return null;
+                        }
+
+                        var rhsResult = _rightHandSide.Evaluate(arguments);
+                        if (rhsResult == null)
+                        {
+                            return null;
+                        }
+
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) < 0;
+                    }
                 case BinaryExpressionType.GreaterThan:
-                    // Use the type of the left operand to make the comparison
-                    return Comparison.CompareUsingMostPreciseType(lhsResult, _rightHandSide.Evaluate(arguments)) > 0;
+                    {
+                        // Use the type of the left operand to make the comparison
+                        if (lhsResult == null)
+                        {
+                            return null;
+                        }
+
+                        var rhsResult = _rightHandSide.Evaluate(arguments);
+                        if (rhsResult == null)
+                        {
+                            return null;
+                        }
+
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) > 0;
+                    }
                 case BinaryExpressionType.Equal:
-                    // Use the type of the left operand to make the comparison
-                    return Comparison.CompareUsingMostPreciseType(lhsResult, _rightHandSide.Evaluate(arguments)) == 0;
+                    {
+                        object rhsResult = null;
+
+                        // Use the type of the left operand to make the comparison
+                        if (lhsResult == null)
+                        {
+                            rhsResult = _rightHandSide.Evaluate(arguments);
+                            if (rhsResult == null)
+                            {
+                                // 2 nulls make a match!
+                                return true;
+                            }
+
+                            return false;
+                        }
+                        else
+                        {
+                            rhsResult = _rightHandSide.Evaluate(arguments);
+
+                            // If we got here then the lhsResult is not null.
+                            if (rhsResult == null)
+                            {
+                                return false;
+                            }
+                        }
+
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) == 0;
+                    }
                 case BinaryExpressionType.Subtract:
                     return Numbers.Subtract(lhsResult, _rightHandSide.Evaluate(arguments));
                 case BinaryExpressionType.Add:
@@ -67,11 +171,13 @@ namespace Expressive.Expressions
                 case BinaryExpressionType.Modulus:
                     return Numbers.Modulus(lhsResult, _rightHandSide.Evaluate(arguments));
                 case BinaryExpressionType.Divide:
-                    var rhsResult = _rightHandSide.Evaluate(arguments);
+                    {
+                        var rhsResult = _rightHandSide.Evaluate(arguments);
 
-                    return (lhsResult == null || rhsResult == null || IsReal(lhsResult) || IsReal(rhsResult))
-                                 ? Numbers.Divide(lhsResult, rhsResult)
-                                 : Numbers.Divide(Convert.ToDouble(lhsResult), rhsResult);
+                        return (lhsResult == null || rhsResult == null || IsReal(lhsResult) || IsReal(rhsResult))
+                                     ? Numbers.Divide(lhsResult, rhsResult)
+                                     : Numbers.Divide(Convert.ToDouble(lhsResult), rhsResult);
+                    }
                 case BinaryExpressionType.Multiply:
                     return Numbers.Multiply(lhsResult, _rightHandSide.Evaluate(arguments));
                 case BinaryExpressionType.BitwiseOr:

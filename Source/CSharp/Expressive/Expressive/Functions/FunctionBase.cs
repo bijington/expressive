@@ -22,6 +22,7 @@ namespace Expressive.Functions
         /// </summary>
         /// <param name="participants"></param>
         /// <param name="expectedCount">The expected number of Parameters, use -1 for an unknown number.</param>
+        /// <param name="minimumCount">The minimum number of Parameters.</param>
         /// <returns>True if the correct number are present, false otherwise.</returns>
         protected bool ValidateParameterCount(IExpression[] participants, int expectedCount, int minimumCount)
         {

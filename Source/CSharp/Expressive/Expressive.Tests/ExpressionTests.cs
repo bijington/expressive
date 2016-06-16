@@ -12,13 +12,25 @@ namespace Expressive.Tests
         [TestMethod]
         public void Debugging()
         {
-            Assert.IsNull(new Expression("2 + [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
-            var expression = new Expression("((1 + 2) * 3)");// + (([d] / [e]) * [f]) - ([a] * [b])");
+            //var exp = new Expression("myfunc('abc')");
+            //exp.RegisterFunction("myfunc", (p, a) =>
+            //{
+            //    return 1;
+            //});
+
+            //Assert.AreEqual(1, exp.Evaluate());
+
+            //object result = new Expression("\"PO-\" + PadLeft([Number], 4, \"0\") + \"-\" + [Year]").Evaluate(new Dictionary<string, object> { ["Number"] = 1234569, ["Year"] = 2016 });
+            //string t = "10009".PadLeft(4, '0');
+
+            var expression = new Expression("[number1] > 1000");
             //Expression expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$')");
+            object value = expression.Evaluate(new Dictionary<string, object> { ["number1"] = null });
+            
+            Assert.AreEqual(null, value);
 
-            object value = expression.Evaluate(new Dictionary<string, object> { ["a"] = 1, ["b"] = 2, ["c"] = 3, ["d"] = 4, ["e"] = 5, ["f"] = 6 });
-
-            Assert.AreEqual(9, value);
+            var nullResult = new Expression("[number1] == null").Evaluate(new Dictionary<string, object> { ["number1"] = null });
+            Assert.AreEqual(true, nullResult);
         }
 
         #region Operators
@@ -144,6 +156,27 @@ namespace Expressive.Tests
             Assert.AreEqual(true, new Expression("1 <= 2").Evaluate());
             Assert.AreEqual(false, new Expression("7 < 2").Evaluate());
             Assert.AreEqual(true, new Expression("1 < 2").Evaluate());
+
+            // Null safety
+            Assert.AreEqual(true, new Expression("[number1] == null").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(false, new Expression("[number1] == null").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
+            Assert.AreEqual(false, new Expression("[number1] != null").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(true, new Expression("[number1] != null").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
+            Assert.AreEqual(true, new Expression("[number1] <> 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(null, new Expression("[number1] >= 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(null, new Expression("[number1] > 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(null, new Expression("[number1] <= 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(null, new Expression("[number1] < 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+
+            Assert.AreEqual(true, new Expression("null == [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(false, new Expression("null == [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
+            Assert.AreEqual(false, new Expression("null != [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(true, new Expression("null != [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
+            Assert.AreEqual(true, new Expression("2 <> [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(null, new Expression("2 >= [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(null, new Expression("2 > [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(null, new Expression("2 <= [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(null, new Expression("2 < [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
         }
 
         #endregion
@@ -333,6 +366,16 @@ namespace Expressive.Tests
             Assert.AreEqual(12, new Expression("Pow(1,2,4,5)").Evaluate());
         }
 
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Regex() takes only 2 argument(s)")]
+        public void RegexShouldHandleOnlyTwoArguments()
+        {
+            Expression expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$')");
+            Assert.AreEqual(false, expression.Evaluate());
+
+            expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$', '')");
+            Assert.AreEqual(false, expression.Evaluate());
+        }
+
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Round() takes only 2 argument(s)")]
         public void RoundShouldHandleOnlyTwoArguments()
         {
@@ -421,6 +464,18 @@ namespace Expressive.Tests
         {
             Assert.AreEqual(1d, new Expression("Truncate(1.7)").Evaluate());
             Assert.AreEqual(12, new Expression("Truncate(1,2,4,5)").Evaluate());
+        }
+
+        [TestMethod]
+        public void CustomFunctionsWithLambda()
+        {
+            var exp = new Expression("myfunc('abc')");
+            exp.RegisterFunction("myfunc", (p, a) =>
+            {
+                return 1;
+            });
+
+            Assert.AreEqual(1, exp.Evaluate());
         }
 
         #endregion

@@ -100,6 +100,7 @@ namespace Expressive
             RegisterFunction(new MedianFunction());
             RegisterFunction(new ModeFunction());
             RegisterFunction(new MinFunction());
+            RegisterFunction(new PadLeftFunction());
             RegisterFunction(new PowFunction());
             RegisterFunction(new RegexFunction());
             RegisterFunction(new RoundFunction());
@@ -116,9 +117,9 @@ namespace Expressive
 
         #region Public Methods
 
-        public void RegisterFunction(Func<IExpression[], object> function)
+        public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
         {
-            RegisterFunction(function);
+            _registeredFunctions.Add(functionName, function);
         }
 
         public void RegisterFunction(IFunction function)
