@@ -9,11 +9,11 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Floor"; } }
 
-        public override object Evaluate(IExpression[] participants)
+        public override object Evaluate(IExpression[] parameters)
         {
-            this.ValidateParameterCount(participants, 1, 1);
+            this.ValidateParameterCount(parameters, 1, 1);
 
-            return Math.Floor(Convert.ToDouble(participants[0].Evaluate(Arguments)));
+            return Math.Floor(Convert.ToDouble(parameters[0].Evaluate(Variables)));
         }
 
         #endregion

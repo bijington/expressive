@@ -14,11 +14,11 @@ namespace Expressive.Functions
             }
         }
 
-        public override object Evaluate(IExpression[] participants)
+        public override object Evaluate(IExpression[] parameters)
         {
-            this.ValidateParameterCount(participants, 3, 3);
+            this.ValidateParameterCount(parameters, 3, 3);
 
-            object value = participants[0].Evaluate(Arguments);
+            object value = parameters[0].Evaluate(Variables);
 
             string text = null;
             if (value is string)
@@ -30,8 +30,8 @@ namespace Expressive.Functions
                 text = value.ToString();
             }
 
-            int totalLength = (int)participants[1].Evaluate(Arguments);
-            char character = (char)((string)participants[2].Evaluate(Arguments))[0];
+            int totalLength = (int)parameters[1].Evaluate(Variables);
+            char character = (char)((string)parameters[2].Evaluate(Variables))[0];
 
             // Not very safe at present but let's see for now.
             return text.PadLeft(totalLength, character);

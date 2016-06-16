@@ -43,7 +43,7 @@ namespace Expressive
         /// <summary>
         /// Gets a list of the Variable names that are contained within this Expression.
         /// </summary>
-        public string[] Variables
+        public string[] ReferencedVariables
         {
             get
             {

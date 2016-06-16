@@ -14,22 +14,22 @@ namespace Expressive.Expressions
 
         #region IExpression Members
 
-        public object Evaluate(IDictionary<string, object> arguments)
+        public object Evaluate(IDictionary<string, object> variables)
         {
-            if (arguments == null ||
-                !arguments.ContainsKey(_variableName))
+            if (variables == null ||
+                !variables.ContainsKey(_variableName))
             {
                 throw new ArgumentException("The variable '" + _variableName + "' has not been supplied.");
             }
 
             // Check to see if we have to referred to another expression.
-            var expression = arguments[_variableName] as Expression;
+            var expression = variables[_variableName] as Expression;
             if (expression != null)
             {
-                return expression.Evaluate(arguments);
+                return expression.Evaluate(variables);
             }
 
-            return arguments[_variableName];
+            return variables[_variableName];
         }
 
         #endregion

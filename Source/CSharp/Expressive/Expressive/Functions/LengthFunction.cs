@@ -14,11 +14,11 @@ namespace Expressive.Functions
             }
         }
 
-        public override object Evaluate(IExpression[] participants)
+        public override object Evaluate(IExpression[] parameters)
         {
-            this.ValidateParameterCount(participants, 1, 1);
+            this.ValidateParameterCount(parameters, 1, 1);
 
-            string text = (string)participants[0].Evaluate(Arguments);
+            string text = (string)parameters[0].Evaluate(Variables);
 
             // Not very safe at present but let's see for now.
             return text.Length;

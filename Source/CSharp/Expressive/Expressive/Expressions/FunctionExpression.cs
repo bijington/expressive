@@ -18,9 +18,9 @@ namespace Expressive.Expressions
 
         #region IExpression Members
 
-        public object Evaluate(IDictionary<string, object> arguments)
+        public object Evaluate(IDictionary<string, object> variables)
         {
-            return _function(_parameters, arguments);
+            return _function(_parameters, variables);
         }
 
         #endregion

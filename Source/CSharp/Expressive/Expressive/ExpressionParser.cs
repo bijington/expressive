@@ -115,33 +115,6 @@ namespace Expressive
 
         #endregion
 
-        #region Public Methods
-
-        public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
-        {
-            _registeredFunctions.Add(functionName, function);
-        }
-
-        public void RegisterFunction(IFunction function)
-        {
-            _registeredFunctions.Add(function.Name, (p, a) =>
-            {
-                function.Arguments = a;
-
-                return function.Evaluate(p);
-            });
-        }
-
-        public void UnregisterFunction(string name)
-        {
-            if (_registeredFunctions.ContainsKey(name))
-            {
-                _registeredFunctions.Remove(name);
-            }
-        }
-
-        #endregion
-
         #region Internal Methods
 
         internal IExpression CompileExpression(string expression, IList<string> variables)
@@ -169,11 +142,34 @@ namespace Expressive
             return CompileExpression(new Queue<string>(tokens), OperatorPrecedence.Minimum, variables);
         }
 
+        internal void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
+        {
+            _registeredFunctions.Add(functionName, function);
+        }
+
+        internal void RegisterFunction(IFunction function)
+        {
+            _registeredFunctions.Add(function.Name, (p, a) =>
+            {
+                function.Variables = a;
+
+                return function.Evaluate(p);
+            });
+        }
+
         internal void RegisterOperator(IOperator op)
         {
             foreach (var tag in op.Tags)
             {
                 _registeredOperators.Add(tag, op);
+            }
+        }
+
+        internal void UnregisterFunction(string name)
+        {
+            if (_registeredFunctions.ContainsKey(name))
+            {
+                _registeredFunctions.Remove(name);
             }
         }
 

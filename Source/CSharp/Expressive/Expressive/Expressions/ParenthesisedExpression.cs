@@ -13,7 +13,7 @@ namespace Expressive.Expressions
 
         #region IExpression Members
 
-        public object Evaluate(IDictionary<string, object> arguments)
+        public object Evaluate(IDictionary<string, object> variables)
         {
             if (_innerExpression == null)
             {
@@ -21,7 +21,7 @@ namespace Expressive.Expressions
                 return null;
             }
 
-            return _innerExpression.Evaluate(arguments);
+            return _innerExpression.Evaluate(variables);
         }
 
         #endregion

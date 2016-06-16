@@ -17,14 +17,14 @@ namespace Expressive.Expressions
 
         #region IExpression Members
 
-        public object Evaluate(IDictionary<string, object> arguments)
+        public object Evaluate(IDictionary<string, object> variables)
         {
             switch (_expressionType)
             {
                 case UnaryExpressionType.Minus:
-                    return Numbers.Subtract(0, _expression.Evaluate(arguments));
+                    return Numbers.Subtract(0, _expression.Evaluate(variables));
                 case UnaryExpressionType.Not:
-                    var value = _expression.Evaluate(arguments);
+                    var value = _expression.Evaluate(variables);
 
                     if (value != null)
                     {
@@ -39,7 +39,7 @@ namespace Expressive.Expressions
                     }
                     break;
                 case UnaryExpressionType.Plus:
-                    return Numbers.Add(0, _expression.Evaluate(arguments));
+                    return Numbers.Add(0, _expression.Evaluate(variables));
             }
 
             return null;

@@ -11,17 +11,17 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Average"; } }
 
-        public override object Evaluate(IExpression[] participants)
+        public override object Evaluate(IExpression[] parameters)
         {
-            this.ValidateParameterCount(participants, -1, 1);
+            this.ValidateParameterCount(parameters, -1, 1);
 
             int count = 0;
             object result = 0;
 
-            foreach (var value in participants)
+            foreach (var value in parameters)
             {
                 int increment = 1;
-                object evaluatedValue = value.Evaluate(Arguments);
+                object evaluatedValue = value.Evaluate(Variables);
                 IEnumerable enumerable = evaluatedValue as IEnumerable;
 
                 if (enumerable != null)

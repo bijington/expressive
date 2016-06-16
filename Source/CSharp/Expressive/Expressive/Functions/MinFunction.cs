@@ -9,11 +9,11 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Min"; } }
 
-        public override object Evaluate(IExpression[] participants)
+        public override object Evaluate(IExpression[] parameters)
         {
-            this.ValidateParameterCount(participants, 2, 2);
+            this.ValidateParameterCount(parameters, 2, 2);
 
-            return Numbers.Min(participants[0].Evaluate(Arguments), participants[1].Evaluate(Arguments));
+            return Numbers.Min(parameters[0].Evaluate(Variables), parameters[1].Evaluate(Variables));
         }
 
         #endregion

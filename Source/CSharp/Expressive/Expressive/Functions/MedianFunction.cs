@@ -12,17 +12,17 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Median"; } }
 
-        public override object Evaluate(IExpression[] participants)
+        public override object Evaluate(IExpression[] parameters)
         {
-            this.ValidateParameterCount(participants, -1, 1);
+            this.ValidateParameterCount(parameters, -1, 1);
 
             object result = 0;
             
             IList<decimal> decimalValues = new List<decimal>();
 
-            foreach (var p in participants)
+            foreach (var p in parameters)
             {
-                var value = p.Evaluate(this.Arguments);
+                var value = p.Evaluate(this.Variables);
                 var enumerable = value as IEnumerable;
                 
                 if (enumerable != null)

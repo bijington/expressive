@@ -10,15 +10,15 @@ namespace Expressive.Functions
 
         public override string Name { get { return "Sum"; } }
 
-        public override object Evaluate(IExpression[] participants)
+        public override object Evaluate(IExpression[] parameters)
         {
-            this.ValidateParameterCount(participants, -1, 1);
+            this.ValidateParameterCount(parameters, -1, 1);
 
             object result = 0;
 
-            foreach (var value in participants)
+            foreach (var value in parameters)
             {
-                object evaluatedValue = value.Evaluate(Arguments);
+                object evaluatedValue = value.Evaluate(Variables);
                 IEnumerable enumerable = evaluatedValue as IEnumerable;
 
                 if (enumerable != null)

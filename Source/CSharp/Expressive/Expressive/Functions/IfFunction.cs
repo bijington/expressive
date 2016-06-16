@@ -9,13 +9,13 @@ namespace Expressive.Functions
 
         public override string Name { get { return "If"; } }
 
-        public override object Evaluate(IExpression[] participants)
+        public override object Evaluate(IExpression[] parameters)
         {
-            this.ValidateParameterCount(participants, 3, 3);
+            this.ValidateParameterCount(parameters, 3, 3);
 
-            bool condition = Convert.ToBoolean(participants[0].Evaluate(Arguments));
+            bool condition = Convert.ToBoolean(parameters[0].Evaluate(Variables));
 
-            return condition ? participants[1].Evaluate(Arguments) : participants[2].Evaluate(Arguments);
+            return condition ? parameters[1].Evaluate(Variables) : parameters[2].Evaluate(Variables);
         }
 
         #endregion
