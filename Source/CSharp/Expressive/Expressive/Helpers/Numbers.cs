@@ -1130,19 +1130,9 @@ namespace Expressive.Helpers
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
-            if (a == null && b == null)
+            if (a == null || b == null)
             {
                 return null;
-            }
-
-            if (a == null)
-            {
-                return b;
-            }
-
-            if (b == null)
-            {
-                return a;
             }
 
             TypeCode typeCodeA = Type.GetTypeCode(a.GetType());

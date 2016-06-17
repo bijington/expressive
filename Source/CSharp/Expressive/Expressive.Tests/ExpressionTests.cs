@@ -309,11 +309,23 @@ namespace Expressive.Tests
             Assert.AreEqual(12, new Expression("Log10(1,2,4,5)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Max() takes only 2 argument(s)")]
-        public void MaxShouldHandleOnlyTwoArguments()
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Max() expects at least 1 argument(s)")]
+        public void MaxShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3, new Expression("Max(3, 2)").Evaluate());
-            Assert.AreEqual(12, new Expression("Max(1,2,4,5)").Evaluate());
+            Assert.AreEqual(12, new Expression("Max()").Evaluate());
+        }
+
+        [TestMethod]
+        public void MaxShouldHandleIEnumerable()
+        {
+            Assert.AreEqual(50, new Expression("Max(1,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 50 } }));
+        }
+
+        [TestMethod]
+        public void MaxShouldIgnoreNull()
+        {
+            Assert.AreEqual(null, new Expression("Max(null,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 50 } }));
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Mean() expects at least 1 argument(s)")]
@@ -342,11 +354,23 @@ namespace Expressive.Tests
             new Expression("median()", ExpressiveOptions.IgnoreCase).Evaluate();
         }
 
-        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Min() takes only 2 argument(s)")]
-        public void MinShouldHandleOnlyTwoArguments()
+        [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Min() expects at least 1 argument(s)")]
+        public void MinShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(2, new Expression("Min(3, 2)").Evaluate());
-            Assert.AreEqual(12, new Expression("IEEERemainder(1,2,4,5)").Evaluate());
+            Assert.AreEqual(12, new Expression("Min()").Evaluate());
+        }
+
+        [TestMethod]
+        public void MinShouldHandleIEnumerable()
+        {
+            Assert.AreEqual(1, new Expression("Min(1,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 50 } }));
+        }
+
+        [TestMethod]
+        public void MinShouldIgnoreNull()
+        {
+            Assert.AreEqual(null, new Expression("Min(null,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 50 } }));
         }
 
         [TestMethod, ExpectedException(typeof(ParameterCountMismatchException), "Mode() expects at least 1 argument(s)")]
