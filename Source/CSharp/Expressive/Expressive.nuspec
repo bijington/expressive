@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ExpressiveParser</id>
+    <version>1.0.0</version>
+    <authors>Shaun Lawrence</authors>
+    <owners>Shaun Lawrence</owners>
+    <licenseUrl>https://opensource.org/licenses/mit</licenseUrl>
+    <projectUrl>https://github.com/bijington/expressive</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A multi-platform expression parsing and evaluating framework.</description>
+    <releaseNotes>The first official release.</releaseNotes>
+    <copyright>Copyright(c) 2016 Shaun Lawrence</copyright>
+    <tags>Expression Parser Evaluator</tags>
+  </metadata>
+  <files>
+    <file src="bin\Expressive.dll" target="lib\Net40" />
+    <file src="bin\Expressive.xml" target="lib\Net40" />
+  </files>
+</package>
