@@ -26,6 +26,9 @@ using System.Threading;
 
 namespace Expressive
 {
+    /// <summary>
+    /// Class definition for an Expression that can be evaluated.
+    /// </summary>
     public sealed class Expression
     {
         #region Fields

@@ -2,6 +2,9 @@
 
 namespace Expressive
 {
+    /// <summary>
+    /// Options to alter the way in which an <see cref="Expression"/> is parsed and evaluated.
+    /// </summary>
     [Flags]
     public enum ExpressiveOptions
     {

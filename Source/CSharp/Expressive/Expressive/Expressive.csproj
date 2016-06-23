@@ -28,11 +28,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Expressive.xml</DocumentationFile>
+    <DocumentationFile>..\bin\Expressive.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -83,6 +83,7 @@
     <Compile Include="Functions\MinFunction.cs" />
     <Compile Include="Functions\ModeFunction.cs" />
     <Compile Include="Functions\PadLeftFunction.cs" />
+    <Compile Include="Functions\PadRightFunction.cs" />
     <Compile Include="Functions\PowFunction.cs" />
     <Compile Include="Functions\RegexFunction.cs" />
     <Compile Include="Functions\RoundFunction.cs" />
