@@ -93,6 +93,7 @@ namespace Expressive
             RegisterFunction(new IEEERemainderFunction());
             RegisterFunction(new IfFunction());
             RegisterFunction(new InFunction());
+            RegisterFunction(new LengthFunction());
             RegisterFunction(new Log10Function());
             RegisterFunction(new LogFunction());
             RegisterFunction(new MaxFunction());
@@ -101,12 +102,14 @@ namespace Expressive
             RegisterFunction(new ModeFunction());
             RegisterFunction(new MinFunction());
             RegisterFunction(new PadLeftFunction());
+            RegisterFunction(new PadRightFunction());
             RegisterFunction(new PowFunction());
             RegisterFunction(new RegexFunction());
             RegisterFunction(new RoundFunction());
             RegisterFunction(new SignFunction());
             RegisterFunction(new SinFunction());
             RegisterFunction(new SqrtFunction());
+            RegisterFunction(new SubstringFunction());
             RegisterFunction(new SumFunction());
             RegisterFunction(new TanFunction());
             RegisterFunction(new TruncateFunction());

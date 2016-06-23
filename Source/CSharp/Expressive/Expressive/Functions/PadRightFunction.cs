@@ -2,7 +2,7 @@
 
 namespace Expressive.Functions
 {
-    internal class PadLeftFunction : FunctionBase
+    internal class PadRightFunction : FunctionBase
     {
         #region FunctionBase Members
 
@@ -10,7 +10,7 @@ namespace Expressive.Functions
         {
             get
             {
-                return "PadLeft";
+                return "PadRight";
             }
         }
 
@@ -43,8 +43,8 @@ namespace Expressive.Functions
             {
                 character = (char)((string)third)[0];
             }
-            
-            return text.PadLeft(totalLength, character);
+
+            return text.PadRight(totalLength, character);
         }
 
         #endregion
