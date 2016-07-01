@@ -127,7 +127,7 @@ namespace Expressive
         /// </summary>
         /// <exception cref="System.ArgumentNullException">Thrown if the callback is not supplied.</exception>
         /// <param name="callback">Provides the result once the evaluation has completed.</param>
-        public void EvaluateAsync(Action<object> callback)
+        public void EvaluateAsync(Action<string, object> callback)
         {
             EvaluateAsync(callback, null);
         }
@@ -138,7 +138,7 @@ namespace Expressive
         /// <exception cref="System.ArgumentNullException">Thrown if the callback is not supplied.</exception>
         /// <param name="callback">Provides the result once the evaluation has completed.</param>
         /// <param name="variables">The variables to be used in the evaluation.</param>
-        public void EvaluateAsync(Action<object> callback, IDictionary<string, object> variables)
+        public void EvaluateAsync(Action<string, object> callback, IDictionary<string, object> variables)
         {
             if (callback == null)
             {
@@ -147,11 +147,21 @@ namespace Expressive
 
             ThreadPool.QueueUserWorkItem((o) =>
             {
-                var result = this.Evaluate(variables);
+                object result = null;
+                string message = null;
 
+                try
+                {
+                    result = this.Evaluate(variables);
+                }
+                catch (Exception ex)
+                {
+                    message = ex.Message;
+                }
+                
                 if (callback != null)
                 {
-                    callback(result);
+                    callback(message, result);
                 }
             });
         }
@@ -161,6 +171,7 @@ namespace Expressive
         /// </summary>
         /// <param name="functionName">The name of the function (NOTE this is also the tag that will be used to extract the function from an expression).</param>
         /// <param name="function">The method of evaluating the function.</param>
+        /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
         public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
         {
             _parser.RegisterFunction(functionName, function);
@@ -170,6 +181,7 @@ namespace Expressive
         /// Registers a custom function inheriting from <see cref="IFunction"/> for use in evaluating an expression.
         /// </summary>
         /// <param name="function">The <see cref="IFunction"/> implementation.</param>
+        /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
         public void RegisterFunction(IFunction function)
         {
             _parser.RegisterFunction(function);

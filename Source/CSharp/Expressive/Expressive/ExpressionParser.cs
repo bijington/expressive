@@ -147,11 +147,15 @@ namespace Expressive
 
         internal void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
         {
+            CheckForExistingFunctionName(functionName);
+
             _registeredFunctions.Add(functionName, function);
         }
 
         internal void RegisterFunction(IFunction function)
         {
+            CheckForExistingFunctionName(function.Name);
+
             _registeredFunctions.Add(function.Name, (p, a) =>
             {
                 function.Variables = a;
@@ -188,7 +192,7 @@ namespace Expressive
             }
 
             IExpression leftHandSide = null;
-            var currentToken = tokens.FirstOrDefault();
+            var currentToken = tokens.PeekOrDefault();
             string previousToken = null;
 
             while (currentToken != null)
@@ -454,6 +458,14 @@ namespace Expressive
             return !string.IsNullOrWhiteSpace(GetString(expression, startIndex, quoteCharacter));
         }
 
+        private void CheckForExistingFunctionName(string functionName)
+        {
+            if (_registeredFunctions.ContainsKey(functionName))
+            {
+                throw new FunctionNameAlreadyRegisteredException(functionName);
+            }
+        }
+
         private static bool CheckForTag(string tag, string lookAhead, ExpressiveOptions options)
         {
             return (options.HasFlag(ExpressiveOptions.IgnoreCase) &&
@@ -461,24 +473,25 @@ namespace Expressive
                 string.Equals(lookAhead, tag, StringComparison.Ordinal);
         }
 
-        private static string ExtractValue(string expression, int expressionLength, int index, string value)
+        private static string ExtractValue(string expression, int expressionLength, int index, string expectedValue)
         {
             string result = null;
-            int valueLength = value.Length;
+            int valueLength = expectedValue.Length;
 
             if (expressionLength >= index + valueLength)
             {
-                var trueString = expression.Substring(index, valueLength);
-                bool isValidBoolean = true;
+                var valueString = expression.Substring(index, valueLength);
+                bool isValidValue = true;
                 if (expressionLength > index + valueLength)
                 {
-                    isValidBoolean = !char.IsLetterOrDigit(expression[index + valueLength]);
+                    // If the next character is not a continuation of the word then we are valid.
+                    isValidValue = !char.IsLetterOrDigit(expression[index + valueLength]);
                 }
 
-                if (string.Equals(trueString, value, StringComparison.OrdinalIgnoreCase) &&
-                    isValidBoolean)
+                if (string.Equals(valueString, expectedValue, StringComparison.OrdinalIgnoreCase) &&
+                    isValidValue)
                 {
-                    result = trueString;
+                    result = valueString;
                 }
             }
 
@@ -612,7 +625,7 @@ namespace Expressive
                 {
                     var character = expression[index];
 
-                    if (character == '[') // Apparently NCalc only uses the [ ] characters optionally but Xenplate forces them to be used.
+                    if (character == '[')
                     {
                         char closingCharacter = ']';
 
@@ -627,7 +640,7 @@ namespace Expressive
                         tokens.Add(variable);
                         lengthProcessed = variable.Length;
                     }
-                    else if (char.IsDigit(character))// || character == _decimalSeparator)
+                    else if (char.IsDigit(character))
                     {
                         var number = GetNumber(expression, index);
 

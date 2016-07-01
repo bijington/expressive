@@ -12,20 +12,8 @@ namespace Expressive.Tests
         [TestMethod]
         public void Debugging()
         {
-            //var exp = new Expression("myfunc('abc')");
-            //exp.RegisterFunction("myfunc", (p, a) =>
-            //{
-            //    return 1;
-            //});
-
-            //Assert.AreEqual(1, exp.Evaluate());
-
-            //object result = new Expression("\"PO-\" + PadLeft([Number], 4, \"0\") + \"-\" + [Year]").Evaluate(new Dictionary<string, object> { ["Number"] = 1234569, ["Year"] = 2016 });
-            //string t = "10009".PadLeft(4, '0');
-
-            var expression = new Expression("[number1] > 1000");
-            //Expression expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$')");
-            object value = expression.Evaluate(new Dictionary<string, object> { ["number1"] = null });
+            var expression = new Expression("[number1] + [date1]");
+            object value = expression.Evaluate(new Dictionary<string, object> { ["number1"] = 1, ["date1"] = DateTime.Now });
             
             Assert.AreEqual(null, value);
 
@@ -515,14 +503,35 @@ namespace Expressive.Tests
 
             object result = null;
 
-            expression.EvaluateAsync((r) =>
+            expression.EvaluateAsync((m, r) =>
             {
+                Assert.IsNull(m);
                 result = r;
                 waitHandle.Set();
             });
 
             waitHandle.WaitOne();
             Assert.AreEqual(4, result);
+        }
+
+        [TestMethod]
+        public void TestAsyncSafety()
+        {
+            Expression expression = new Expression("1+3+[abc]");
+
+            AutoResetEvent waitHandle = new AutoResetEvent(false);
+
+            object result = null;
+
+            expression.EvaluateAsync((m, r) =>
+            {
+                Assert.AreEqual(m, "The variable 'abc' has not been supplied.");
+                result = r;
+                waitHandle.Set();
+            });
+
+            waitHandle.WaitOne();
+            Assert.IsNull(result);
         }
 
         [TestMethod, ExpectedException(typeof(ArgumentException), "There aren't enough ')' symbols. Expected 2 but there is only 1")]

@@ -1,28 +1,29 @@
-﻿using System;
+﻿using Expressive.Functions;
+using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
 namespace Expressive.Exceptions
 {
     /// <summary>
-    /// Represents an error that is thrown when a token is not recognised inside an <see cref="Expression"/>.
+    /// Represents an error that is thrown when registering an <see cref="IFunction"/> and the name is already used.
     /// </summary>
     [Serializable]
-    public sealed class UnrecognisedTokenException : Exception
+    public sealed class FunctionNameAlreadyRegisteredException : Exception
     {
         /// <summary>
-        /// Gets the unrecognised token in the <see cref="Expression"/>.
+        /// Gets the name of the function already used.
         /// </summary>
-        public string Token { get; private set; }
+        public string Name { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UnrecognisedTokenException"/> class with a specified unrecognised token.
+        /// Initializes a new instance of the <see cref="FunctionNameAlreadyRegisteredException"/> class with a specified unrecognised token.
         /// </summary>
-        /// <param name="token">The unrecognised token.</param>
-        public UnrecognisedTokenException(string token)
-            : base("Unrecognised token '" + token + "'")
+        /// <param name="name">The name of the function.</param>
+        public FunctionNameAlreadyRegisteredException(string name)
+            : base($"A function has already been registered '{name}'")
         {
-            this.Token = token;
+            this.Name = name;
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Expressive.Exceptions
         {
             base.GetObjectData(info, context);
 
-            info.AddValue("Token", Token);
+            info.AddValue("Name", Name);
         }
     }
 }

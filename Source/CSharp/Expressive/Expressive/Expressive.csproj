@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\FunctionNameAlreadyRegisteredException.cs" />
     <Compile Include="Exceptions\MissingTokenException.cs" />
     <Compile Include="Exceptions\ParameterCountMismatchException.cs" />
     <Compile Include="Exceptions\UnrecognisedTokenException.cs" />
