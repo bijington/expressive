@@ -21,6 +21,8 @@ The `Expression` will terminate early in the following situations:
 The supported languages are:
 
 - C&#35;
+  - [GitHub release v1.0.0](https://github.com/bijington/expressive/releases/tag/v1.0.0)
+  - [Nuget release v1.0.0](https://www.nuget.org/packages/ExpressiveParser/)
 - Java (TBA)
 - Swift (TBA)
 
