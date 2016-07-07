@@ -2,14 +2,19 @@ package com.bijington.expressive;
 
 import com.bijington.expressive.exceptions.MissingTokenException;
 import com.bijington.expressive.exceptions.UnrecognisedTokenException;
+import com.bijington.expressive.expressions.ConstantValueExpression;
 import com.bijington.expressive.expressions.FunctionExpression;
 import com.bijington.expressive.expressions.IExpression;
+import com.bijington.expressive.expressions.VariableExpression;
 import com.bijington.expressive.functions.IFunction;
 import com.bijington.expressive.helpers.Strings;
 import com.bijington.expressive.operators.IOperator;
 import com.bijington.expressive.operators.OperatorPrecedence;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 
@@ -78,7 +83,6 @@ class ExpressionParser {
 
         List<String> tokens = tokenise(expression);
 
-        // TODO this is not good enough as it doesn't cater for brackets inside quotes
         int openCount = 0;
         int closeCount = 0;
 
@@ -121,6 +125,50 @@ class ExpressionParser {
         }
     }
 
+    private static String cleanString(String input) {
+        int inputLength = input.length();
+
+        if (inputLength <= 1) return input;
+
+        // the input string can only get shorter
+        // so init the buffer so we won't have to reallocate later
+        char[] buffer = new char[inputLength];
+        int outIdx = 0;
+        for (int i = 0; i < inputLength; i++)
+        {
+            char c = input.charAt(i);
+            if (c == '\\')
+            {
+                if (i < inputLength - 1)
+                {
+                    switch (input.charAt(i + 1))
+                    {
+                        case 'n':
+                            buffer[outIdx++] = '\n';
+                            i++;
+                            continue;
+                        case 'r':
+                            buffer[outIdx++] = '\r';
+                            i++;
+                            continue;
+                        case 't':
+                            buffer[outIdx++] = '\t';
+                            i++;
+                            continue;
+                        case '\'':
+                            buffer[outIdx++] = '\'';
+                            i++;
+                            continue;
+                    }
+                }
+            }
+
+            buffer[outIdx++] = c;
+        }
+
+        return new String(buffer, 0, outIdx);
+    }
+
     private IExpression compileExpression(List<String> tokens, int minimumPrecedence, List<String> variables) throws UnrecognisedTokenException {
         IExpression leftHandSide = null;
         String currentToken = tokens.stream().findFirst().orElseGet(null);
@@ -130,6 +178,7 @@ class ExpressionParser {
         while (currentToken != null) {
             IOperator op = _registeredOperators.getOrDefault(currentToken, null);
             IFunction function = _registeredFunctions.getOrDefault(currentToken, null);
+            Number number = Strings.parseNumber(currentToken);
 
             // Are we an IOperator?
             if (op != null) {
@@ -211,96 +260,63 @@ class ExpressionParser {
 
                 leftHandSide = new FunctionExpression(currentToken, function, expressionArray);
             }
-//            else if (currentToken.IsNumeric()) // Or a number
-//            {
-//                tokens.remove(0);
-//                int intValue = 0;
-//                double doubleValue = 0.0;
-//                float floatValue = 0.0f;
-//                long longValue = 0;
-//
-////                private static Number parse(String str) {
-////                Number number = null;
-////                try {
-////                    number = Double.parseDouble(str);
-////                } catch(NumberFormatException e) {
-////                    try {
-////                        number = Float.parseFloat(str);
-////                    } catch(NumberFormatException e1) {
-////                        try {
-////                            number = Long.parseLong(str);
-////                        } catch(NumberFormatException e2) {
-////                            try {
-////                                number = Integer.parseInt(str);
-////                            } catch(NumberFormatException e3) {
-////                                throw e3;
-////                            }
-////                        }
-////                    }
-////                }
-////                return number;
-////            }
-//
-//                if (int.TryParse(currentToken, out intValue)) {
-//                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Integer, intValue);
-//                }
-//                else if (double.TryParse(currentToken, out doubleValue)) {
-//                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Double, doubleValue);
-//                }
-//                else if (float.TryParse(currentToken, out floatValue)) {
-//                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Float, floatValue);
-//                }
-//                else if (long.TryParse(currentToken, out longValue)) {
-//                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Long, longValue);
-//                }
-//            }
-//            else if (currentToken.startsWith("[") && currentToken.endsWith("]")) {
-//                tokens.remove(0);
-//                String variableName = currentToken.replace("[", "").Replace("]", "");
-//                leftHandSide = new VariableExpression(variableName);
-//
-//                if (!variables.contains(variableName, _stringComparer)) {
-//                    variables.add(variableName);
-//                }
-//            }
-//            else if (string.Equals(currentToken, "true", StringComparison.OrdinalIgnoreCase)) {
-//                tokens.remove(0);
-//                leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Boolean, true);
-//            }
-//            else if (string.Equals(currentToken, "false", StringComparison.OrdinalIgnoreCase)) {
-//                tokens.remove(0);
-//                leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Boolean, false);
-//            }
-//            else if (string.Equals(currentToken, "null", StringComparison.OrdinalIgnoreCase)) {
-//                tokens.remove(0);
-//                leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Null, null);
-//            }
-//            else if (currentToken.StartsWith(DateSeparator.ToString()) && currentToken.EndsWith(DateSeparator.ToString())) {
-//                tokens.remove(0);
-//
-//                String dateToken = currentToken.replace(DATE_SEPARATOR.toString(), "");
-////                DateTime date = DateTime.MinValue;
-////
-////                // If we can't parse the date let's check for some known tags.
-////                if (!DateTime.TryParse(dateToken, out date)) {
-////                    if (string.Equals("TODAY", dateToken, StringComparison.OrdinalIgnoreCase)) {
-////                        date = DateTime.Today;
-////                    }
-////                    else if (string.Equals("NOW", dateToken, StringComparison.OrdinalIgnoreCase)) {
-////                        date = DateTime.Now;
-////                    }
-////                    else
-////                    {
-////                        throw new UnrecognisedTokenException(dateToken);
-////                    }
-////                }
-////
-////                leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.DateTime, date);
-//            }
+            else if (number != null) {
+                tokens.remove(0);
+
+                leftHandSide = new ConstantValueExpression(number);
+            }
+            else if (currentToken.startsWith("[") && currentToken.endsWith("]")) {
+                tokens.remove(0);
+                String variableName = currentToken.replace("[", "").replace("]", "");
+                leftHandSide = new VariableExpression(variableName);
+
+                if (!variables.contains(variableName)) {
+                    variables.add(variableName);
+                }
+            }
+            else if (currentToken.equalsIgnoreCase("true")) {
+                tokens.remove(0);
+                leftHandSide = new ConstantValueExpression(true);
+            }
+            else if (currentToken.equalsIgnoreCase("false")) {
+                tokens.remove(0);
+                leftHandSide = new ConstantValueExpression(false);
+            }
+            else if (currentToken.equalsIgnoreCase("null")) {
+                tokens.remove(0);
+                leftHandSide = new ConstantValueExpression(null);
+            }
+            else if (currentToken.startsWith(DATE_SEPARATOR.toString()) && currentToken.endsWith(DATE_SEPARATOR.toString())) {
+                tokens.remove(0);
+
+                String dateToken = currentToken.replace(DATE_SEPARATOR.toString(), "");
+                Date date = null;
+
+                DateFormat dateFormat = new SimpleDateFormat();
+
+                // TODO this might be required.
+                //dateFormat.setLenient(true);
+
+                if (dateToken.equals("Today")) {
+
+                }
+                else if (dateToken.equals("Now")) {
+                    date = new Date();
+                }
+                else {
+                    try {
+                        date = dateFormat.parse(dateToken);
+                    } catch (ParseException pe) {
+                        throw new UnrecognisedTokenException(dateToken);
+                    }
+                }
+
+                leftHandSide = new ConstantValueExpression(date);
+            }
             else if ((currentToken.startsWith("'") && currentToken.endsWith("'")) ||
                      (currentToken.startsWith("\"") && currentToken.endsWith("\""))) {
                 tokens.remove(0);
-                //leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.String, CleanString(currentToken.Substring(1, currentToken.Length - 2)));
+                leftHandSide = new ConstantValueExpression(cleanString(currentToken.substring(1, currentToken.length() - 1)));
             }
             else if (currentToken.equals(PARAMETER_SEPARATOR.toString())) {
                 // Make sure we ignore the parameter separator

@@ -20,7 +20,5 @@ public class FunctionExpression implements IExpression {
     }
 
     @Override
-    public Object evaluate(Map<String, Object> variables) {
-        return _function.evaluate(_parameters);
-    }
+    public Object evaluate(Map<String, Object> variables) { return _function.evaluate(_parameters); }
 }
