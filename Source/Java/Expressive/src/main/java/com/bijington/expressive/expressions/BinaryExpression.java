@@ -27,8 +27,8 @@ public class BinaryExpression implements IExpression {
         // We will evaluate the left hand side but hold off on the right hand side as it may not be necessary
         Object lhsResult = _leftHandSide.evaluate(variables);
 
-//        switch (_expressionType)
-//        {
+        switch (_expressionType)
+        {
 //            case BinaryExpressionType.Unknown:
 //                break;
 //            case BinaryExpressionType.And:
@@ -188,9 +188,11 @@ public class BinaryExpression implements IExpression {
 //                return Convert.ToUInt16(lhsResult) << Convert.ToUInt16(_rightHandSide.Evaluate(variables));
 //            case BinaryExpressionType.RightShift:
 //                return Convert.ToUInt16(lhsResult) >> Convert.ToUInt16(_rightHandSide.Evaluate(variables));
-//            default:
-//                break;
-//        }
+            case NullCoalescing:
+                return (lhsResult != null) ? lhsResult : _rightHandSide.evaluate(variables);
+            default:
+                break;
+        }
 
         return null;
     }

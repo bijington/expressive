@@ -45,8 +45,7 @@ public final class Expression {
      * Gets a list of the Variable names that are contained within this Expression.
      * @return A list of the Variable names that are contained within this Expression.
      */
-    public String[] getReferencedVariables() throws MissingTokenException, UnrecognisedTokenException
-    {
+    public String[] getReferencedVariables() throws MissingTokenException, UnrecognisedTokenException {
         this.compileExpression();
 
         return _variables;
@@ -56,8 +55,7 @@ public final class Expression {
      * Initializes a new instance of the Expression class with no options.
      * @param expression The expression to be evaluated.
      */
-    public Expression(String expression)
-    {
+    public Expression(String expression) {
         this (expression, EnumSet.of(ExpressiveOptions.NONE));
     }
 
@@ -66,8 +64,7 @@ public final class Expression {
      * @param expression The expression to be evaluated.
      * @param options The options to use when evaluating.
      */
-    public Expression(String expression, EnumSet<ExpressiveOptions> options)
-    {
+    public Expression(String expression, EnumSet<ExpressiveOptions> options) {
         _originalExpression = expression;
         _options = options;
 
@@ -81,8 +78,7 @@ public final class Expression {
      */
     /// <exception cref="Exceptions.ParameterCountMismatchException">Thrown when the evaluator detects a function does not have the expected number of parameters supplied.</exception>
     /// <exception cref="Exceptions.UnrecognisedTokenException">Thrown when the evaluator is unable to process a token in the expression.</exception>
-    public Object evaluate() throws MissingTokenException, UnrecognisedTokenException
-    {
+    public Object evaluate() throws MissingTokenException, UnrecognisedTokenException {
         return evaluate(null);
     }
 
@@ -94,8 +90,7 @@ public final class Expression {
     /// <exception cref="Exceptions.UnrecognisedTokenException">Thrown when the evaluator is unable to process a token in the expression.</exception>
     /// <param name="variables">The variables to be used in the evaluation.</param>
     /// <returns>The result of the expression.</returns>
-    public Object evaluate(Map<String, Object> variables) throws MissingTokenException, UnrecognisedTokenException
-    {
+    public Object evaluate(Map<String, Object> variables) throws MissingTokenException, UnrecognisedTokenException {
         this.compileExpression();
 
         /*if (variables != null &&

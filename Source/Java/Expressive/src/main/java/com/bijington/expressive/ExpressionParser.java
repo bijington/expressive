@@ -8,6 +8,7 @@ import com.bijington.expressive.expressions.IExpression;
 import com.bijington.expressive.expressions.VariableExpression;
 import com.bijington.expressive.functions.IFunction;
 import com.bijington.expressive.helpers.Strings;
+import com.bijington.expressive.operators.Conditional.NullCoalescingOperator;
 import com.bijington.expressive.operators.IOperator;
 import com.bijington.expressive.operators.OperatorPrecedence;
 
@@ -32,7 +33,6 @@ class ExpressionParser {
     private final Map<String, IFunction> _registeredFunctions;
     //private Map<String, Function<IExpression[], Map<String, Object>, Object>> _registeredFunctions;
     private final Map<String, IOperator> _registeredOperators;
-    //private StringComparer _stringComparer;
 
     ExpressionParser(EnumSet<ExpressiveOptions> options) {
         _options = options;
@@ -40,7 +40,7 @@ class ExpressionParser {
         _registeredFunctions = new HashMap<>();
         _registeredOperators = new HashMap<>();
 
-        registerOperator(null);
+        registerOperator(new NullCoalescingOperator());
     }
 
     void registerFunction(IFunction function) {
@@ -62,11 +62,9 @@ class ExpressionParser {
     }*/
 
     void registerOperator(IOperator op) {
-
-        /*foreach (var tag in op.Tags)
-        {
-            _registeredOperators.Add(tag, op);
-        }*/
+        for (String tag: op.getTags()) {
+            _registeredOperators.put(tag, op);
+        }
     }
 
     void unregisterFunction(String name) {
@@ -87,12 +85,10 @@ class ExpressionParser {
         int closeCount = 0;
 
         for (String t: tokens) {
-            if (t == "(")
-            {
+            if (t == "(") {
                 openCount++;
             }
-            else if (t == ")")
-            {
+            else if (t == ")") {
                 closeCount++;
             }
         }
@@ -117,6 +113,12 @@ class ExpressionParser {
     private static Boolean canExtractValue(String expression, int expressionLength, int index, String value) {
         // TODO should this be case insensitive?
         return value.equalsIgnoreCase(extractValue(expression, expressionLength, index, value));
+    }
+
+    private static Boolean checkForTag(String tag, String lookAhead, EnumSet<ExpressiveOptions> options) {
+        return (options.contains(ExpressiveOptions.IGNORE_CASE) &&
+                lookAhead.equalsIgnoreCase(tag)) ||
+                lookAhead.equals(tag);
     }
 
     private static void checkForUnrecognised(StringBuilder unrecognised, List<String> tokens) {
@@ -329,7 +331,8 @@ class ExpressionParser {
             }
 
             previousToken = currentToken;
-            currentToken = tokens.get(0);
+
+            currentToken = !tokens.isEmpty() ? tokens.get(0) : null;
         }
 
         return leftHandSide;
@@ -418,13 +421,27 @@ class ExpressionParser {
     }
 
     private List<String> tokenise(String expression) throws MissingTokenException {
-        if (expression == null || expression.length() == 0)
-        {
+        if (expression == null || expression.length() == 0) {
             return  null;
         }
 
         int expressionLength = expression.length();
-        //        var operators = _registeredOperators.OrderByDescending(op => op.Key.Length);
+        List<String> operators = new ArrayList<>(_registeredOperators.keySet());
+        Comparator<String> x = new Comparator<String>()
+        {
+            @Override
+            public int compare(String o1, String o2)
+            {
+                if(o1.length() > o2.length())
+                    return -1;
+
+                if(o2.length() > o1.length())
+                    return 1;
+
+                return 0;
+            }
+        };
+        Collections.sort(operators,  x);
         List<String> tokens = new ArrayList<>();
         StringBuilder unrecognised = null;
 
@@ -435,35 +452,29 @@ class ExpressionParser {
             Boolean foundUnrecognisedCharacter = false;
 
             // Functions would tend to have longer tags so check for these first.
-//        foreach (var kvp in _registeredFunctions)
-//        {
-//        var lookAhead = expression.Substring(index, Math.Min(kvp.Key.Length, expressionLength - index));
-//
-//        if (CheckForTag(kvp.Key, lookAhead, _options))
-//        {
-//        CheckForUnrecognised(unrecognised, tokens);
-//        lengthProcessed = kvp.Key.Length;
-//        tokens.Add(lookAhead);
-//        break;
-//        }
-//        }
+            for (String key: _registeredFunctions.keySet()) {
+                String lookAhead = expression.substring(index, Math.min(index + key.length(), expressionLength));
 
-            // if (lengthProcessed == 0)
-//        {
-//        // Loop through and find any matching operators.
-//        foreach (var op in operators)
-//        {
-//        var lookAhead = expression.Substring(index, Math.Min(op.Key.Length, expressionLength - index));
-//
-//        if (CheckForTag(op.Key, lookAhead, _options))
-//        {
-//        CheckForUnrecognised(unrecognised, tokens);
-//        lengthProcessed = op.Key.Length;
-//        tokens.Add(lookAhead);
-//        break;
-//        }
-//        }
-//        }
+                if (checkForTag(key, lookAhead, _options)) {
+                    checkForUnrecognised(unrecognised, tokens);
+                    lengthProcessed = key.length();
+                    tokens.add(lookAhead);
+                    break;
+                }
+            }
+
+            if (lengthProcessed == 0) {
+                for (String tag: operators) {
+                    String lookAhead = expression.substring(index, Math.min(index + tag.length(), expressionLength));
+
+                    if (checkForTag(tag, lookAhead, _options)) {
+                        checkForUnrecognised(unrecognised, tokens);
+                        lengthProcessed = tag.length();
+                        tokens.add(lookAhead);
+                        break;
+                    }
+                }
+            }
 
             // If an operator wasn't found then process the current character.
             if (lengthProcessed == 0) {

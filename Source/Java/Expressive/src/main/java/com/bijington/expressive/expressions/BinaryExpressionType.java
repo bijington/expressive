@@ -23,4 +23,5 @@ public enum BinaryExpressionType {
     BitwiseXOr,
     LeftShift,
     RightShift,
+    NullCoalescing,
 }

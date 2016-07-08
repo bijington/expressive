@@ -17,16 +17,16 @@ public class Strings {
         Number number = null;
 
         try {
-            number = Double.parseDouble(value);
+            number = Integer.parseInt(value);
         } catch(NumberFormatException e) {
             try {
-                number = Float.parseFloat(value);
+                number = Long.parseLong(value);
             } catch(NumberFormatException e1) {
                 try {
-                    number = Long.parseLong(value);
+                    number = Double.parseDouble(value);
                 } catch(NumberFormatException e2) {
                     try {
-                        number = Integer.parseInt(value);
+                        number = Float.parseFloat(value);
                     } catch(NumberFormatException e3) {
 
                     }
