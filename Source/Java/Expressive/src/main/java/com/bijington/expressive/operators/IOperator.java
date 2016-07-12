@@ -3,6 +3,7 @@ package com.bijington.expressive.operators;
 import com.bijington.expressive.expressions.IExpression;
 
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Created by shaun on 27/06/2016.
@@ -18,8 +19,8 @@ public interface IOperator {
 
     IExpression buildExpression(String previousToken, IExpression[] expressions);
 
-    Boolean canGetCaptiveTokens(String previousToken, String token, List<String> remainingTokens);
-    String[] getCaptiveTokens(String previousToken, String token, List<String> remainingTokens);
+    Boolean canGetCaptiveTokens(String previousToken, String token, Queue<String> remainingTokens);
+    String[] getCaptiveTokens(String previousToken, String token, Queue<String> remainingTokens);
     String[] getInnerCaptiveTokens(String[] allCaptiveTokens);
     int getPrecedence(String previousToken);
 }

@@ -10,4 +10,42 @@ public class Convert {
         }
         return null;
     }
+
+    public static Boolean toBoolean(Object value) {
+        if (value == null) return false;
+
+        // Boolean check
+        if (value.getClass().equals(Boolean.class)) {
+            return Boolean.class.cast(value);
+        }
+        // String check
+        if (value.getClass().equals(String.class)) {
+            return Boolean.valueOf(String.class.cast(value));
+        }
+        // Integer check
+        if (value.getClass().equals(Integer.class)) {
+            return Integer.class.cast(value) != 0;
+        }
+
+        return false;
+    }
+
+    public static Integer toInteger(Object value) {
+        if (value == null) return 0;
+
+        // Boolean check
+        if (value.getClass().equals(Boolean.class)) {
+            return Boolean.class.cast(value) ? 1 : 0;
+        }
+        // String check
+        if (value.getClass().equals(String.class)) {
+            return Integer.valueOf(String.class.cast(value));
+        }
+        // Integer check
+        if (value.getClass().equals(Integer.class)) {
+            return Integer.class.cast(value);
+        }
+
+        return 0;
+    }
 }

@@ -6,6 +6,17 @@ import java.text.NumberFormat;
  * Created by shaun on 30/06/2016.
  */
 public class Strings {
+    public static Boolean isArithmeticOperator(String source)
+    {
+        return source.equals("+") ||
+                source.equals("-") || source.equals("\u2212") ||
+                source.equals("/") || source.equals("\u00f7") ||
+                source.equals("*") || source.equals("\u00d7") ||
+                source.equals("+") ||
+                source.equals("+") ||
+                source.equals("+");
+    }
+
     public static Boolean isNullOrEmpty(String value) {
         if (value != null)
             return value.length() == 0;

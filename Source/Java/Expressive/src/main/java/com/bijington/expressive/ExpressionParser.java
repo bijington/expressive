@@ -8,16 +8,26 @@ import com.bijington.expressive.expressions.IExpression;
 import com.bijington.expressive.expressions.VariableExpression;
 import com.bijington.expressive.functions.IFunction;
 import com.bijington.expressive.helpers.Strings;
-import com.bijington.expressive.operators.Conditional.NullCoalescingOperator;
+import com.bijington.expressive.operators.additive.PlusOperator;
+import com.bijington.expressive.operators.additive.SubtractOperator;
+import com.bijington.expressive.operators.bitwise.*;
+import com.bijington.expressive.operators.conditional.NullCoalescingOperator;
 import com.bijington.expressive.operators.IOperator;
 import com.bijington.expressive.operators.OperatorPrecedence;
+import com.bijington.expressive.operators.grouping.ParenthesisCloseOperator;
+import com.bijington.expressive.operators.grouping.ParenthesisOpenOperator;
+import com.bijington.expressive.operators.logic.AndOperator;
+import com.bijington.expressive.operators.logic.NotOperator;
+import com.bijington.expressive.operators.logic.OrOperator;
+import com.bijington.expressive.operators.multiplicative.DivideOperator;
+import com.bijington.expressive.operators.multiplicative.ModulusOperator;
+import com.bijington.expressive.operators.multiplicative.MultiplyOperator;
+import com.bijington.expressive.operators.relational.*;
 
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * Created by shaun on 27/06/2016.
@@ -37,10 +47,41 @@ class ExpressionParser {
     ExpressionParser(EnumSet<ExpressiveOptions> options) {
         _options = options;
 
+        // TODO ideally make use of the locale.
+        _decimalSeparator = DECIMAL_SEPARATOR;
+
         _registeredFunctions = new HashMap<>();
         _registeredOperators = new HashMap<>();
 
+        // Additive
+        registerOperator(new PlusOperator());
+        registerOperator(new SubtractOperator());
+        // Bitwise
+        registerOperator(new BitwiseAndOperator());
+        registerOperator(new BitwiseOrOperator());
+        registerOperator(new BitwiseXOrOperator());
+        registerOperator(new LeftShiftOperator());
+        registerOperator(new RightShiftOperator());
+        // Conditional
         registerOperator(new NullCoalescingOperator());
+        // Grouping
+        registerOperator(new ParenthesisCloseOperator());
+        registerOperator(new ParenthesisOpenOperator());
+        // Logic
+        registerOperator(new AndOperator());
+        registerOperator(new NotOperator());
+        registerOperator(new OrOperator());
+        // Multiplicative
+        registerOperator(new DivideOperator());
+        registerOperator(new ModulusOperator());
+        registerOperator(new MultiplyOperator());
+        // Multiplicative
+        registerOperator(new EqualOperator());
+        registerOperator(new GreaterThanOperator());
+        registerOperator(new GreaterThanOrEqualOperator());
+        registerOperator(new LessThanOperator());
+        registerOperator(new LessThanOrEqualOperator());
+        registerOperator(new NotEqualOperator());
     }
 
     void registerFunction(IFunction function) {
@@ -79,7 +120,7 @@ class ExpressionParser {
             //throw new ArgumentNullException("expression");
         }
 
-        List<String> tokens = tokenise(expression);
+        Queue<String> tokens = tokenise(expression);
 
         int openCount = 0;
         int closeCount = 0;
@@ -121,7 +162,7 @@ class ExpressionParser {
                 lookAhead.equals(tag);
     }
 
-    private static void checkForUnrecognised(StringBuilder unrecognised, List<String> tokens) {
+    private static void checkForUnrecognised(StringBuilder unrecognised, Queue<String> tokens) {
         if (unrecognised != null) {
             tokens.add(unrecognised.toString());
         }
@@ -171,15 +212,15 @@ class ExpressionParser {
         return new String(buffer, 0, outIdx);
     }
 
-    private IExpression compileExpression(List<String> tokens, int minimumPrecedence, List<String> variables) throws UnrecognisedTokenException {
+    private IExpression compileExpression(Queue<String> tokens, int minimumPrecedence, List<String> variables) throws UnrecognisedTokenException {
         IExpression leftHandSide = null;
-        String currentToken = tokens.stream().findFirst().orElseGet(null);
+        String currentToken = !tokens.isEmpty() ? tokens.peek() : null;
 
         String previousToken = null;
 
         while (currentToken != null) {
-            IOperator op = _registeredOperators.getOrDefault(currentToken, null);
-            IFunction function = _registeredFunctions.getOrDefault(currentToken, null);
+            IOperator op = _registeredOperators.containsKey(currentToken) ? _registeredOperators.get(currentToken) : null;// _registeredOperators.getOrDefault(currentToken, null);
+            IFunction function = _registeredFunctions.containsKey(currentToken) ? _registeredFunctions.get(currentToken) : null;//_registeredFunctions.getOrDefault(currentToken, null);
             Number number = Strings.parseNumber(currentToken);
 
             // Are we an IOperator?
@@ -187,7 +228,7 @@ class ExpressionParser {
                 int precedence = op.getPrecedence(previousToken);
 
                 if (precedence > minimumPrecedence) {
-                    tokens.remove(0);
+                    tokens.remove();
 
                     if (!op.canGetCaptiveTokens(previousToken, currentToken, tokens)) {
                         // Do it anyway to update the list of tokens
@@ -201,7 +242,7 @@ class ExpressionParser {
 
                         if (captiveTokens.length > 1) {
                             String[] innerTokens = op.getInnerCaptiveTokens(captiveTokens);
-                            rightHandSide = compileExpression(Arrays.asList(innerTokens), OperatorPrecedence.Minimum, variables);
+                            rightHandSide = compileExpression(new LinkedList<>(Arrays.asList(innerTokens)), OperatorPrecedence.Minimum, variables);
 
                             currentToken = captiveTokens[captiveTokens.length - 1];
                         }
@@ -220,13 +261,13 @@ class ExpressionParser {
             }
             else if (function != null) {
                 List<IExpression> expressions = new ArrayList<IExpression>();
-                List<String> captiveTokens = new ArrayList<String>();
+                Queue<String> captiveTokens = new LinkedList<>();
                 int parenCount = 0;
-                tokens.remove(0);
+                tokens.remove();
 
                 // Loop through the list of tokens and split by ParameterSeparator character
                 while (tokens.size() > 0) {
-                    String nextToken = tokens.remove(0);
+                    String nextToken = tokens.remove();
 
                     if (nextToken.equals("(")) {
                         parenCount++;
@@ -263,12 +304,12 @@ class ExpressionParser {
                 leftHandSide = new FunctionExpression(currentToken, function, expressionArray);
             }
             else if (number != null) {
-                tokens.remove(0);
+                tokens.remove();
 
                 leftHandSide = new ConstantValueExpression(number);
             }
             else if (currentToken.startsWith("[") && currentToken.endsWith("]")) {
-                tokens.remove(0);
+                tokens.remove();
                 String variableName = currentToken.replace("[", "").replace("]", "");
                 leftHandSide = new VariableExpression(variableName);
 
@@ -277,19 +318,19 @@ class ExpressionParser {
                 }
             }
             else if (currentToken.equalsIgnoreCase("true")) {
-                tokens.remove(0);
+                tokens.remove();
                 leftHandSide = new ConstantValueExpression(true);
             }
             else if (currentToken.equalsIgnoreCase("false")) {
-                tokens.remove(0);
+                tokens.remove();
                 leftHandSide = new ConstantValueExpression(false);
             }
             else if (currentToken.equalsIgnoreCase("null")) {
-                tokens.remove(0);
+                tokens.remove();
                 leftHandSide = new ConstantValueExpression(null);
             }
             else if (currentToken.startsWith(DATE_SEPARATOR.toString()) && currentToken.endsWith(DATE_SEPARATOR.toString())) {
-                tokens.remove(0);
+                tokens.remove();
 
                 String dateToken = currentToken.replace(DATE_SEPARATOR.toString(), "");
                 Date date = null;
@@ -317,22 +358,22 @@ class ExpressionParser {
             }
             else if ((currentToken.startsWith("'") && currentToken.endsWith("'")) ||
                      (currentToken.startsWith("\"") && currentToken.endsWith("\""))) {
-                tokens.remove(0);
+                tokens.remove();
                 leftHandSide = new ConstantValueExpression(cleanString(currentToken.substring(1, currentToken.length() - 1)));
             }
             else if (currentToken.equals(PARAMETER_SEPARATOR.toString())) {
                 // Make sure we ignore the parameter separator
-                tokens.remove(0);
+                tokens.remove();
             }
             else {
-                tokens.remove(0);
+                tokens.remove();
 
                 throw new UnrecognisedTokenException(currentToken);
             }
 
             previousToken = currentToken;
 
-            currentToken = !tokens.isEmpty() ? tokens.get(0) : null;
+            currentToken = !tokens.isEmpty() ? tokens.peek() : null;
         }
 
         return leftHandSide;
@@ -420,7 +461,7 @@ class ExpressionParser {
         return character == '\'' || character == '\"';
     }
 
-    private List<String> tokenise(String expression) throws MissingTokenException {
+    private Queue<String> tokenise(String expression) throws MissingTokenException {
         if (expression == null || expression.length() == 0) {
             return  null;
         }
@@ -442,7 +483,7 @@ class ExpressionParser {
             }
         };
         Collections.sort(operators,  x);
-        List<String> tokens = new ArrayList<>();
+        Queue<String> tokens = new LinkedList<>();
         StringBuilder unrecognised = null;
 
         int index = 0;
@@ -487,7 +528,7 @@ class ExpressionParser {
                         throw new MissingTokenException("Missing closing token '{closingCharacter}'", closingCharacter);
                     }
 
-                    String variable = expression.substring(index, expression.indexOf(closingCharacter, index));
+                    String variable = expression.substring(index, expression.indexOf(closingCharacter, index) + 1);
 
                     checkForUnrecognised(unrecognised, tokens);
                     tokens.add(variable);

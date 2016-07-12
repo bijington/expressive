@@ -27,9 +27,7 @@ import com.bijington.expressive.functions.IFunction;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 /// <summary>
 /// Class definition for an Expression that can be evaluated.
