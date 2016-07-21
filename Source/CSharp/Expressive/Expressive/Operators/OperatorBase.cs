@@ -11,17 +11,17 @@ namespace Expressive.Operators
 
         public abstract IExpression BuildExpression(string previousToken, IExpression[] expressions);
 
-        public bool CanGetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
+        public virtual bool CanGetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
         {
             return true;
         }
 
-        public string[] GetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
+        public virtual string[] GetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
         {
             return new[] { token };
         }
 
-        public string[] GetInnerCaptiveTokens(string[] allCaptiveTokens)
+        public virtual string[] GetInnerCaptiveTokens(string[] allCaptiveTokens)
         {
             return new string[0];
         }

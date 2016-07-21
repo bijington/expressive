@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace Expressive.Operators.Additive
 {
-    internal class SubtractOperator : IOperator
+    internal class SubtractOperator : OperatorBase
     {
         #region IOperator Members
 
-        public string[] Tags { get { return new[] { "-", "\u2212" }; } }
+        public override string[] Tags { get { return new[] { "-", "\u2212" }; } }
 
-        public IExpression BuildExpression(string previousToken, IExpression[] expressions)
+        public override IExpression BuildExpression(string previousToken, IExpression[] expressions)
         {
             if (IsUnary(previousToken))
             {
@@ -21,42 +21,19 @@ namespace Expressive.Operators.Additive
             return new BinaryExpression(BinaryExpressionType.Subtract, expressions[0], expressions[1]);
         }
 
-        public bool CanGetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
+        public override bool CanGetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
         {
             var remainingTokensCopy = new Queue<string>(remainingTokens.ToArray());
 
             return this.GetCaptiveTokens(previousToken, token, remainingTokensCopy).Any();
         }
 
-        public string[] GetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
-        {
-            string[] result = null;
-
-            if (IsUnary(previousToken))
-            {
-                if (remainingTokens.FirstOrDefault() != null)
-                {
-                    result = new string[] { token, remainingTokens.Dequeue() };
-                }
-                else
-                {
-                    result = new[] { token };
-                }
-            }
-            else
-            {
-                result = new[] { token };
-            }
-
-            return result;
-        }
-
-        public string[] GetInnerCaptiveTokens(string[] allCaptiveTokens)
+        public override string[] GetInnerCaptiveTokens(string[] allCaptiveTokens)
         {
             return allCaptiveTokens.Skip(1).ToArray();
         }
 
-        public OperatorPrecedence GetPrecedence(string previousToken)
+        public override OperatorPrecedence GetPrecedence(string previousToken)
         {
             if (IsUnary(previousToken))
             {
