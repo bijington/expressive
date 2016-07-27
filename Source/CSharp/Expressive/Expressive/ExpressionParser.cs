@@ -1,9 +1,14 @@
 ﻿using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
+using Expressive.Functions.Logical;
+using Expressive.Functions.Mathematical;
+using Expressive.Functions.Statistical;
+using Expressive.Functions.String;
 using Expressive.Operators;
 using Expressive.Operators.Additive;
 using Expressive.Operators.Bitwise;
+using Expressive.Operators.Conditional;
 using Expressive.Operators.Grouping;
 using Expressive.Operators.Logic;
 using Expressive.Operators.Multiplicative;
@@ -59,6 +64,8 @@ namespace Expressive
             RegisterOperator(new BitwiseXOrOperator());
             RegisterOperator(new LeftShiftOperator());
             RegisterOperator(new RightShiftOperator());
+            // Conditional
+            RegisterOperator(new NullCoalescingOperator());
             // Grouping
             RegisterOperator(new ParenthesisCloseOperator());
             RegisterOperator(new ParenthesisOpenOperator());
@@ -80,39 +87,43 @@ namespace Expressive
             #endregion
 
             #region Functions
+            // Mathematical
             RegisterFunction(new AbsFunction());
             RegisterFunction(new AcosFunction());
             RegisterFunction(new AsinFunction());
             RegisterFunction(new AtanFunction());
-            RegisterFunction(new AverageFunction());
             RegisterFunction(new CeilingFunction());
             RegisterFunction(new CosFunction());
             RegisterFunction(new CountFunction());
             RegisterFunction(new ExpFunction());
             RegisterFunction(new FloorFunction());
             RegisterFunction(new IEEERemainderFunction());
-            RegisterFunction(new IfFunction());
-            RegisterFunction(new InFunction());
-            RegisterFunction(new LengthFunction());
             RegisterFunction(new Log10Function());
             RegisterFunction(new LogFunction());
             RegisterFunction(new MaxFunction());
-            RegisterFunction(new MeanFunction());
-            RegisterFunction(new MedianFunction());
-            RegisterFunction(new ModeFunction());
             RegisterFunction(new MinFunction());
-            RegisterFunction(new PadLeftFunction());
-            RegisterFunction(new PadRightFunction());
             RegisterFunction(new PowFunction());
-            RegisterFunction(new RegexFunction());
             RegisterFunction(new RoundFunction());
             RegisterFunction(new SignFunction());
             RegisterFunction(new SinFunction());
             RegisterFunction(new SqrtFunction());
-            RegisterFunction(new SubstringFunction());
             RegisterFunction(new SumFunction());
             RegisterFunction(new TanFunction());
             RegisterFunction(new TruncateFunction());
+            // Logical
+            RegisterFunction(new IfFunction());
+            RegisterFunction(new InFunction());
+            // Statistical
+            RegisterFunction(new AverageFunction());
+            RegisterFunction(new MeanFunction());
+            RegisterFunction(new MedianFunction());
+            RegisterFunction(new ModeFunction());
+            // String
+            RegisterFunction(new LengthFunction());
+            RegisterFunction(new PadLeftFunction());
+            RegisterFunction(new PadRightFunction());
+            RegisterFunction(new RegexFunction());
+            RegisterFunction(new SubstringFunction());            
             #endregion
         }
 
@@ -122,9 +133,9 @@ namespace Expressive
 
         internal IExpression CompileExpression(string expression, IList<string> variables)
         {
-            if (expression == null)
+            if (string.IsNullOrWhiteSpace(expression))
             {
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException("expression", "An Expression cannot be empty.");
             }
 
             var tokens = Tokenise(expression);

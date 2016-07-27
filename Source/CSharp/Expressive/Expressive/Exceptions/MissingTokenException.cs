@@ -20,7 +20,7 @@ namespace Expressive.Exceptions
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         /// <param name="missingToken">The token that is missing.</param>
-        public MissingTokenException(string message, char missingToken)
+        internal MissingTokenException(string message, char missingToken)
             : base(message)
         {
             this.MissingToken = missingToken;

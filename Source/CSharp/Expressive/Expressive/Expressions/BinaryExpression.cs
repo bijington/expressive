@@ -1,4 +1,5 @@
-﻿using Expressive.Helpers;
+﻿using Expressive.Exceptions;
+using Expressive.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -21,9 +22,13 @@ namespace Expressive.Expressions
 
         public object Evaluate(IDictionary<string, object> variables)
         {
-            if (_leftHandSide == null || _rightHandSide == null)
+            if (_leftHandSide == null)
             {
-                return null;
+                throw new MissingParticipantException("The left hand side of the operation is missing.");
+            }
+            else if (_rightHandSide == null)
+            {
+                throw new MissingParticipantException("The right hand side of the operation is missing.");
             }
 
             // We will evaluate the left hand side but hold off on the right hand side as it may not be necessary
@@ -190,6 +195,8 @@ namespace Expressive.Expressions
                     return Convert.ToUInt16(lhsResult) << Convert.ToUInt16(_rightHandSide.Evaluate(variables));
                 case BinaryExpressionType.RightShift:
                     return Convert.ToUInt16(lhsResult) >> Convert.ToUInt16(_rightHandSide.Evaluate(variables));
+                case BinaryExpressionType.NullCoalescing:
+                    return lhsResult ?? _rightHandSide.Evaluate(variables);
                 default:
                     break;
             }
@@ -228,5 +235,6 @@ namespace Expressive.Expressions
         BitwiseXOr,
         LeftShift,
         RightShift,
+        NullCoalescing,
     }
 }
