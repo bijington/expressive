@@ -6,7 +6,7 @@ namespace Expressive.Helpers
     //  Shout out to https://ncalc.codeplex.com/ for the bulk of this implementation.
     internal static class Comparison
     {
-        private static Type[] CommonTypes = new[] { typeof(Int64), typeof(Double), typeof(Boolean), typeof(String), typeof(Decimal) };
+        private static Type[] CommonTypes = new[] { typeof(Int64), typeof(Double), typeof(Boolean), typeof(DateTime), typeof(String), typeof(Decimal) };
 
         internal static int CompareUsingMostPreciseType(object a, object b)
         {
