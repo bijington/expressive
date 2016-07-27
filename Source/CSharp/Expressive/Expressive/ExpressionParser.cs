@@ -135,7 +135,7 @@ namespace Expressive
         {
             if (string.IsNullOrWhiteSpace(expression))
             {
-                throw new ArgumentNullException("expression", "An Expression cannot be empty.");
+                throw new ExpressiveException("An Expression cannot be empty.");
             }
 
             var tokens = Tokenise(expression);

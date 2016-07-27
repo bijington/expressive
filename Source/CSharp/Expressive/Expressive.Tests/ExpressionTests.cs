@@ -744,17 +744,6 @@ namespace Expressive.Tests
             Assert.AreEqual(25d, value);
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "An Expression cannot be empty.")]
-        public void EmptyExpressionsReturnNull()
-        {
-            // This was a previous bug (Issue #6) so this is in place to make sure it does not re-occur.
-            var expression = new Expression("");
-
-            object value = expression.Evaluate(new Dictionary<string, object> { ["a"] = 1, ["b"] = 2, ["c"] = 3, ["d"] = 6, ["e"] = 2, ["f"] = 6 });
-
-            Assert.AreEqual(null, value);
-        }
-
         [TestMethod]
         public void ShouldThrowExceptionIfEitherSideIsMissing()
         {
@@ -774,6 +763,28 @@ namespace Expressive.Tests
             catch (ExpressiveException ee)
             {
                 Assert.AreEqual("The right hand side of the operation is missing.", ee.Message);
+            }
+        }
+
+        [TestMethod]
+        public void ShouldThrowExceptionIfNoContents()
+        {
+            try
+            {
+                new Expression("()").Evaluate();
+            }
+            catch (ExpressiveException ee)
+            {
+                Assert.AreEqual("Missing contents inside ().", ee.Message);
+            }
+
+            try
+            {
+                new Expression("").Evaluate();
+            }
+            catch (ExpressiveException ee)
+            {
+                Assert.IsTrue(string.Equals("An Expression cannot be empty.", ee.Message, StringComparison.Ordinal));
             }
         }
 
