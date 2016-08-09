@@ -153,7 +153,7 @@ namespace Expressive
                 throw new ArgumentException("There are too many ')' symbols. Expected " + openCount + " but there is " + closeCount);
             }
 
-            return CompileExpression(new Queue<string>(tokens), OperatorPrecedence.Minimum, variables);
+            return CompileExpression(new Queue<string>(tokens), OperatorPrecedence.Minimum, variables, false);
         }
 
         internal void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
@@ -195,7 +195,7 @@ namespace Expressive
 
         #region Private Methods
 
-        private IExpression CompileExpression(Queue<string> tokens, OperatorPrecedence minimumPrecedence, IList<string> variables)
+        private IExpression CompileExpression(Queue<string> tokens, OperatorPrecedence minimumPrecedence, IList<string> variables, bool isWithinFunction)
         {
             if (tokens == null)
             {
@@ -234,13 +234,13 @@ namespace Expressive
                             if (captiveTokens.Length > 1)
                             {
                                 var innerTokens = op.GetInnerCaptiveTokens(captiveTokens);
-                                rightHandSide = CompileExpression(new Queue<string>(innerTokens), OperatorPrecedence.Minimum, variables);
+                                rightHandSide = CompileExpression(new Queue<string>(innerTokens), OperatorPrecedence.Minimum, variables, isWithinFunction);
 
                                 currentToken = captiveTokens[captiveTokens.Length - 1];
                             }
                             else
                             {
-                                rightHandSide = CompileExpression(tokens, precedence, variables);
+                                rightHandSide = CompileExpression(tokens, precedence, variables, isWithinFunction);
                                 // We are at the end of an expression so fake it up.
                                 currentToken = ")";
                             }
@@ -255,6 +255,8 @@ namespace Expressive
                 }
                 else if (_registeredFunctions.TryGetValue(currentToken, out function)) // or an IFunction?
                 {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken);
+
                     var expressions = new List<IExpression>();
                     var captiveTokens = new Queue<string>();
                     var parenCount = 0;
@@ -283,13 +285,13 @@ namespace Expressive
                         if (parenCount == 0 &&
                             captiveTokens.Any())
                         {
-                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: OperatorPrecedence.Minimum, variables: variables));
+                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: OperatorPrecedence.Minimum, variables: variables, isWithinFunction: true));
                             captiveTokens.Clear();
                         }
                         else if (string.Equals(nextToken, ParameterSeparator.ToString(), StringComparison.Ordinal) && parenCount == 1)
                         {
                             // TODO: Should we expect expressions to be null???
-                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: 0, variables: variables));
+                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: 0, variables: variables, isWithinFunction: true));
                             captiveTokens.Clear();
                         }
 
@@ -303,6 +305,8 @@ namespace Expressive
                 }
                 else if (currentToken.IsNumeric()) // Or a number
                 {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken);
+
                     tokens.Dequeue();
                     int intValue = 0;
                     decimal decimalValue = 0.0M;
@@ -333,6 +337,8 @@ namespace Expressive
                 }
                 else if (currentToken.StartsWith("[") && currentToken.EndsWith("]")) // or a variable?
                 {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken);
+
                     tokens.Dequeue();
                     string variableName = currentToken.Replace("[", "").Replace("]", "");
                     leftHandSide = new VariableExpression(variableName);
@@ -344,21 +350,29 @@ namespace Expressive
                 }
                 else if (string.Equals(currentToken, "true", StringComparison.OrdinalIgnoreCase)) // or a boolean?
                 {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken);
+
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Boolean, true);
                 }
                 else if (string.Equals(currentToken, "false", StringComparison.OrdinalIgnoreCase))
                 {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken);
+
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Boolean, false);
                 }
                 else if (string.Equals(currentToken, "null", StringComparison.OrdinalIgnoreCase)) // or a null?
                 {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken);
+
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Null, null);
                 }
                 else if (currentToken.StartsWith(DateSeparator.ToString()) && currentToken.EndsWith(DateSeparator.ToString())) // or a date?
                 {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken);
+
                     tokens.Dequeue();
 
                     string dateToken = currentToken.Replace(DateSeparator.ToString(), "");
@@ -386,11 +400,18 @@ namespace Expressive
                 else if ((currentToken.StartsWith("'") && currentToken.EndsWith("'")) ||
                     (currentToken.StartsWith("\"") && currentToken.EndsWith("\"")))
                 {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken);
+
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.String, CleanString(currentToken.Substring(1, currentToken.Length - 2)));
                 }
                 else if (string.Equals(currentToken, ParameterSeparator.ToString(), StringComparison.Ordinal)) // Make sure we ignore the parameter separator
                 {
+                    // TODO should we throw an exception if we are not within a function?
+                    if (!isWithinFunction)
+                    {
+                        throw new ExpressiveException($"Unexpected token '{currentToken}'");
+                    }
                     tokens.Dequeue();
 
                     //throw new InvalidOperationException("Unrecognised token '" + currentToken + "'");
@@ -474,6 +495,14 @@ namespace Expressive
             if (_registeredFunctions.ContainsKey(functionName))
             {
                 throw new FunctionNameAlreadyRegisteredException(functionName);
+            }
+        }
+
+        private void CheckForExistingParticipant(IExpression participant, string token)
+        {
+            if (participant != null)
+            {
+                throw new ExpressiveException($"Unexpected token '{token}'");
             }
         }
 
