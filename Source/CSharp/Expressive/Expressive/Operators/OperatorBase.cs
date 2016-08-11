@@ -9,24 +9,24 @@ namespace Expressive.Operators
 
         public abstract string[] Tags { get; }
 
-        public abstract IExpression BuildExpression(string previousToken, IExpression[] expressions);
+        public abstract IExpression BuildExpression(Token previousToken, IExpression[] expressions);
 
-        public virtual bool CanGetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
+        public virtual bool CanGetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens)
         {
             return true;
         }
 
-        public virtual string[] GetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
+        public virtual Token[] GetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens)
         {
             return new[] { token };
         }
 
-        public virtual string[] GetInnerCaptiveTokens(string[] allCaptiveTokens)
+        public virtual Token[] GetInnerCaptiveTokens(Token[] allCaptiveTokens)
         {
-            return new string[0];
+            return new Token[0];
         }
 
-        public abstract OperatorPrecedence GetPrecedence(string previousToken);
+        public abstract OperatorPrecedence GetPrecedence(Token previousToken);
 
         #endregion
     }

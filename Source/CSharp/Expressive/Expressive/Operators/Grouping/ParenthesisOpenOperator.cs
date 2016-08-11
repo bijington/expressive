@@ -11,21 +11,21 @@ namespace Expressive.Operators.Grouping
 
         public string[] Tags { get { return new[] { "(" }; } }
 
-        public IExpression BuildExpression(string previousToken, IExpression[] expressions)
+        public IExpression BuildExpression(Token previousToken, IExpression[] expressions)
         {
             return new ParenthesisedExpression(expressions[0] ?? expressions[1]);
         }
 
-        public bool CanGetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
+        public bool CanGetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens)
         {
-            var remainingTokensCopy = new Queue<string>(remainingTokens.ToArray());
+            var remainingTokensCopy = new Queue<Token>(remainingTokens.ToArray());
 
             return this.GetCaptiveTokens(previousToken, token, remainingTokensCopy).Any();
         }
 
-        public string[] GetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens)
+        public Token[] GetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens)
         {
-            IList<string> result = new List<string>();
+            IList<Token> result = new List<Token>();
 
             result.Add(token);
 
@@ -37,11 +37,11 @@ namespace Expressive.Operators.Grouping
 
                 result.Add(nextToken);
 
-                if (string.Equals(nextToken, "(", StringComparison.Ordinal))
+                if (string.Equals(nextToken.CurrentToken, "(", StringComparison.Ordinal))
                 {
                     parenCount++;
                 }
-                else if (string.Equals(nextToken, ")", StringComparison.Ordinal))
+                else if (string.Equals(nextToken.CurrentToken, ")", StringComparison.Ordinal))
                 {
                     parenCount--;
                 }
@@ -55,12 +55,12 @@ namespace Expressive.Operators.Grouping
             return result.ToArray();
         }
 
-        public string[] GetInnerCaptiveTokens(string[] allCaptiveTokens)
+        public Token[] GetInnerCaptiveTokens(Token[] allCaptiveTokens)
         {
             return allCaptiveTokens.Skip(1).Take(allCaptiveTokens.Length - 2).ToArray();
         }
 
-        public OperatorPrecedence GetPrecedence(string previousToken)
+        public OperatorPrecedence GetPrecedence(Token previousToken)
         {
             return OperatorPrecedence.ParenthesisOpen;
         }

@@ -8,12 +8,12 @@ namespace Expressive.Operators.Bitwise
 
         public override string[] Tags { get { return new[] { ">>" }; } }
 
-        public override IExpression BuildExpression(string previousToken, IExpression[] expressions)
+        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions)
         {
             return new BinaryExpression(BinaryExpressionType.RightShift, expressions[0], expressions[1]);
         }
 
-        public override OperatorPrecedence GetPrecedence(string previousToken)
+        public override OperatorPrecedence GetPrecedence(Token previousToken)
         {
             return OperatorPrecedence.LeftShift;
         }

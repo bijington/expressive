@@ -13,11 +13,11 @@ namespace Expressive.Operators
         /// </summary>
         string[] Tags { get; }
 
-        IExpression BuildExpression(string previousToken, IExpression[] expressions);
+        IExpression BuildExpression(Token previousToken, IExpression[] expressions);
 
-        bool CanGetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens);
-        string[] GetCaptiveTokens(string previousToken, string token, Queue<string> remainingTokens);
-        string[] GetInnerCaptiveTokens(string[] allCaptiveTokens);
-        OperatorPrecedence GetPrecedence(string previousToken);
+        bool CanGetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens);
+        Token[] GetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens);
+        Token[] GetInnerCaptiveTokens(Token[] allCaptiveTokens);
+        OperatorPrecedence GetPrecedence(Token previousToken);
     }
 }

@@ -125,6 +125,7 @@
     <Compile Include="Operators\Relational\NotEqualOperator.cs" />
     <Compile Include="Operators\Logic\NotOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Token.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
