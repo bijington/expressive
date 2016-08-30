@@ -9,28 +9,6 @@ namespace Expressive.Tests
     [TestClass]
     public class ExpressionTests
     {
-        [TestMethod]
-        public void Debugging()
-        {
-            var complex = new Expression("((Sum([ConsumingQty]) * Sum([ConsumingUV])) / Sum([ModifyingQty]))");
-            var variables = new Dictionary<string, object>();
-            variables.Add("ConsumingQty", new List<object> { 12, 1 });
-            variables.Add("ModifyingQty", new List<object> { 5, 3 });
-            variables.Add("ConsumingUV", new List<object> { 2, 2 });
-
-            var r = complex.Evaluate(variables);
-
-            //var a = new Expression("(true == '(true')").Evaluate();
-
-            var expression = new Expression("[number1] + [date1]");
-            object value = expression.Evaluate(new Dictionary<string, object> { ["number1"] = 1, ["date1"] = DateTime.Now });
-            
-            Assert.AreEqual(null, value);
-
-            var nullResult = new Expression("[number1] == null").Evaluate(new Dictionary<string, object> { ["number1"] = null });
-            Assert.AreEqual(true, nullResult);
-        }
-
         #region Operators
 
         #region Plus Operator
@@ -563,6 +541,127 @@ namespace Expressive.Tests
 
             Assert.AreEqual(1, exp.Evaluate());
         }
+
+        #region Date Functions
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddDays() takes only 2 argument(s)")]
+        public void AddDaysShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(new DateTime(2016, 01, 03), new Expression("AddDays(#2016-01-01#, 2)").Evaluate());
+            Assert.AreEqual(new DateTime(2016, 01, 03), new Expression("addDays(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("AddDays()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddHours() takes only 2 argument(s)")]
+        public void AddHoursShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(new DateTime(2016, 01, 01, 02, 00, 00), new Expression("AddHours(#2016-01-01 00:00:00#, 2)").Evaluate());
+            Assert.AreEqual(new DateTime(2016, 01, 01, 02, 00, 00), new Expression("addhours(#2016-01-01 00:00:00#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("AddHours()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddMinutes() takes only 2 argument(s)")]
+        public void AddMinutesShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(new DateTime(2016, 01, 01, 00, 02, 00), new Expression("AddMinutes(#2016-01-01 00:00:00#, 2)").Evaluate());
+            Assert.AreEqual(new DateTime(2016, 01, 01, 00, 02, 00), new Expression("addminutes(#2016-01-01 00:00:00#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("AddMinutes()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddMonths() takes only 2 argument(s)")]
+        public void AddMonthsShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(new DateTime(2016, 03, 01), new Expression("AddMonths(#2016-01-01#, 2)").Evaluate());
+            Assert.AreEqual(new DateTime(2016, 03, 01), new Expression("addmonths(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("AddMonths()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddYears() takes only 2 argument(s)")]
+        public void AddYearsShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual(new DateTime(2018, 01, 01), new Expression("AddYears(#2016-01-01#, 2)").Evaluate());
+            Assert.AreEqual(new DateTime(2018, 01, 01), new Expression("addyears(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("AddYears()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "DayOf() takes only 1 argument(s)")]
+        public void DayOfShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(1, new Expression("DayOf(#2016-01-01#)").Evaluate());
+            Assert.AreEqual(12, new Expression("dayof(#2016-01-12#)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("DayOf()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "DaysBetween() takes only 2 argument(s)")]
+        public void DaysBetweenShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual((new DateTime(2016, 01, 12) - new DateTime(2016, 01, 01)).TotalDays, new Expression("DaysBetween(#2016-01-01#, #2016-01-12#)").Evaluate());
+            Assert.AreEqual((new DateTime(2016, 12, 01) - new DateTime(2016, 01, 01)).TotalDays, new Expression("daysbetween(#2016-01-01#, #2016-12-01#)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("DaysBetween()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "HourOf() takes only 1 argument(s)")]
+        public void HourOfShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(2, new Expression("HourOf(#2016-01-01 02:00:00#)").Evaluate());
+            Assert.AreEqual(2, new Expression("hourof(#2016-01-12 02:00:00#)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("HourOf()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "HoursBetween() takes only 2 argument(s)")]
+        public void HoursBetweenShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual((new DateTime(2016, 01, 01, 23, 00, 00) - new DateTime(2016, 01, 01)).TotalHours, new Expression("HoursBetween(#2016-01-01#, #2016-01-01 23:00:00#)").Evaluate());
+            Assert.AreEqual((new DateTime(2016, 12, 01, 23, 00, 00) - new DateTime(2016, 01, 01)).TotalHours, new Expression("hoursbetween(#2016-01-01#, #2016-12-01 23:00:00#)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("HoursBetween()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "MinuteOf() takes only 1 argument(s)")]
+        public void MinuteOfShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(55, new Expression("MinuteOf(#2016-01-01 02:55:00#)").Evaluate());
+            Assert.AreEqual(12, new Expression("minuteof(#2016-01-12 02:12:00#)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("MinuteOf()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "MinutesBetween() takes only 2 argument(s)")]
+        public void MinutesBetweenShouldHandleOnlyTwoArguments()
+        {
+            Assert.AreEqual((new DateTime(2016, 01, 01, 23, 12, 00) - new DateTime(2016, 01, 01)).TotalMinutes, new Expression("MinutesBetween(#2016-01-01#, #2016-01-01 23:12:00#)").Evaluate());
+            Assert.AreEqual((new DateTime(2016, 12, 01, 23, 32, 00) - new DateTime(2016, 01, 01)).TotalMinutes, new Expression("minutesbetween(#2016-01-01#, #2016-12-01 23:32:00#)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("MinutesBetween()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "MonthOf() takes only 1 argument(s)")]
+        public void MonthOfShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(01, new Expression("MonthOf(#2016-01-01#)").Evaluate());
+            Assert.AreEqual(06, new Expression("monthof(#2016-06-12#)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("MonthOf()").Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressiveException), "YearOf() takes only 1 argument(s)")]
+        public void YearOfShouldHandleOnlyOneArgument()
+        {
+            Assert.AreEqual(2016, new Expression("YearOf(#2016-01-01#)").Evaluate());
+            Assert.AreEqual(2016, new Expression("yearof(#2016-01-12#)", ExpressiveOptions.IgnoreCase).Evaluate());
+
+            new Expression("YearOf()").Evaluate();
+        }
+
+        #endregion
 
         #endregion
 

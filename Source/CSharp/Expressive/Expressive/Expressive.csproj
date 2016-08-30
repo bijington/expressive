@@ -11,6 +11,7 @@
     <AssemblyName>Expressive</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +25,7 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <DocumentationFile>
     </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\bin\Expressive.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -62,6 +65,19 @@
     <Compile Include="Expressions\VariableExpression.cs" />
     <Compile Include="ExpressiveOptions.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Functions\Date\AddDaysFunction.cs" />
+    <Compile Include="Functions\Date\AddHoursFunction.cs" />
+    <Compile Include="Functions\Date\AddMinutesFunction.cs" />
+    <Compile Include="Functions\Date\AddMonthsFunction.cs" />
+    <Compile Include="Functions\Date\AddYearsFunction.cs" />
+    <Compile Include="Functions\Date\DayOfFunction.cs" />
+    <Compile Include="Functions\Date\DaysBetweenFunction.cs" />
+    <Compile Include="Functions\Date\HourOfFunction.cs" />
+    <Compile Include="Functions\Date\HoursBetweenFunction.cs" />
+    <Compile Include="Functions\Date\MinuteOfFunction.cs" />
+    <Compile Include="Functions\Date\MinutesBetweenFunction.cs" />
+    <Compile Include="Functions\Date\MonthOfFunction.cs" />
+    <Compile Include="Functions\Date\YearOfFunction.cs" />
     <Compile Include="Functions\Mathematical\AbsFunction.cs" />
     <Compile Include="Functions\Mathematical\AcosFunction.cs" />
     <Compile Include="Functions\Mathematical\AsinFunction.cs" />

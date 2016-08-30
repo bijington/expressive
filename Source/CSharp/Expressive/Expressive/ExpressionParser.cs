@@ -1,6 +1,7 @@
 ﻿using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
+using Expressive.Functions.Date;
 using Expressive.Functions.Logical;
 using Expressive.Functions.Mathematical;
 using Expressive.Functions.Statistical;
@@ -87,6 +88,20 @@ namespace Expressive
             #endregion
 
             #region Functions
+            // Date
+            RegisterFunction(new AddDaysFunction());
+            RegisterFunction(new AddHoursFunction());
+            RegisterFunction(new AddMinutesFunction());
+            RegisterFunction(new AddMonthsFunction());
+            RegisterFunction(new AddYearsFunction());
+            RegisterFunction(new DayOfFunction());
+            RegisterFunction(new DaysBetweenFunction());
+            RegisterFunction(new HourOfFunction());
+            RegisterFunction(new HoursBetweenFunction());
+            RegisterFunction(new MinuteOfFunction());
+            RegisterFunction(new MinutesBetweenFunction());
+            RegisterFunction(new MonthOfFunction());
+            RegisterFunction(new YearOfFunction());
             // Mathematical
             RegisterFunction(new AbsFunction());
             RegisterFunction(new AcosFunction());
@@ -318,13 +333,13 @@ namespace Expressive
                     {
                         leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Integer, intValue);
                     }
-                    else if (decimal.TryParse(currentToken.CurrentToken, out decimalValue))
-                    {
-                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Decimal, decimalValue);
-                    }
                     else if (double.TryParse(currentToken.CurrentToken, out doubleValue))
                     {
                         leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Double, doubleValue);
+                    }
+                    else if (decimal.TryParse(currentToken.CurrentToken, out decimalValue))
+                    {
+                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Decimal, decimalValue);
                     }
                     else if (float.TryParse(currentToken.CurrentToken, out floatValue))
                     {
