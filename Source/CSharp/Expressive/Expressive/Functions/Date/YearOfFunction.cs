@@ -13,7 +13,11 @@ namespace Expressive.Functions.Date
         {
             this.ValidateParameterCount(parameters, 1, 1);
 
-            DateTime date = Convert.ToDateTime(parameters[0].Evaluate(Variables));
+            var dateObject = parameters[0].Evaluate(Variables);
+
+            if (dateObject == null) return null;
+
+            DateTime date = Convert.ToDateTime(dateObject);
 
             return date.Year;
         }

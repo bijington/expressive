@@ -91,16 +91,22 @@ namespace Expressive
             // Date
             RegisterFunction(new AddDaysFunction());
             RegisterFunction(new AddHoursFunction());
+            RegisterFunction(new AddMillisecondsFunction());
             RegisterFunction(new AddMinutesFunction());
             RegisterFunction(new AddMonthsFunction());
+            RegisterFunction(new AddSecondsFunction());
             RegisterFunction(new AddYearsFunction());
             RegisterFunction(new DayOfFunction());
             RegisterFunction(new DaysBetweenFunction());
             RegisterFunction(new HourOfFunction());
             RegisterFunction(new HoursBetweenFunction());
+            RegisterFunction(new MillisecondOfFunction());
+            RegisterFunction(new MillisecondsBetweenFunction());
             RegisterFunction(new MinuteOfFunction());
             RegisterFunction(new MinutesBetweenFunction());
             RegisterFunction(new MonthOfFunction());
+            RegisterFunction(new SecondOfFunction());
+            RegisterFunction(new SecondsBetweenFunction());
             RegisterFunction(new YearOfFunction());
             // Mathematical
             RegisterFunction(new AbsFunction());
@@ -333,13 +339,13 @@ namespace Expressive
                     {
                         leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Integer, intValue);
                     }
-                    else if (double.TryParse(currentToken.CurrentToken, out doubleValue))
-                    {
-                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Double, doubleValue);
-                    }
                     else if (decimal.TryParse(currentToken.CurrentToken, out decimalValue))
                     {
                         leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Decimal, decimalValue);
+                    }
+                    else if (double.TryParse(currentToken.CurrentToken, out doubleValue))
+                    {
+                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Double, doubleValue);
                     }
                     else if (float.TryParse(currentToken.CurrentToken, out floatValue))
                     {

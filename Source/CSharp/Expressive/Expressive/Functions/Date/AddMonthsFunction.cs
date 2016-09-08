@@ -13,8 +13,13 @@ namespace Expressive.Functions.Date
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
-            DateTime date = Convert.ToDateTime(parameters[0].Evaluate(Variables));
-            int months = Convert.ToInt32(parameters[1].Evaluate(Variables));
+            var dateObject = parameters[0].Evaluate(Variables);
+            var monthsObject = parameters[1].Evaluate(Variables);
+
+            if (dateObject == null || monthsObject == null) return null;
+
+            DateTime date = Convert.ToDateTime(dateObject);
+            int months = Convert.ToInt32(monthsObject);
 
             return date.AddMonths(months);
         }

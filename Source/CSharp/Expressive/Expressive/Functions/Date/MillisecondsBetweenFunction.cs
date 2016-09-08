@@ -3,11 +3,11 @@ using System;
 
 namespace Expressive.Functions.Date
 {
-    internal sealed class HoursBetweenFunction : FunctionBase
+    internal sealed class MillisecondsBetweenFunction : FunctionBase
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "HoursBetween"; } }
+        public override string Name { get { return "MillisecondsBetween"; } }
 
         public override object Evaluate(IExpression[] parameters)
         {
@@ -21,7 +21,7 @@ namespace Expressive.Functions.Date
             DateTime start = Convert.ToDateTime(startObject);
             DateTime end = Convert.ToDateTime(endObject);
 
-            return (end - start).TotalHours;
+            return (end - start).TotalMilliseconds;
         }
 
         #endregion

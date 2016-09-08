@@ -3,11 +3,11 @@ using System;
 
 namespace Expressive.Functions.Date
 {
-    internal sealed class HourOfFunction : FunctionBase
+    internal sealed class MillisecondOfFunction : FunctionBase
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "HourOf"; } }
+        public override string Name { get { return "MillisecondOf"; } }
 
         public override object Evaluate(IExpression[] parameters)
         {
@@ -19,7 +19,7 @@ namespace Expressive.Functions.Date
 
             DateTime date = Convert.ToDateTime(dateObject);
 
-            return date.Hour;
+            return date.Millisecond;
         }
 
         #endregion

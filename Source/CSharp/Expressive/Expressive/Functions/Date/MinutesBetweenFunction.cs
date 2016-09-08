@@ -13,8 +13,13 @@ namespace Expressive.Functions.Date
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
-            DateTime start = Convert.ToDateTime(parameters[0].Evaluate(Variables));
-            DateTime end = Convert.ToDateTime(parameters[1].Evaluate(Variables));
+            var startObject = parameters[0].Evaluate(Variables);
+            var endObject = parameters[1].Evaluate(Variables);
+
+            if (startObject == null || endObject == null) return null;
+
+            DateTime start = Convert.ToDateTime(startObject);
+            DateTime end = Convert.ToDateTime(endObject);
 
             return (end - start).TotalMinutes;
         }

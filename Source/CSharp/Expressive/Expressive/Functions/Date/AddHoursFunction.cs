@@ -13,8 +13,13 @@ namespace Expressive.Functions.Date
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
-            DateTime date = Convert.ToDateTime(parameters[0].Evaluate(Variables));
-            double hours = Convert.ToDouble(parameters[1].Evaluate(Variables));
+            var dateObject = parameters[0].Evaluate(Variables);
+            var hoursObject = parameters[1].Evaluate(Variables);
+
+            if (dateObject == null || hoursObject == null) return null;
+
+            DateTime date = Convert.ToDateTime(dateObject);
+            double hours = Convert.ToDouble(hoursObject);
 
             return date.AddHours(hours);
         }
