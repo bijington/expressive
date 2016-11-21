@@ -184,6 +184,21 @@ namespace Expressive.Tests
 
         #endregion
 
+        [TestMethod]
+        public void AggregatesHandledInOperators()
+        {
+            Expression expression = new Expression("[array]+2");
+
+            object value = expression.Evaluate(new Dictionary<string, object> { ["array"] = new object[] { 1, 2, 3, 4 } });
+
+            var valueArray = (object[])value;
+            Assert.AreEqual(4, valueArray.Length);
+            Assert.AreEqual(3, valueArray[0]);
+            Assert.AreEqual(4, valueArray[1]);
+            Assert.AreEqual(5, valueArray[2]);
+            Assert.AreEqual(6, valueArray[3]);
+        }
+
         #region Functions
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "Abs() takes only 1 argument(s)")]
@@ -719,7 +734,7 @@ namespace Expressive.Tests
         public void ShouldShortCircuitBooleanExpressions()
         {
             var expression = new Expression("([a] != 0) && ([b]/[a]>2)");
-
+            
             Assert.AreEqual(false, expression.Evaluate(new Dictionary<string, object> { { "a", 0 } }));
         }
 
