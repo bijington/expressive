@@ -1,5 +1,6 @@
 package com.bijington.expressive.expressions;
 
+import com.bijington.expressive.exceptions.ExpressiveException;
 import com.bijington.expressive.helpers.Comparison;
 import com.bijington.expressive.helpers.Convert;
 import com.bijington.expressive.helpers.Numbers;
@@ -22,7 +23,7 @@ public class BinaryExpression implements IExpression {
     }
 
     @Override
-    public Object evaluate(Map<String, Object> variables) {
+    public Object evaluate(Map<String, Object> variables) throws ExpressiveException {
         if (_leftHandSide == null || _rightHandSide == null)
         {
             return null;

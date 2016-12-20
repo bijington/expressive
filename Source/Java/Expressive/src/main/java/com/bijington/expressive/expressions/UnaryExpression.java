@@ -1,5 +1,6 @@
 package com.bijington.expressive.expressions;
 
+import com.bijington.expressive.exceptions.ExpressiveException;
 import com.bijington.expressive.helpers.Convert;
 import com.bijington.expressive.helpers.Numbers;
 
@@ -18,7 +19,7 @@ public class UnaryExpression implements IExpression {
     }
 
     @Override
-    public Object evaluate(Map<String, Object> variables) {
+    public Object evaluate(Map<String, Object> variables) throws ExpressiveException {
         switch (_expressionType) {
             case Minus:
                 return Numbers.subtract(0, _expression.evaluate(variables));

@@ -1,5 +1,7 @@
 package com.bijington.expressive.expressions;
 
+import com.bijington.expressive.exceptions.ExpressiveException;
+
 import java.util.Map;
 
 /**
@@ -18,5 +20,5 @@ public interface IExpression
     /// </summary>
     /// <param name="variables">The list of variables for use in evaluating.</param>
     /// <returns>The result of the <see cref="IExpression"/>.</returns>
-    Object evaluate(Map<String, Object> variables);
+    Object evaluate(Map<String, Object> variables) throws ExpressiveException;
 }

@@ -30,6 +30,21 @@ public class Convert {
         return false;
     }
 
+    public static Double toDouble(Object value) {
+        if (value == null) return 0.0;
+
+        // Boolean check
+        if (value.getClass().equals(Boolean.class)) {
+            return Boolean.class.cast(value) ? 1.0 : 0.0;
+        }
+        // String check
+        if (value.getClass().equals(String.class)) {
+            return Double.valueOf(String.class.cast(value));
+        }
+
+        return (Double)Numbers.add(0.0, value);
+    }
+
     public static Integer toInteger(Object value) {
         if (value == null) return 0;
 
