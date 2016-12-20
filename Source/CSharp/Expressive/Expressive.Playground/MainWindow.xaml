@@ -1,0 +1,62 @@
+﻿<Window x:Class="Expressive.Playground.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Expressive.Playground"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        Icon="Icon.ico"
+        mc:Ignorable="d"
+        Title="Expressive Playground"
+        WindowState="Maximized"
+        Loaded="Window_Loaded">
+    <Window.InputBindings>
+        <KeyBinding Key="E" Modifiers="Control" Command="{Binding EvaluateCommand}"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
+    </Window.InputBindings>
+    <Grid Background="{DynamicResource LightBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="365"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.ColumnSpan="3">
+            <MenuItem Header="File">
+                <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding SaveCommand}"/>
+                <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenCommand}"/>
+                <Separator/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
+        </Menu>
+
+        <avalonEdit:TextEditor Name="textEditor" FontFamily="Consolas" FontSize="12pt" Background="{DynamicResource LightBackground}" Foreground="{DynamicResource Foreground}"
+                               BorderBrush="{DynamicResource BorderBrushNormal}" BorderThickness="1" WordWrap="True"
+                               Grid.Row="1" PreviewKeyDown="textEditor_PreviewKeyDown">
+            <avalonEdit:TextEditor.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Evaluate" Click="MenuItem_Click" InputGestureText="Ctrl+E"/>
+                </ContextMenu>
+            </avalonEdit:TextEditor.ContextMenu>
+        </avalonEdit:TextEditor>
+
+        <GridSplitter Grid.Column="1" Grid.Row="1" Width="4" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
+
+        <DataGrid Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Variables}">
+            
+        </DataGrid>
+
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="3">
+            <TextBlock Text="{Binding VersionText}" Foreground="{DynamicResource Foreground}" TextAlignment="Right" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="5"/>
+            <TextBlock Text="Result: " Foreground="{DynamicResource Foreground}" VerticalAlignment="Center" Padding="5"/>
+            <TextBlock Text="{Binding Result}" Foreground="{DynamicResource Foreground}" VerticalAlignment="Center"/>
+        </DockPanel>
+        
+    </Grid>
+</Window>

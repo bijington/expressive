@@ -12,7 +12,7 @@ namespace Expressive.Exceptions
         /// Initializes a new instance of the <see cref="ParameterCountMismatchException"/> class with a specified error message.
         /// </summary>
         /// <param name="message"></param>
-        public ParameterCountMismatchException(string message)
+        internal ParameterCountMismatchException(string message)
             : base(message)
         {
 

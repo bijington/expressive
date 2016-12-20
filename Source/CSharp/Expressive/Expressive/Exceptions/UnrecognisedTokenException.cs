@@ -19,7 +19,7 @@ namespace Expressive.Exceptions
         /// Initializes a new instance of the <see cref="UnrecognisedTokenException"/> class with a specified unrecognised token.
         /// </summary>
         /// <param name="token">The unrecognised token.</param>
-        public UnrecognisedTokenException(string token)
+        internal UnrecognisedTokenException(string token)
             : base("Unrecognised token '" + token + "'")
         {
             this.Token = token;

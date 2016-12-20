@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Expressive.Exceptions;
+using System.Collections.Generic;
 
 namespace Expressive.Expressions
 {
@@ -17,8 +18,7 @@ namespace Expressive.Expressions
         {
             if (_innerExpression == null)
             {
-                // TODO should this be an exception?
-                return null;
+                throw new MissingParticipantException("Missing contents inside ().");
             }
 
             return _innerExpression.Evaluate(variables);

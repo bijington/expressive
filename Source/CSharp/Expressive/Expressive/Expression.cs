@@ -18,6 +18,7 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
 using System;
@@ -88,9 +89,7 @@ namespace Expressive
         /// <summary>
         /// Evaluates the expression and returns the result.
         /// </summary>
-        /// <exception cref="Exceptions.MissingTokenException">Thrown when the evaluator detects that a token has not been supplied.</exception>
-        /// <exception cref="Exceptions.ParameterCountMismatchException">Thrown when the evaluator detects a function does not have the expected number of parameters supplied.</exception>
-        /// <exception cref="Exceptions.UnrecognisedTokenException">Thrown when the evaluator is unable to process a token in the expression.</exception>
+        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
         /// <returns>The result of the expression.</returns>
         public object Evaluate()
         {
@@ -100,26 +99,31 @@ namespace Expressive
         /// <summary>
         /// Evaluates the expression using the supplied variables and returns the result.
         /// </summary>
-        /// <exception cref="Exceptions.MissingTokenException">Thrown when the evaluator detects that a token has not been supplied.</exception>
-        /// <exception cref="Exceptions.ParameterCountMismatchException">Thrown when the evaluator detects a function does not have the expected number of parameters supplied.</exception>
-        /// <exception cref="Exceptions.UnrecognisedTokenException">Thrown when the evaluator is unable to process a token in the expression.</exception>
+        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
         /// <param name="variables">The variables to be used in the evaluation.</param>
         /// <returns>The result of the expression.</returns>
         public object Evaluate(IDictionary<string, object> variables)
         {
-            object result = null;
-            
-            this.CompileExpression();
-
-            if (variables != null &&
-                _options.HasFlag(ExpressiveOptions.IgnoreCase))
+            try
             {
-                variables = new Dictionary<string, object>(variables, StringComparer.OrdinalIgnoreCase);
+                object result = null;
+
+                this.CompileExpression();
+
+                if (variables != null &&
+                    _options.HasFlag(ExpressiveOptions.IgnoreCase))
+                {
+                    variables = new Dictionary<string, object>(variables, StringComparer.OrdinalIgnoreCase);
+                }
+
+                result = _compiledExpression?.Evaluate(variables);
+
+                return result;
             }
-
-            result = _compiledExpression.Evaluate(variables);
-
-            return result;
+            catch (Exception ex)
+            {
+                throw new ExpressiveException(ex);
+            }
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace Expressive.Exceptions
         /// Initializes a new instance of the <see cref="FunctionNameAlreadyRegisteredException"/> class with a specified unrecognised token.
         /// </summary>
         /// <param name="name">The name of the function.</param>
-        public FunctionNameAlreadyRegisteredException(string name)
+        internal FunctionNameAlreadyRegisteredException(string name)
             : base($"A function has already been registered '{name}'")
         {
             this.Name = name;

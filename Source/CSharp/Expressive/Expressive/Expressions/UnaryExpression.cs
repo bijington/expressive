@@ -35,7 +35,7 @@ namespace Expressive.Expressions
                             return !(bool)value;
                         }
 
-                        return Convert.ToBoolean(value);
+                        return !Convert.ToBoolean(value);
                     }
                     break;
                 case UnaryExpressionType.Plus:

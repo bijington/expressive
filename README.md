@@ -164,6 +164,7 @@ expression.EvaluateAsync((r) =>
 | Bitwise NOT            | ~                 | 2 ~ 2                   |
 | Left shift             | <<                | 2 << 2                  |
 | Right shift            | >>                | 2 >> 2                  |
+| Null Coalesce          | ??                | null ?? 0               |
 
 ### Functions
 
@@ -211,5 +212,4 @@ expression.EvaluateAsync((r) =>
 | Integer             | 123                     |
 | Boolean             | true, false             |
 | Floating point      | 123.456                 |
-| Scientific notation | 1.22e2                  |
 | null                | null                    |

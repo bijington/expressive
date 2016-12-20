@@ -22,7 +22,9 @@
         Multiply = 17,
         Modulus = 18,
         Divide = 19,
-        BitwiseNot = 20, // TODO: Is this needed?
+        NullCoalescing = 20,
+        Conditional = 20,
+        //BitwiseNot = 20, // TODO: Is this needed?
         UnaryPlus = 21,
         UnaryMinus = 22,
         ParenthesisOpen = 23,
