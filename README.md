@@ -179,43 +179,43 @@ expression.EvaluateAsync((r) =>
 #### Date
 
 | Function | AddDays |
-|-|-|
+| -------- | ------- |
 | **Usage** | AddDays(#2017-01-30#, 2)|
 | **Description** | Returns the supplied date with the specified number of days added. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | AddHours |
-|-|-|
+| -------- | ------- |
 | **Usage** | AddHours(#2017-01-30 00:00:00#, 2)|
 | **Description** | Returns the supplied date with the specified number of hours added. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | AddMilliseconds |
-|-|-|
+| -------- | ------- |
 | **Usage** | AddMilliseconds(#2017-01-30 00:00:00.000#, 2)|
 | **Description** | Returns the supplied date with the specified number of milliseconds added. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | AddMinutes |
-|-|-|
+| -------- | ------- |
 | **Usage** | AddMinutes(#2017-01-30 00:00:00#, 2)|
 | **Description** | Returns the supplied date with the specified number of minutes added. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | AddMonths |
-|-|-|
+| -------- | ------- |
 | **Usage** | AddMonths(#2017-01-30#, 2)|
 | **Description** | Returns the supplied date with the specified number of months added. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | AddSeconds |
-|-|-|
+| -------- | ------- |
 | **Usage** | AddSeconds(#2017-01-30 00:00:00#, 2)|
 | **Description** | Returns the supplied date with the specified number of seconds added. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | AddYears |
-|-|-|
+| -------- | ------- |
 | **Usage** | AddMonths(#2017-01-30#, 2)|
 | **Description** | Returns the supplied date with the specified number of months added. |
 | **Remarks** | Expects **exactly 2** parameters.|
@@ -223,43 +223,43 @@ expression.EvaluateAsync((r) =>
 ****
 
 | Function | DayOf |
-|-|-|
+| -------- | ------- |
 | **Usage** | DayOf(#2017-01-30#)|
 | **Description** | Returns the day component of the supplied date. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 | Function | HourOf |
-|-|-|
+| -------- | ------- |
 | **Usage** | DayOf(#2017-01-30 00:00:00#)|
 | **Description** | Returns the hour component of the supplied date. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 | Function | MillisecondOf |
-|-|-|
+| -------- | ------- |
 | **Usage** | MillisecondOf(#2017-01-30 00:00:00.000#)|
 | **Description** | Returns the millisecond component of the supplied date. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 | Function | MinuteOf |
-|-|-|
+| -------- | ------- |
 | **Usage** | MinuteOf(#2017-01-30 00:00:00#)|
 | **Description** | Returns the minute component of the supplied date. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 | Function | MonthOf |
-|-|-|
+| -------- | ------- |
 | **Usage** | MonthOf(#2017-01-30 00:00:00#)|
 | **Description** | Returns the month component of the supplied date. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 | Function | SecondOf |
-|-|-|
+| -------- | ------- |
 | **Usage** | SecondOf(#2017-01-30 00:00:00#)|
 | **Description** | Returns the second component of the supplied date. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 | Function | YearOf |
-|-|-|
+| -------- | ------- |
 | **Usage** | YearOf(#2017-01-30 00:00:00#)|
 | **Description** | Returns the year component of the supplied date. |
 | **Remarks** | Expects **exactly 1** parameter.|
@@ -267,43 +267,43 @@ expression.EvaluateAsync((r) =>
 ****
 
 | Function | DaysBetween |
-|-|-|
+| -------- | ------- |
 | **Usage** | DaysBetween(#2017-01-01#, #2017-01-30#)|
 | **Description** | Returns the number of days between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | HoursBetween |
-|-|-|
+| -------- | ------- |
 | **Usage** | HoursBetween(#2017-01-01 00:00:00#, #2017-01-30 00:00:00#)|
 | **Description** | Returns the number of hours between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | MillisecondsBetween |
-|-|-|
+| -------- | ------- |
 | **Usage** | MillisecondsBetween(#2017-01-01 00:00:00#, #2017-01-30 00:00:00#)|
 | **Description** | Returns the number of milliseconds between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | MinutesBetween |
-|-|-|
+| -------- | ------- |
 | **Usage** | MinutesBetween(#2017-01-01#, #2017-01-30#)|
 | **Description** | Returns the number of minutes between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | MonthsBetween |
-|-|-|
+| -------- | ------- |
 | **Usage** | MonthsBetween(#2017-01-01#, #2017-01-30#)|
 | **Description** | Returns the number of months between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | SecondsBetween |
-|-|-|
+| -------- | ------- |
 | **Usage** | SecondsBetween(#2017-01-01#, #2017-01-30#)|
 | **Description** | Returns the number of seconds between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
 | Function | YearsBetween |
-|-|-|
+| -------- | ------- |
 | **Usage** | YearsBetween(#2017-01-01#, #2017-01-30#)|
 | **Description** | Returns the number of years between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
@@ -311,55 +311,50 @@ expression.EvaluateAsync((r) =>
 #### Mathematical
 
 | Function | Abs |
-|-|-|
+| -------- | ------- |
 | **Usage** | Abs(-1)|
 | **Description** | Returns the absolute value of a number. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 
 | Function | Acos |
-|-|-|
+| -------- | ------- |
 | **Usage** | Acos(1)|
 | **Description** | Returns the angle whose cosine is the specified number. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 
 | Function | Asin |
-|-|-|
+| -------- | ------- |
 | **Usage** | Asin(0)|
 | **Description** | Returns the angle whose sine is the specified number. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 
 | Function | Atan |
-|-|-|
+| -------- | ------- |
 | **Usage** | Atan(0)|
 | **Description** | Returns the angle whose tangent is the specified number. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 
 | Function | Average |
-|-|-|
+| -------- | ------- |
 | **Usage** | Average(1,2,3,4,5,6)|
 | **Description** | Returns the mean average out of the supplied numbers. |
 | **Remarks** | Expects **at least 1** parameter.|
 
 
 | Function | Ceiling |
-|-|-|
+| -------- | ------- |
 | **Usage** | Ceiling(1.5)|
 | **Description** | Returns the smallest integral value that is greater than or equal to the specified number. |
 | **Remarks** | Expects **exactly 1** parameter.|
 
 
+** Still to be converted**
 | Function           | Usage                         | Parameters                    |
 | ------------------ | ----------------------------- | ------------------------------ |
-| Abs                | Abs(-1)                       | Expects **exactly 1** parameter. |
-| Acos               | Acos(1)                       | Expects **exactly 1** parameter. |
-| Asin               | Asin(0)                       | Expects **exactly 1** parameter. |
-| Atan               | Atan(0)                       | Expects **exactly 1** parameter. |
-| Average            | Average(1,2,3,4)              | Expects **at least 1** parameter. |
-| Ceiling            | Ceiling(1.5)                  | Expects **exactly 1** parameter. |
 | Cos                | Cos(0)                        | Expects **exactly 1** parameter. |
 | EndsWith           | EndsWith('end')               | Expects **exactly 1** parameter. |
 | Exp                | Exp(0)                        | Expects **exactly 1** parameter. |
