@@ -11,14 +11,14 @@ namespace Expressive.Operators.Additive
 
         public override string[] Tags { get { return new[] { "+" }; } }
 
-        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions)
+        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {
             if (IsUnary(previousToken))
             {
                 return new UnaryExpression(UnaryExpressionType.Plus, expressions[0] ?? expressions[1]);
             }
 
-            return new BinaryExpression(BinaryExpressionType.Add, expressions[0], expressions[1]);
+            return new BinaryExpression(BinaryExpressionType.Add, expressions[0], expressions[1], options);
         }
 
         public override bool CanGetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens)

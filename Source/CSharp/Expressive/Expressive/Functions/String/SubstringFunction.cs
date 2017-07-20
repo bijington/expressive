@@ -14,7 +14,7 @@ namespace Expressive.Functions.String
             }
         }
 
-        public override object Evaluate(IExpression[] parameters)
+        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
         {
             this.ValidateParameterCount(parameters, 3, 3);
 

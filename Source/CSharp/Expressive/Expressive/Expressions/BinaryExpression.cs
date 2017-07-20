@@ -11,12 +11,14 @@ namespace Expressive.Expressions
     {
         private readonly BinaryExpressionType _expressionType;
         private readonly IExpression _leftHandSide;
+        private readonly ExpressiveOptions _options;
         private readonly IExpression _rightHandSide;
         
-        internal BinaryExpression(BinaryExpressionType type, IExpression lhs, IExpression rhs)
+        internal BinaryExpression(BinaryExpressionType type, IExpression lhs, IExpression rhs, ExpressiveOptions options)
         {
             _expressionType = type;
             _leftHandSide = lhs;
+            _options = options;
             _rightHandSide = rhs;
         }
 
@@ -35,6 +37,8 @@ namespace Expressive.Expressions
 
             // We will evaluate the left hand side but hold off on the right hand side as it may not be necessary
             var lhsResult = _leftHandSide.Evaluate(variables);
+
+            var ignoreCase = _options.HasFlag(ExpressiveOptions.IgnoreCase);
 
             switch (_expressionType)
             {
@@ -71,7 +75,7 @@ namespace Expressive.Expressions
                             }
                         }
 
-                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) != 0;
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) != 0;
                     }
                 case BinaryExpressionType.LessThanOrEqual:
                     {
@@ -87,7 +91,7 @@ namespace Expressive.Expressions
                             return null;
                         }
 
-                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) <= 0;
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) <= 0;
                     }
                 case BinaryExpressionType.GreaterThanOrEqual:
                     {
@@ -103,7 +107,7 @@ namespace Expressive.Expressions
                             return null;
                         }
 
-                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) >= 0;
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) >= 0;
                     }
                 case BinaryExpressionType.LessThan:
                     {
@@ -119,7 +123,7 @@ namespace Expressive.Expressions
                             return null;
                         }
 
-                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) < 0;
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) < 0;
                     }
                 case BinaryExpressionType.GreaterThan:
                     {
@@ -135,7 +139,7 @@ namespace Expressive.Expressions
                             return null;
                         }
 
-                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) > 0;
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) > 0;
                     }
                 case BinaryExpressionType.Equal:
                     {
@@ -164,7 +168,7 @@ namespace Expressive.Expressions
                             }
                         }
 
-                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult) == 0;
+                        return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) == 0;
                     }
                 case BinaryExpressionType.Subtract:
                     return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Numbers.Subtract(l, r));

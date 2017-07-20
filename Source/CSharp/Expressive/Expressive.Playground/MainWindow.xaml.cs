@@ -49,6 +49,81 @@ namespace Expressive.Playground
 
         #region Properties
 
+        private ExpressiveOptions Options
+        {
+            get
+            {
+                var options = ExpressiveOptions.None;
+
+                if (this.IgnoreCase)
+                {
+                    options |= ExpressiveOptions.IgnoreCase;
+                }
+                if (this.NoCache)
+                {
+                    options |= ExpressiveOptions.NoCache;
+                }
+                if (this.RoundAwayFromZero)
+                {
+                    options |= ExpressiveOptions.RoundAwayFromZero;
+                }
+
+                return options;
+            }
+        }
+
+        #region Options
+
+        public bool IgnoreCase
+        {
+            get { return (bool)GetValue(IgnoreCaseProperty); }
+            set { SetValue(IgnoreCaseProperty, value); }
+        }
+
+        public static readonly DependencyProperty IgnoreCaseProperty =
+            DependencyProperty.Register("IgnoreCase", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.IgnoreCasePropertyChanged));
+
+        private static void IgnoreCasePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var typedSender = (MainWindow)sender;
+
+            typedSender.TriggerEvaluation();
+        }
+
+        public bool NoCache
+        {
+            get { return (bool)GetValue(NoCacheProperty); }
+            set { SetValue(NoCacheProperty, value); }
+        }
+
+        public static readonly DependencyProperty NoCacheProperty =
+            DependencyProperty.Register("NoCache", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.NoCachePropertyChanged));
+
+        private static void NoCachePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var typedSender = (MainWindow)sender;
+
+            typedSender.TriggerEvaluation();
+        }
+
+        public bool RoundAwayFromZero
+        {
+            get { return (bool)GetValue(RoundAwayFromZeroProperty); }
+            set { SetValue(RoundAwayFromZeroProperty, value); }
+        }
+
+        public static readonly DependencyProperty RoundAwayFromZeroProperty =
+            DependencyProperty.Register("RoundAwayFromZero", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.RoundAwayFromZeroPropertyChanged));
+
+        private static void RoundAwayFromZeroPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var typedSender = (MainWindow)sender;
+
+            typedSender.TriggerEvaluation();
+        }
+
+        #endregion
+
         public object Result
         {
             get { return (object)GetValue(ResultProperty); }
@@ -258,39 +333,7 @@ namespace Expressive.Playground
         {
             _evaluationTimer.Stop();
 
-            foreach (var line in this.textEditor.Document.Lines)
-            {
-
-                var t = line.ToString();
-            }
-
-
-            //foreach (var expressionText in this.textEditor.Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                string expressionText = this.textEditor.Text;
-
-                Expression expression = new Expression(expressionText, ExpressiveOptions.IgnoreCase);
-
-                // Add any variables into the data grid if they are not already in there.
-                try
-                {
-                    foreach (var variable in expression.ReferencedVariables)
-                    {
-                        if (!this.Variables.Any(v => String.Equals(v.Name, variable, StringComparison.InvariantCultureIgnoreCase)))
-                        {
-                            this.Variables.Add(new VariableDescriptor { Name = variable, Value = "" });
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
-
-                object result = this.EvaluateExpression(expressionText);
-
-                this.Result = result;
-            }
+            this.TriggerEvaluation();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -341,7 +384,7 @@ namespace Expressive.Playground
 
             if (!string.IsNullOrWhiteSpace(expressionText))
             {
-                Expression expression = new Expression(expressionText, ExpressiveOptions.IgnoreCase);
+                Expression expression = new Expression(expressionText, this.Options);
                 try
                 {
                     result = expression.Evaluate(this.Variables.Where(v => !string.IsNullOrWhiteSpace(v.Name)).ToDictionary(v => v.Name, v => v.TypedValue));
@@ -416,6 +459,43 @@ namespace Expressive.Playground
             if (services != null)
                 services.AddService(typeof(ITextMarkerService), textMarkerService);
             this._textMarkerService = textMarkerService;
+        }
+
+        private void TriggerEvaluation()
+        {
+            foreach (var line in this.textEditor.Document.Lines)
+            {
+
+                var t = line.ToString();
+            }
+
+
+            //foreach (var expressionText in this.textEditor.Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string expressionText = this.textEditor.Text;
+                
+                Expression expression = new Expression(expressionText, this.Options);
+
+                // Add any variables into the data grid if they are not already in there.
+                try
+                {
+                    foreach (var variable in expression.ReferencedVariables)
+                    {
+                        if (!this.Variables.Any(v => string.Equals(v.Name, variable, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            this.Variables.Add(new VariableDescriptor { Name = variable, Value = "" });
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                object result = this.EvaluateExpression(expressionText);
+
+                this.Result = result;
+            }
         }
 
         private void UpdateTimer()

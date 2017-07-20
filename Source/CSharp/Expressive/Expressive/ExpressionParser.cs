@@ -192,7 +192,7 @@ namespace Expressive
             {
                 function.Variables = a;
 
-                return function.Evaluate(p);
+                return function.Evaluate(p, _options);
             });
         }
 
@@ -266,7 +266,7 @@ namespace Expressive
                                 currentToken = new Token(")", -1);
                             }
 
-                            leftHandSide = op.BuildExpression(previousToken, new[] { leftHandSide, rightHandSide });
+                            leftHandSide = op.BuildExpression(previousToken, new[] { leftHandSide, rightHandSide }, _options);
                         }
                     }
                     else

@@ -6,11 +6,17 @@ namespace Expressive.Helpers
     //  Shout out to https://ncalc.codeplex.com/ for the bulk of this implementation.
     internal static class Comparison
     {
-        private static Type[] CommonTypes = new[] { typeof(Int64), typeof(Double), typeof(Boolean), typeof(DateTime), typeof(String), typeof(Decimal) };
+        private static Type[] CommonTypes = new[] { typeof(long), typeof(double), typeof(bool), typeof(DateTime), typeof(string), typeof(decimal) };
 
-        internal static int CompareUsingMostPreciseType(object a, object b)
+        internal static int CompareUsingMostPreciseType(object a, object b, bool ignoreCase)
         {
             Type mpt = GetMostPreciseType(a.GetType(), b.GetType());
+
+            if (mpt == typeof(string))
+            {
+                return String.Compare((string)Convert.ChangeType(a, mpt), (string)Convert.ChangeType(b, mpt), ignoreCase);
+            }
+
             return Comparer.Default.Compare(Convert.ChangeType(a, mpt), Convert.ChangeType(b, mpt));
         }
 

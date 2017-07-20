@@ -34,6 +34,30 @@
                 <Separator/>
                 <MenuItem Header="Exit"/>
             </MenuItem>
+            <MenuItem Header="Options">
+                <!-- Hacky for now but the tick doesn't seem to be displaying in the MenuItem -->
+                <MenuItem>
+                    <MenuItem.Header>
+                        <CheckBox IsChecked="{Binding IgnoreCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Content="Ignore case"
+                                  Foreground="White"/>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <CheckBox IsChecked="{Binding NoCache, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Content="No cache"
+                                  Foreground="White"/>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <CheckBox IsChecked="{Binding RoundAwayFromZero, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Content="Round away from zero"
+                                  Foreground="White"/>
+                    </MenuItem.Header>
+                </MenuItem>
+            </MenuItem>
         </Menu>
 
         <avalonEdit:TextEditor Name="textEditor" FontFamily="Consolas" FontSize="12pt" Background="{DynamicResource LightBackground}" Foreground="{DynamicResource Foreground}"
@@ -48,9 +72,7 @@
 
         <GridSplitter Grid.Column="1" Grid.Row="1" Width="4" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext"/>
 
-        <DataGrid Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Variables}">
-            
-        </DataGrid>
+        <DataGrid Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Variables}"/>
 
         <DockPanel Grid.Row="2" Grid.ColumnSpan="3">
             <TextBlock Text="{Binding VersionText}" Foreground="{DynamicResource Foreground}" TextAlignment="Right" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="5"/>

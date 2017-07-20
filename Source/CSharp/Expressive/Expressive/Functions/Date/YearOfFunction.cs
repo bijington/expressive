@@ -9,7 +9,7 @@ namespace Expressive.Functions.Date
 
         public override string Name { get { return "YearOf"; } }
 
-        public override object Evaluate(IExpression[] parameters)
+        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
         {
             this.ValidateParameterCount(parameters, 1, 1);
 

@@ -13,7 +13,7 @@ namespace Expressive.Functions
 
         public abstract string Name { get; }
 
-        public abstract object Evaluate(IExpression[] parameters);
+        public abstract object Evaluate(IExpression[] parameters, ExpressiveOptions options);
 
         #endregion
 

@@ -8,7 +8,7 @@ namespace Expressive.Operators.Grouping
 
         public override string[] Tags { get { return new[] { ")" }; } }
 
-        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions)
+        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {
             return expressions[0] ?? expressions[1];
         }

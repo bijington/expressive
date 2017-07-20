@@ -22,7 +22,8 @@ namespace Expressive.Functions
         /// Forces the Function to evaluate itself using the supplied parameters.
         /// </summary>
         /// <param name="parameters">The list of parameters inside the Function.</param>
+        /// <param name="options">The evaluation options to be used.</param>
         /// <returns>The result of the Function.</returns>
-        object Evaluate(IExpression[] parameters);
+        object Evaluate(IExpression[] parameters, ExpressiveOptions options);
     }
 }

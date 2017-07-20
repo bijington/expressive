@@ -11,7 +11,7 @@ namespace Expressive.Operators.Grouping
 
         public string[] Tags { get { return new[] { "(" }; } }
 
-        public IExpression BuildExpression(Token previousToken, IExpression[] expressions)
+        public IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {
             return new ParenthesisedExpression(expressions[0] ?? expressions[1]);
         }

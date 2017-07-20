@@ -12,7 +12,7 @@ namespace Expressive.Functions.Statistical
 
         public override string Name { get { return "Median"; } }
 
-        public override object Evaluate(IExpression[] parameters)
+        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
