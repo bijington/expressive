@@ -298,7 +298,7 @@ namespace Expressive.Playground
             var t = this.textEditor.SelectedText;
 
             var result = this.EvaluateExpression(this.textEditor.SelectedText);
-
+            
             MessageBox.Show($"Result: {result}");
         }
 
@@ -381,7 +381,8 @@ namespace Expressive.Playground
             // TODO actually populate from the Expressive library
             // Date
             _functions.Add(new FunctionCompletionData("AddDays", "Returns the specified date with the specified number of days added to it.", VariableType.Date, VariableType.Number));
-            _functions.Add(new FunctionCompletionData("Days", "Returns number of days between the specified two dates.", VariableType.Date, VariableType.Date));
+            _functions.Add(new FunctionCompletionData("DayOf", "Return the day component of the specified date.", VariableType.Date));
+            _functions.Add(new FunctionCompletionData("DaysBetween", "Returns number of days between the specified two dates.", VariableType.Date, VariableType.Date));
             // Logical
             _functions.Add(new FunctionCompletionData("If", "Allows you to make logical comparisons between a value and what you expect and return a value on whether the expected value matches the actual.", VariableType.Boolean, VariableType.String, VariableType.String));
             _functions.Add(new FunctionCompletionData("In", "Returns true if the first specified value exists within the following specified value(s).", VariableType.Number, VariableType.Number));

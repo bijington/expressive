@@ -40,7 +40,7 @@ namespace Expressive.Playground
                 switch (_type)
                 {
                     case VariableType.Number:
-                        return Convert.ToDouble(_value);
+                        return string.IsNullOrWhiteSpace(_value) ? (double?) null : Convert.ToDouble(_value);
                     case VariableType.String:
                         return _value as string;
                     case VariableType.Date:
