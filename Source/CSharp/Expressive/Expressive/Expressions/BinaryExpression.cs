@@ -224,21 +224,21 @@ namespace Expressive.Expressions
             IList<object> rhsParticipants = new List<object>();
             object rhsResult = rhs.Evaluate(variables);
 
-            if (!(lhsResult is IEnumerable) && !(rhsResult is IEnumerable))
+            if (!(lhsResult is ICollection) && !(rhsResult is ICollection))
             {
                 return resultSelector(lhsResult, rhsResult);
             }
 
-            if (lhsResult is IEnumerable)
+            if (lhsResult is ICollection)
             {
-                foreach (var item in ((IEnumerable)lhsResult))
+                foreach (var item in ((ICollection)lhsResult))
                 {
                     lhsParticipants.Add(item);
                 }
             }
-            if (rhsResult is IEnumerable)
+            if (rhsResult is ICollection)
             {
-                foreach (var item in ((IEnumerable)rhsResult))
+                foreach (var item in ((ICollection)rhsResult))
                 {
                     rhsParticipants.Add(item);
                 }

@@ -903,6 +903,13 @@ namespace Expressive.Tests
             }
         }
 
+        [TestMethod]
+        public void ShouldMatchStringToBooleanTrue()
+        {
+            Assert.IsTrue((bool)new Expression("'True' && true").Evaluate());
+            Assert.IsFalse((bool)new Expression("'False' && true").Evaluate());
+        }
+
         #endregion
     }
 }
