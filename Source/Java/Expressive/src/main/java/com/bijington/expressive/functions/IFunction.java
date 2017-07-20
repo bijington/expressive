@@ -1,5 +1,6 @@
 package com.bijington.expressive.functions;
 
+import com.bijington.expressive.exceptions.ExpressiveException;
 import com.bijington.expressive.expressions.IExpression;
 
 import java.util.Map;
@@ -29,5 +30,5 @@ public interface IFunction
     /// </summary>
     /// <param name="parameters">The list of parameters inside the Function.</param>
     /// <returns>The result of the Function.</returns>
-    Object evaluate(IExpression[] parameters);
+    Object evaluate(IExpression[] parameters) throws ExpressiveException;
 }

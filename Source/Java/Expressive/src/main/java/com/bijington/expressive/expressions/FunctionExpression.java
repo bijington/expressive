@@ -1,5 +1,6 @@
 package com.bijington.expressive.expressions;
 
+import com.bijington.expressive.exceptions.ExpressiveException;
 import com.bijington.expressive.functions.IFunction;
 
 import java.util.Map;
@@ -20,5 +21,9 @@ public class FunctionExpression implements IExpression {
     }
 
     @Override
-    public Object evaluate(Map<String, Object> variables) { return _function.evaluate(_parameters); }
+    public Object evaluate(Map<String, Object> variables) throws ExpressiveException {
+        _function.setVariables(variables);
+
+        return _function.evaluate(_parameters);
+    }
 }

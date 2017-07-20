@@ -1,6 +1,7 @@
 package com.bijington.expressive.expressions;
 
 import com.bijington.expressive.Expression;
+import com.bijington.expressive.exceptions.ExpressiveException;
 
 import java.util.Map;
 
@@ -15,20 +16,22 @@ public class VariableExpression implements IExpression {
     }
 
     @Override
-    public Object evaluate(Map<String, Object> variables) {
+    public Object evaluate(Map<String, Object> variables) throws ExpressiveException {
         if (variables == null ||
             !variables.containsKey(_variableName))
         {
-            //throw new ArgumentException("The variable '" + _variableName + "' has not been supplied.");
+            throw new ExpressiveException("The variable '" + _variableName + "' has not been supplied.");
         }
 
+        Object value = variables.get(_variableName);
         // Check to see if we have to referred to another expression.
-//        Expression expression = variables[_variableName] as Expression;
-//        if (expression != null)
-//        {
-//            return expression.evaluate(variables);
-//        }
+        if (value != null && value.getClass().equals(Expression.class))
+        {
+            Expression expression = (Expression)value;
 
-        return variables.get(_variableName);
+            return expression.evaluate(variables);
+        }
+
+        return value;
     }
 }

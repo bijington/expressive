@@ -20,16 +20,17 @@
 
 package com.bijington.expressive;
 
+import com.bijington.expressive.exceptions.ExpressiveException;
 import com.bijington.expressive.exceptions.MissingTokenException;
+import com.bijington.expressive.exceptions.ParameterCountMismatchException;
 import com.bijington.expressive.exceptions.UnrecognisedTokenException;
 import com.bijington.expressive.expressions.IExpression;
 import com.bijington.expressive.functions.IFunction;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.TreeMap;
 
 /// <summary>
 /// Class definition for an Expression that can be evaluated.
@@ -39,16 +40,16 @@ public final class Expression {
     private final EnumSet<ExpressiveOptions> _options;
     private final String _originalExpression;
     private final ExpressionParser _parser;
-    private String[] _variables;
+    private String[] _referencedVariables;
 
     /**
      * Gets a list of the Variable names that are contained within this Expression.
      * @return A list of the Variable names that are contained within this Expression.
      */
-    public String[] getReferencedVariables() throws MissingTokenException, UnrecognisedTokenException {
+    public String[] getReferencedVariables() throws ExpressiveException {
         this.compileExpression();
 
-        return _variables;
+        return _referencedVariables;
     }
 
     /**
@@ -78,7 +79,7 @@ public final class Expression {
      */
     /// <exception cref="Exceptions.ParameterCountMismatchException">Thrown when the evaluator detects a function does not have the expected number of parameters supplied.</exception>
     /// <exception cref="Exceptions.UnrecognisedTokenException">Thrown when the evaluator is unable to process a token in the expression.</exception>
-    public Object evaluate() throws MissingTokenException, UnrecognisedTokenException {
+    public Object evaluate() throws ExpressiveException {
         return evaluate(null);
     }
 
@@ -90,18 +91,18 @@ public final class Expression {
     /// <exception cref="Exceptions.UnrecognisedTokenException">Thrown when the evaluator is unable to process a token in the expression.</exception>
     /// <param name="variables">The variables to be used in the evaluation.</param>
     /// <returns>The result of the expression.</returns>
-    public Object evaluate(Map<String, Object> variables) throws MissingTokenException, UnrecognisedTokenException {
+    public Object evaluate(Map<String, Object> variables) throws ExpressiveException {
         this.compileExpression();
 
-        /*if (variables != null &&
-                _options.HasFlag(ExpressiveOptions.IgnoreCase))
-        {
-            variables = new Dictionary<String, Object>(variables, StringComparer.OrdinalIgnoreCase);
-        }*/
+        if (_options.contains(ExpressiveOptions.IGNORE_CASE) && variables != null) {
+            Map<String, Object> insensitiveMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-        Object result = _compiledExpression.evaluate(variables);
+            insensitiveMap.putAll(variables);
 
-        return result;
+            variables = insensitiveMap;
+        }
+
+        return _compiledExpression.evaluate(variables);
     }
 
     /// <summary>
@@ -155,16 +156,16 @@ public final class Expression {
         _parser.registerFunction(function);
     }
 
-    private void compileExpression() throws MissingTokenException, UnrecognisedTokenException {
+    private void compileExpression() throws ExpressiveException {
         // Cache the expression to save us having to recompile.
         if (_compiledExpression == null ||
-            _options.contains(ExpressiveOptions.NO_CACHE))
-        {
+            _options.contains(ExpressiveOptions.NO_CACHE)) {
             ArrayList<String> variables = new ArrayList<>();
 
             _compiledExpression = _parser.compileExpression(_originalExpression, variables);
 
-            //_variables = variables.ToArray();
+            _referencedVariables = new String[variables.size()];
+            _referencedVariables = variables.toArray(_referencedVariables);
         }
     }
 }

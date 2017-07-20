@@ -1,4 +1,4 @@
-package com.bijington.expressive.operators.Conditional;
+package com.bijington.expressive.operators.conditional;
 
 import com.bijington.expressive.expressions.BinaryExpression;
 import com.bijington.expressive.expressions.BinaryExpressionType;

@@ -1,5 +1,7 @@
 package com.bijington.expressive.expressions;
 
+import com.bijington.expressive.exceptions.ExpressiveException;
+
 import java.util.Map;
 
 /**
@@ -13,7 +15,7 @@ public class ParenthesisedExpression implements IExpression {
     }
 
     @Override
-    public Object evaluate(Map<String, Object> variables) {
+    public Object evaluate(Map<String, Object> variables) throws ExpressiveException {
         if (_innerExpression == null) {
             // TODO should this be an exception?
             return null;
