@@ -50,7 +50,7 @@ namespace Expressive
             // Initialise the string comparer only once.
             _stringComparer = _options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
 
-            _decimalSeparator = Convert.ToChar(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+            _decimalSeparator = Convert.ToChar(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
             _registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(GetDictionaryComparer(options));
             _registeredOperators = new Dictionary<string, IOperator>(GetDictionaryComparer(options));
 

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 
 namespace Expressive.Tests
@@ -908,6 +909,14 @@ namespace Expressive.Tests
         {
             Assert.IsTrue((bool)new Expression("'True' && true").Evaluate());
             Assert.IsFalse((bool)new Expression("'False' && true").Evaluate());
+        }
+
+        [TestMethod]
+        public void ShouldHandleCommaDecimalSeparatorForEuropeanCultures()
+        {
+            //Rule('a60f99fa-21ee-4dfa-b8c1-80ffaa3a83de', 10, 20)
+            var invariantExpression = new Expression("If('a60f99fa-21ee-4dfa-b8c1-80ffaa3a83de' == 0, 10, 20)", ExpressiveOptions.None);
+            Assert.AreEqual(20, invariantExpression.Evaluate());
         }
 
         #endregion
