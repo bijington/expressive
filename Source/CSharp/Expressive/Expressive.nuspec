@@ -3,21 +3,18 @@
   <metadata>
     <id>ExpressiveParser</id>
 	<title>Expressive Parser</title>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <authors>Shaun Lawrence</authors>
     <owners>Shaun Lawrence</owners>
     <licenseUrl>https://opensource.org/licenses/mit</licenseUrl>
     <projectUrl>https://github.com/bijington/expressive</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A multi-platform expression parsing and evaluating framework.</description>
-    <releaseNotes> Version 1.1.0 includes
+    <releaseNotes> Version 1.1.1 includes
 	Bug fixes:
-	* General bug fixes.
-	Features:
-	* Added in date related functions.
-	* Modified operators to allow for the evaluation of aggregate types.
-	General:
-	* Changed the .NET version down to 4.0 to allow for support in older projects.
+	* GH-16: The parser now always uses the '.' decimal separator rather than using the current locales.
+	* GH-10: String comparisons now adhere to the ExpressiveOptions.IgnoreCase option if passed in.
+	* GH-14: Comparisons between strings and booleans now no longer fail.
 	</releaseNotes>
     <copyright>Copyright(c) 2017 Shaun Lawrence</copyright>
     <tags>Expression Parser Evaluator</tags>
