@@ -14,7 +14,7 @@ namespace Expressive.Helpers
 
             if (mpt == typeof(string))
             {
-                return String.Compare((string)Convert.ChangeType(a, mpt), (string)Convert.ChangeType(b, mpt), ignoreCase);
+                return string.Compare((string)Convert.ChangeType(a, mpt), (string)Convert.ChangeType(b, mpt), ignoreCase);
             }
 
             return Comparer.Default.Compare(Convert.ChangeType(a, mpt), Convert.ChangeType(b, mpt));
