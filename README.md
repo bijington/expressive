@@ -290,11 +290,7 @@ expression.EvaluateAsync((r) =>
 | **Description** | Returns the number of minutes between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
-| Function | MonthsBetween |
-| -------- | ------- |
-| **Usage** | MonthsBetween(#2017-01-01#, #2017-01-30#)|
-| **Description** | Returns the number of months between the specified 2 dates. |
-| **Remarks** | Expects **exactly 2** parameters.|
+** MonthsBetween - not yet implemented due to the inprecise duration of a month **
 
 | Function | SecondsBetween |
 | -------- | ------- |
@@ -302,11 +298,7 @@ expression.EvaluateAsync((r) =>
 | **Description** | Returns the number of seconds between the specified 2 dates. |
 | **Remarks** | Expects **exactly 2** parameters.|
 
-| Function | YearsBetween |
-| -------- | ------- |
-| **Usage** | YearsBetween(#2017-01-01#, #2017-01-30#)|
-| **Description** | Returns the number of years between the specified 2 dates. |
-| **Remarks** | Expects **exactly 2** parameters.|
+** YearsBetween - not yet implemented due to the inprecise duration of a year **
 
 #### Mathematical
 
@@ -353,6 +345,7 @@ expression.EvaluateAsync((r) =>
 
 
 ** Still to be converted**
+
 | Function           | Usage                         | Parameters                    |
 | ------------------ | ----------------------------- | ------------------------------ |
 | Cos                | Cos(0)                        | Expects **exactly 1** parameter. |
