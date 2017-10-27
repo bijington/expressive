@@ -124,6 +124,7 @@ namespace Expressive
             RegisterFunction(new MaxFunction());
             RegisterFunction(new MinFunction());
             RegisterFunction(new PowFunction());
+            RegisterFunction(new RandomFunction());
             RegisterFunction(new RoundFunction());
             RegisterFunction(new SignFunction());
             RegisterFunction(new SinFunction());
@@ -140,10 +141,13 @@ namespace Expressive
             RegisterFunction(new MedianFunction());
             RegisterFunction(new ModeFunction());
             // String
+            RegisterFunction(new ContainsFunction());
+            RegisterFunction(new EndsWithFunction());
             RegisterFunction(new LengthFunction());
             RegisterFunction(new PadLeftFunction());
             RegisterFunction(new PadRightFunction());
             RegisterFunction(new RegexFunction());
+            RegisterFunction(new StartsWithFunction());
             RegisterFunction(new SubstringFunction());            
             #endregion
         }

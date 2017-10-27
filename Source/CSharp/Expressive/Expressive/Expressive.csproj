@@ -89,6 +89,7 @@
     <Compile Include="Functions\Mathematical\AcosFunction.cs" />
     <Compile Include="Functions\Mathematical\AsinFunction.cs" />
     <Compile Include="Functions\Mathematical\AtanFunction.cs" />
+    <Compile Include="Functions\Mathematical\RandomFunction.cs" />
     <Compile Include="Functions\Statistical\AverageFunction.cs" />
     <Compile Include="Functions\Mathematical\CeilingFunction.cs" />
     <Compile Include="Functions\Mathematical\CosFunction.cs" />
@@ -100,6 +101,8 @@
     <Compile Include="Functions\Logical\IfFunction.cs" />
     <Compile Include="Functions\IFunction.cs" />
     <Compile Include="Functions\Logical\InFunction.cs" />
+    <Compile Include="Functions\String\ContainsFunction.cs" />
+    <Compile Include="Functions\String\EndsWithFunction.cs" />
     <Compile Include="Functions\String\LengthFunction.cs" />
     <Compile Include="Functions\Mathematical\Log10Function.cs" />
     <Compile Include="Functions\Mathematical\LogFunction.cs" />
@@ -116,6 +119,7 @@
     <Compile Include="Functions\Mathematical\SignFunction.cs" />
     <Compile Include="Functions\Mathematical\SinFunction.cs" />
     <Compile Include="Functions\Mathematical\SqrtFunction.cs" />
+    <Compile Include="Functions\String\StartsWithFunction.cs" />
     <Compile Include="Functions\String\SubstringFunction.cs" />
     <Compile Include="Functions\Mathematical\SumFunction.cs" />
     <Compile Include="Functions\Mathematical\TanFunction.cs" />
