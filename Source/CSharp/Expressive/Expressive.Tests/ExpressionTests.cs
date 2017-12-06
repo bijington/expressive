@@ -919,6 +919,23 @@ namespace Expressive.Tests
             Assert.AreEqual(20, invariantExpression.Evaluate());
         }
 
+        [TestMethod]
+        public void ShouldHandlePartiallyMatchingCustomFunctionNames()
+        {
+            var expression = new Expression("CountInstances()");
+
+            expression.RegisterFunction("CountInstances", (p, a) =>
+            {
+                return 1;
+            });
+            expression.RegisterFunction("CountSealed", (p, a) =>
+            {
+                return 99;
+            });
+
+            Assert.AreEqual(1, (int)expression.Evaluate());
+        }
+
         #endregion
     }
 }

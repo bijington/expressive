@@ -660,7 +660,7 @@ namespace Expressive
                 bool foundUnrecognisedCharacter = false;
 
                 // Functions would tend to have longer tags so check for these first.
-                foreach (var kvp in _registeredFunctions)
+                foreach (var kvp in _registeredFunctions.OrderByDescending(f => f.Key.Length))
                 {
                     var lookAhead = expression.Substring(index, Math.Min(kvp.Key.Length, expressionLength - index));
 
