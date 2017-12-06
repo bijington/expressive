@@ -18,12 +18,28 @@ namespace Expressive.Functions.String
         {
             this.ValidateParameterCount(parameters, 3, 3);
 
-            string text = (string)parameters[0].Evaluate(Variables);
+            object value = parameters[0].Evaluate(Variables);
+
+            if (value == null)
+            {
+                return null;
+            }
+
+            // Safely handle the text input, if not text then call ToString.
+            string text = null;
+            if (value is string)
+            {
+                text = (string)value;
+            }
+            else
+            {
+                text = value.ToString();
+            }
+
             int startIndex = (int)parameters[1].Evaluate(Variables);
             int length = (int)parameters[2].Evaluate(Variables);
-
-            // Not very safe at present but let's see for now.
-            return text.Substring(startIndex, length);
+            
+            return text?.Substring(startIndex, length);
         }
 
         #endregion
