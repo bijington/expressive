@@ -100,14 +100,6 @@ namespace Expressive.Tests
             Assert.AreEqual(2.3M, value);
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Operator '-' can't be applied to operands of types 'decimal' and 'double'")]
-        public void ShouldNotSubtractDoubleAndDecimal()
-        {
-            var expression = new Expression("1.8 - Abs([var1])");
-
-            object value = expression.Evaluate(new Dictionary<string, object> { { "var1", 0.2 } });
-        }
-
         [TestMethod]
         public void ShouldHandleUnarySubtraction()
         {
@@ -937,5 +929,46 @@ namespace Expressive.Tests
         }
 
         #endregion
+
+        [TestMethod]
+        public void ShouldHandleBugTwentyTwo()
+        {
+            // Not working
+            //[myDouble]*5
+            //[myDouble]* pow(5.5,2)
+            //[myDouble]+5.5
+
+            var arguments = new Dictionary<string, object>
+            {
+                ["myDouble"] = 4.0,
+                ["myFloat"] = 4.0f
+            };
+
+            var expression = new Expression("[myDouble]*5");
+            Assert.AreEqual(20, (double)expression.Evaluate(arguments));
+
+            expression = new Expression("[myDouble]*Pow(5.5,2)");
+            Assert.AreEqual(121, (double)expression.Evaluate(arguments));
+
+            expression = new Expression("[myDouble]+5.5");
+            Assert.AreEqual(9.5M, (decimal)expression.Evaluate(arguments));
+
+            // Not working
+            //[myDouble]*5.5
+            expression = new Expression("[myDouble]*5.5");
+            Assert.AreEqual(22M, (decimal)expression.Evaluate(arguments));
+
+            expression = new Expression("[myDouble]-5.5");
+            Assert.AreEqual(-1.5M, (decimal)expression.Evaluate(arguments));
+
+            expression = new Expression("[myDouble]+5.5");
+            Assert.AreEqual(9.5M, (decimal)expression.Evaluate(arguments));
+
+            expression = new Expression("[myDouble]/2.0");
+            Assert.AreEqual(2.0M, (decimal)expression.Evaluate(arguments));
+
+            expression = new Expression("[myFloat]/2.0");
+            Assert.AreEqual(2.0M, (decimal)expression.Evaluate(arguments));
+        }
     }
 }
