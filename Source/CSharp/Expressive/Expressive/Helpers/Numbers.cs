@@ -34,8 +34,8 @@ namespace Expressive.Helpers
                 return b;
             }
 
-            TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
-            TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
+            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
+            TypeCode typeCodeB = TypeHelper.GetTypeCode(b);
 
             switch (typeCodeA)
             {
@@ -276,8 +276,8 @@ namespace Expressive.Helpers
                 return b;
             }
 
-            TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
-            TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
+            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
+            TypeCode typeCodeB = TypeHelper.GetTypeCode(b);
 
             switch (typeCodeA)
             {
@@ -490,8 +490,8 @@ namespace Expressive.Helpers
                 return b;
             }
 
-            TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
-            TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
+            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
+            TypeCode typeCodeB = TypeHelper.GetTypeCode(b);
 
             switch (typeCodeA)
             {
@@ -704,8 +704,8 @@ namespace Expressive.Helpers
                 return b;
             }
 
-            TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
-            TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
+            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
+            TypeCode typeCodeB = TypeHelper.GetTypeCode(b);
 
             switch (typeCodeA)
             {
@@ -935,8 +935,8 @@ namespace Expressive.Helpers
                 return b;
             }
 
-            TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
-            TypeCode typeCodeB = Type.GetTypeCode(b.GetType());
+            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
+            TypeCode typeCodeB = TypeHelper.GetTypeCode(b);
 
             switch (typeCodeA)
             {
@@ -1140,7 +1140,7 @@ namespace Expressive.Helpers
                 return null;
             }
 
-            TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
+            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
 
             switch (typeCodeA)
             {
@@ -1191,7 +1191,7 @@ namespace Expressive.Helpers
                 return a;
             }
 
-            TypeCode typeCodeA = Type.GetTypeCode(a.GetType());
+            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
 
             switch (typeCodeA)
             {

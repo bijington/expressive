@@ -24,6 +24,7 @@ using Expressive.Functions;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Expressive
 {
@@ -149,7 +150,11 @@ namespace Expressive
                 throw new ArgumentNullException("callback");
             }
 
+#if NETSTANDARD1_4
+            Task.Run(() =>
+#else
             ThreadPool.QueueUserWorkItem((o) =>
+#endif
             {
                 object result = null;
                 string message = null;
@@ -162,11 +167,8 @@ namespace Expressive
                 {
                     message = ex.Message;
                 }
-                
-                if (callback != null)
-                {
-                    callback(message, result);
-                }
+
+                callback?.Invoke(message, result);
             });
         }
 

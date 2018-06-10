@@ -217,7 +217,7 @@ namespace Expressive.Expressions
 
         private static bool IsReal(object value)
         {
-            var typeCode = Type.GetTypeCode(value.GetType());
+            var typeCode = TypeHelper.GetTypeCode(value);
 
             return typeCode == TypeCode.Decimal || typeCode == TypeCode.Double || typeCode == TypeCode.Single;
         }

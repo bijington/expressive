@@ -1,13 +1,18 @@
 ﻿using System;
+
+#if !NETSTANDARD1_4
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+#endif
 
 namespace Expressive.Exceptions
 {
     /// <summary>
     /// Represents an error that is thrown when a token is not recognised inside an <see cref="Expression"/>.
     /// </summary>
+#if !NETSTANDARD1_4
     [Serializable]
+#endif
     public sealed class UnrecognisedTokenException : Exception
     {
         /// <summary>
@@ -25,6 +30,7 @@ namespace Expressive.Exceptions
             this.Token = token;
         }
 
+#if !NETSTANDARD1_4
         /// <summary>
         /// Set the <see cref="SerializationInfo"/> with information about this exception.
         /// </summary>
@@ -37,5 +43,6 @@ namespace Expressive.Exceptions
 
             info.AddValue("Token", Token);
         }
+#endif
     }
 }

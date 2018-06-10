@@ -1,14 +1,18 @@
-﻿using Expressive.Functions;
-using System;
+﻿using System;
+using Expressive.Functions;
+#if !NETSTANDARD1_4
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+#endif
 
 namespace Expressive.Exceptions
 {
     /// <summary>
     /// Represents an error that is thrown when registering an <see cref="IFunction"/> and the name is already used.
     /// </summary>
+#if !NETSTANDARD1_4
     [Serializable]
+#endif
     public sealed class FunctionNameAlreadyRegisteredException : Exception
     {
         /// <summary>
@@ -26,6 +30,7 @@ namespace Expressive.Exceptions
             this.Name = name;
         }
 
+#if !NETSTANDARD1_4
         /// <summary>
         /// Set the <see cref="SerializationInfo"/> with information about this exception.
         /// </summary>
@@ -38,5 +43,6 @@ namespace Expressive.Exceptions
 
             info.AddValue("Name", Name);
         }
+#endif
     }
 }

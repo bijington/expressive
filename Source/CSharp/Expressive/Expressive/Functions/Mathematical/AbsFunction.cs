@@ -1,4 +1,5 @@
 ﻿using Expressive.Expressions;
+using Expressive.Helpers;
 using System;
 
 namespace Expressive.Functions.Mathematical
@@ -17,7 +18,7 @@ namespace Expressive.Functions.Mathematical
 
             if (value != null)
             {
-                var valueType = Type.GetTypeCode(value.GetType());
+                var valueType = TypeHelper.GetTypeCode(value);
 
                 switch (valueType)
                 {

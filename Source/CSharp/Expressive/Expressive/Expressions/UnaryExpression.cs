@@ -28,8 +28,6 @@ namespace Expressive.Expressions
 
                     if (value != null)
                     {
-                        var valueType = Type.GetTypeCode(value.GetType());
-
                         if (value is bool)
                         {
                             return !(bool)value;

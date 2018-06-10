@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Expressive.Standard": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "NETSTANDARD": "1"
+      }
+    }
+  }
+}

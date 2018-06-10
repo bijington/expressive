@@ -31,11 +31,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\bin\net40\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Expressive.xml</DocumentationFile>
+    <DocumentationFile>..\bin\net40\Expressive.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
@@ -45,7 +45,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +125,7 @@
     <Compile Include="Functions\Mathematical\TruncateFunction.cs" />
     <Compile Include="Helpers\Comparison.cs" />
     <Compile Include="Helpers\Numbers.cs" />
+    <Compile Include="Helpers\TypeHelper.cs" />
     <Compile Include="Operators\Additive\PlusOperator.cs" />
     <Compile Include="Operators\Additive\SubtractOperator.cs" />
     <Compile Include="Operators\Bitwise\BitwiseAndOperator.cs" />
