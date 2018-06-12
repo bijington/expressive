@@ -3,23 +3,29 @@
   <metadata>
     <id>ExpressiveParser</id>
 	<title>Expressive Parser</title>
-    <version>1.2.1</version>
+    <version>1.3.0</version>
     <authors>Shaun Lawrence</authors>
     <owners>Shaun Lawrence</owners>
     <licenseUrl>https://opensource.org/licenses/mit</licenseUrl>
     <projectUrl>https://github.com/bijington/expressive</projectUrl>
+	<iconUrl>https://raw.githubusercontent.com/bijington/expressive/master/Assets/logo-64.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A multi-platform expression parsing and evaluating framework.</description>
-    <releaseNotes> Version 1.2.1 includes
-	Bug fixes:
-	* GH-17: Added in some extra functions: Contains (String), EndsWith (String), StartsWith (String), Random (Mathematical)
-	* GH-19: Improved the function matching process by looking for longer names first.
+    <releaseNotes> Version 1.3.0 includes
+	Features:
+	* GH-18: Included .NET Standard 1.4+ support.
+	* GH-20: Added in the ability to convert/cast values.
+	Bug fixes:	
+	* GH-22: Arithmetic by decimal values is much more stable if going across types (decimal vs double).
 	</releaseNotes>
-    <copyright>Copyright(c) 2017 Shaun Lawrence</copyright>
-    <tags>Expression Parser Evaluator</tags>
+    <copyright>Copyright(c) 2018 Shaun Lawrence</copyright>
+    <tags>Expression Parser Evaluator Cross-Platform</tags>
   </metadata>
   <files>
-    <file src="bin\Expressive.dll" target="lib\Net40" />
-    <file src="bin\Expressive.xml" target="lib\Net40" />
+	<!-- <file src="bin\**" target="lib" /> -->
+	
+	<file src="bin\net40\*" target="lib\net40" />
+	
+	<file src="bin\netstandard1.4\*" target="lib\netstandard1.4" />
   </files>
 </package>
