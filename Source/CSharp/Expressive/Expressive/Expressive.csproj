@@ -65,6 +65,12 @@
     <Compile Include="Expressions\VariableExpression.cs" />
     <Compile Include="ExpressiveOptions.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Functions\Conversion\DateFunction.cs" />
+    <Compile Include="Functions\Conversion\DecimalFunction.cs" />
+    <Compile Include="Functions\Conversion\DoubleFunction.cs" />
+    <Compile Include="Functions\Conversion\IntegerFunction.cs" />
+    <Compile Include="Functions\Conversion\LongFunction.cs" />
+    <Compile Include="Functions\Conversion\StringFunction.cs" />
     <Compile Include="Functions\Date\AddDaysFunction.cs" />
     <Compile Include="Functions\Date\AddHoursFunction.cs" />
     <Compile Include="Functions\Date\AddMillisecondsFunction.cs" />

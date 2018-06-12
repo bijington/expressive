@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading;
 
 namespace Expressive.Tests
@@ -667,6 +666,124 @@ namespace Expressive.Tests
             Assert.AreEqual(2016, new Expression("yearof(#2016-01-12#)", ExpressiveOptions.IgnoreCase).Evaluate());
 
             new Expression("YearOf()").Evaluate();
+        }
+
+        #endregion
+
+        #region Conversion Functions
+
+        [TestMethod]
+        public void ShouldConvertToDate()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["myString"] = "2018-01-10",
+            };
+
+            var expression = new Expression("Date([myString])");
+            Assert.AreEqual(new DateTime(2018, 01, 10), (DateTime)expression.Evaluate(arguments));
+
+            expression = new Expression("Date([myString], 'yyyy-dd-MM')");
+            Assert.AreEqual(new DateTime(2018, 10, 01), (DateTime)expression.Evaluate(arguments));
+        }
+
+        [TestMethod]
+        public void ShouldConvertToDecimal()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["myLong"] = 5L,
+                ["myInteger"] = 4,
+                ["myDouble"] = 4.4d
+            };
+
+            var expression = new Expression("Decimal([myLong])");
+            Assert.AreEqual(5M, (decimal)expression.Evaluate(arguments));
+
+            expression = new Expression("Decimal([myInteger])");
+            Assert.AreEqual(4M, (decimal)expression.Evaluate(arguments));
+
+            expression = new Expression("Decimal([myDouble])");
+            Assert.AreEqual(4.4M, (decimal)expression.Evaluate(arguments));
+        }
+
+        [TestMethod]
+        public void ShouldConvertToDouble()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["myLong"] = 5L,
+                ["myDecimal"] = 4.4M,
+                ["myInteger"] = 4
+            };
+
+            var expression = new Expression("Double([myLong])");
+            Assert.AreEqual(5d, (double)expression.Evaluate(arguments));
+
+            expression = new Expression("Double([myDecimal])");
+            Assert.AreEqual(4.4d, (double)expression.Evaluate(arguments));
+
+            expression = new Expression("Double([myInteger])");
+            Assert.AreEqual(4d, (double)expression.Evaluate(arguments));
+        }
+
+        [TestMethod]
+        public void ShouldConvertToInteger()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["myLong"] = 5L,
+                ["myDecimal"] = 4.4M,
+                ["myDouble"] = 4.4d
+            };
+            
+            var expression = new Expression("Integer([myLong])");
+            Assert.AreEqual(5, (int)expression.Evaluate(arguments));
+
+            expression = new Expression("Integer([myDecimal])");
+            Assert.AreEqual(4, (int)expression.Evaluate(arguments));
+
+            expression = new Expression("Integer([myDouble])");
+            Assert.AreEqual(4, (int)expression.Evaluate(arguments));
+        }
+
+        [TestMethod]
+        public void ShouldConvertToLong()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["myInteger"] = 5,
+                ["myDecimal"] = 4.4M,
+                ["myDouble"] = 4.4d
+            };
+
+            var expression = new Expression("Long([myInteger])");
+            Assert.AreEqual(5L, (long)expression.Evaluate(arguments));
+
+            expression = new Expression("Long([myDecimal])");
+            Assert.AreEqual(4L, (long)expression.Evaluate(arguments));
+
+            expression = new Expression("Long([myDouble])");
+            Assert.AreEqual(4L, (long)expression.Evaluate(arguments));
+        }
+
+        [TestMethod]
+        public void ShouldConvertToString()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["myDate"] = new DateTime(2018, 01, 10, 12, 34, 56),
+                ["myDecimal"] = 4.4M
+            };
+
+            var expression = new Expression("String([myDate])");
+            Assert.AreEqual("10/01/2018 12:34:56", (string)expression.Evaluate(arguments));
+
+            expression = new Expression("String([myDate], 'yyyy-MM-dd')");
+            Assert.AreEqual("2018-01-10", (string)expression.Evaluate(arguments));
+
+            expression = new Expression("String([myDecimal])");
+            Assert.AreEqual("4.4", (string)expression.Evaluate(arguments));
         }
 
         #endregion

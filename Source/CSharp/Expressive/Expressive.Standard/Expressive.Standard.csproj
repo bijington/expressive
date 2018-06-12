@@ -38,6 +38,12 @@
     <Compile Include="..\Expressive\Expressions\VariableExpression.cs" Link="Expressions\VariableExpression.cs" />
     <Compile Include="..\Expressive\ExpressiveOptions.cs" Link="ExpressiveOptions.cs" />
     <Compile Include="..\Expressive\ExtensionMethods.cs" Link="ExtensionMethods.cs" />
+    <Compile Include="..\Expressive\Functions\Conversion\DateFunction.cs" Link="Functions\Conversion\DateFunction.cs" />
+    <Compile Include="..\Expressive\Functions\Conversion\DecimalFunction.cs" Link="Functions\Conversion\DecimalFunction.cs" />
+    <Compile Include="..\Expressive\Functions\Conversion\DoubleFunction.cs" Link="Functions\Conversion\DoubleFunction.cs" />
+    <Compile Include="..\Expressive\Functions\Conversion\IntegerFunction.cs" Link="Functions\Conversion\IntegerFunction.cs" />
+    <Compile Include="..\Expressive\Functions\Conversion\LongFunction.cs" Link="Functions\Conversion\LongFunction.cs" />
+    <Compile Include="..\Expressive\Functions\Conversion\StringFunction.cs" Link="Functions\Conversion\StringFunction.cs" />
     <Compile Include="..\Expressive\Functions\Date\AddDaysFunction.cs" Link="Functions\Date\AddDaysFunction.cs" />
     <Compile Include="..\Expressive\Functions\Date\AddHoursFunction.cs" Link="Functions\Date\AddHoursFunction.cs" />
     <Compile Include="..\Expressive\Functions\Date\AddMillisecondsFunction.cs" Link="Functions\Date\AddMillisecondsFunction.cs" />

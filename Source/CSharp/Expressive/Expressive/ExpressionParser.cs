@@ -1,6 +1,7 @@
 ﻿using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
+using Expressive.Functions.Conversion;
 using Expressive.Functions.Date;
 using Expressive.Functions.Logical;
 using Expressive.Functions.Mathematical;
@@ -88,6 +89,13 @@ namespace Expressive
             #endregion
 
             #region Functions
+            // Conversion
+            RegisterFunction(new DateFunction());
+            RegisterFunction(new DecimalFunction());
+            RegisterFunction(new DoubleFunction());
+            RegisterFunction(new IntegerFunction());
+            RegisterFunction(new LongFunction());
+            RegisterFunction(new StringFunction());
             // Date
             RegisterFunction(new AddDaysFunction());
             RegisterFunction(new AddHoursFunction());
