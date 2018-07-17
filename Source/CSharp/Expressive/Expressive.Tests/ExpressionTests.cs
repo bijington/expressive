@@ -1098,5 +1098,17 @@ namespace Expressive.Tests
 
             Assert.AreEqual("Date Needed", new Expression("if([plate.datecontrol] = NULL, 'Date Needed', 'Date Entered')", ExpressiveOptions.IgnoreCase).Evaluate(arguments));
         }
+
+        [TestMethod]
+        public void ShouldHandleBugTwentyFour()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["DischargeStatus1_Value"] = "11",
+                ["DischargeStatus2_Value"] = "00",
+            };
+
+            Assert.AreEqual(true, new Expression("[DischargeStatus1_Value] > 00 AND[DischargeStatus2_Value] = 00", ExpressiveOptions.IgnoreCase).Evaluate(arguments));
+        }
     }
 }

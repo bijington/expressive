@@ -3,26 +3,25 @@ using System.Collections.Generic;
 
 namespace Expressive.Helpers
 {
-    //  Shout out to https://ncalc.codeplex.com/ for the bulk of this implementation.
     internal static class Comparison
     {
-        private static readonly Type[] CommonTypes = new[] { typeof(long), typeof(double), typeof(bool), typeof(DateTime), typeof(string), typeof(decimal) };
+        private static readonly Type[] CommonTypes = new[] { typeof(long), typeof(int), typeof(double), typeof(bool), typeof(DateTime), typeof(string), typeof(decimal) };
 
         internal static int CompareUsingMostPreciseType(object a, object b, bool ignoreCase)
         {
-            Type mpt = GetMostPreciseType(a.GetType(), b.GetType());
+            Type mostPreciseType = GetMostPreciseType(a.GetType(), b.GetType());
 
-            if (mpt == typeof(string))
+            if (mostPreciseType == typeof(string))
             {
-                return string.Compare((string)Convert.ChangeType(a, mpt), (string)Convert.ChangeType(b, mpt), ignoreCase);
+                return string.Compare((string)Convert.ChangeType(a, mostPreciseType), (string)Convert.ChangeType(b, mostPreciseType), ignoreCase);
             }
 
-            return Comparison.Compare(a, b);
+            return Comparison.Compare(a, b, mostPreciseType, ignoreCase);
         }
 
         internal static Type GetMostPreciseType(Type a, Type b)
         {
-            foreach (Type t in CommonTypes)
+            foreach (Type t in Comparison.CommonTypes)
             {
                 if (a == t || b == t)
                 {
@@ -33,7 +32,7 @@ namespace Expressive.Helpers
             return a;
         }
 
-        private static int Compare(object lhs, object rhs)
+        private static int Compare(object lhs, object rhs, Type mostPreciseType, bool ignoreCase)
         {
             // If at least one is null then the check is simple.
             if (lhs == null && rhs == null)
@@ -58,6 +57,25 @@ namespace Expressive.Helpers
             }
             else
             {
+                // Attempt to convert using the mostPreciseType first.
+                try
+                {
+                    if (lhsType == mostPreciseType)
+                    {
+                        rhs = Convert.ChangeType(rhs, mostPreciseType);
+                    }
+                    else
+                    {
+                        lhs = Convert.ChangeType(lhs, mostPreciseType);
+                    }
+
+                    return Comparer<object>.Default.Compare(lhs, rhs);
+                }
+                catch (System.Exception)
+                {
+
+                }
+
                 // Attempt to convert the RHS to match the LHS.
                 try
                 {
@@ -81,8 +99,9 @@ namespace Expressive.Helpers
                 // Failing that resort to a string.
                 try
                 {
-                    return Comparer<string>.Default.Compare((string)Convert.ChangeType(lhs, typeof(string)),
-                                                            (string)Convert.ChangeType(rhs, typeof(string)));
+                    return string.Compare((string)Convert.ChangeType(lhs, typeof(string)),
+                                          (string)Convert.ChangeType(rhs, typeof(string)),
+                                          ignoreCase);
                 }
                 catch (System.Exception)
                 {
