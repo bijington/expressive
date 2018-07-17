@@ -112,7 +112,7 @@ namespace Expressive.Tests
         }
 
         #endregion
-        
+
         [TestMethod]
         public void LogicTests()
         {
@@ -736,7 +736,7 @@ namespace Expressive.Tests
                 ["myDecimal"] = 4.4M,
                 ["myDouble"] = 4.4d
             };
-            
+
             var expression = new Expression("Integer([myLong])");
             Assert.AreEqual(5, (int)expression.Evaluate(arguments));
 
@@ -836,7 +836,7 @@ namespace Expressive.Tests
         public void ShouldIdentifyParenthesisMismatch()
         {
             Expression expression = new Expression("(a + b) * (4 - 2");
-            
+
             object value = expression.Evaluate(new Dictionary<string, object> { { "a", 2 }, { "b", 3 } });
         }
 
@@ -845,7 +845,7 @@ namespace Expressive.Tests
         //public void ShouldShortCircuitBooleanExpressions()
         //{
         //    var expression = new Expression("([a] != 0) && ([b]/[a]>2)");
-            
+
         //    Assert.AreEqual(false, expression.Evaluate(new Dictionary<string, object> { { "a", 0 } }));
         //}
 
@@ -1086,6 +1086,17 @@ namespace Expressive.Tests
 
             expression = new Expression("[myFloat]/2.0");
             Assert.AreEqual(2.0M, (decimal)expression.Evaluate(arguments));
+        }
+
+        [TestMethod]
+        public void ShouldHandleBugTwentyThree()
+        {
+            var arguments = new Dictionary<string, object>
+            {
+                ["plate.datecontrol"] = null,
+            };
+
+            Assert.AreEqual("Date Needed", new Expression("if([plate.datecontrol] = NULL, 'Date Needed', 'Date Entered')", ExpressiveOptions.IgnoreCase).Evaluate(arguments));
         }
     }
 }

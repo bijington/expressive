@@ -47,7 +47,7 @@ namespace Expressive
         internal ExpressionParser(ExpressiveOptions options)
         {
             _options = options;
-
+            
             // Initialise the string comparer only once.
             _stringComparer = _options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
 
@@ -781,7 +781,7 @@ namespace Expressive
                             lengthProcessed = 5;
                         }
                     }
-                    else if (character == 'n' && CanExtractValue(expression, expressionLength, index, "null")) // Check for null
+                    else if ((character == 'n' || character == 'N') && CanExtractValue(expression, expressionLength, index, "null")) // Check for null
                     {
                         CheckForUnrecognised(unrecognised, tokens, index);
                         var nullString = ExtractValue(expression, expressionLength, index, "null");
