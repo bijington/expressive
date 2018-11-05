@@ -1,4 +1,5 @@
 ﻿using Expressive.Expressions;
+using Expressive.Expressions.Binary.Logic;
 
 namespace Expressive.Operators.Logic
 {
@@ -6,11 +7,11 @@ namespace Expressive.Operators.Logic
     {
         #region OperatorBase Members
 
-        public override string[] Tags { get { return new[] { "&&", "and" }; } }
+        public override string[] Tags => new[] { "&&", "and" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {
-            return new BinaryExpression(BinaryExpressionType.And, expressions[0], expressions[1], options);
+            return new AndExpression(expressions[0], expressions[1], options);
         }
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)

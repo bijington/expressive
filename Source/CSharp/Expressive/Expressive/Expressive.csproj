@@ -57,11 +57,16 @@
     <Compile Include="Expression.cs" />
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="Expressions\BinaryExpression.cs" />
+    <Compile Include="Expressions\Binary\Logic\AndExpression.cs" />
+    <Compile Include="Expressions\Binary\BinaryExpressionBase.cs" />
+    <Compile Include="Expressions\Unary\Logic\NotExpression.cs" />
+    <Compile Include="Expressions\Binary\Logic\OrExpression.cs" />
     <Compile Include="Expressions\ConstantValueExpression.cs" />
     <Compile Include="Expressions\FunctionExpression.cs" />
     <Compile Include="Expressions\IExpression.cs" />
     <Compile Include="Expressions\ParenthesisedExpression.cs" />
     <Compile Include="Expressions\UnaryExpression.cs" />
+    <Compile Include="Expressions\Unary\UnaryExpressionBase.cs" />
     <Compile Include="Expressions\VariableExpression.cs" />
     <Compile Include="ExpressiveOptions.cs" />
     <Compile Include="ExtensionMethods.cs" />

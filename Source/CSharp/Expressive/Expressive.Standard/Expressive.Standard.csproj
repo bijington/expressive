@@ -4,15 +4,17 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Expressive.Standard</PackageId>
-    <Version>1.3.0</Version>
+    <Version>1.3.1</Version>
     <Authors>Shaun Lawrence</Authors>
     <Company>Shaun Lawrence</Company>
     <PackageLicenseUrl>https://opensource.org/licenses/mit</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/bijington/expressive</PackageProjectUrl>
     <PackageTags>Expression Parser Evaluator</PackageTags>
     <Copyright>Copyright(c) 2018 Shaun Lawrence</Copyright>
-    <PackageReleaseNotes>Adding in support for .NET Standard 1.4</PackageReleaseNotes>
-    <Description>A multi-platform expression parsing and evaluating framework.</Description>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description>[DEPRECATED] Use ExpressiveParser.
+
+A multi-platform expression parsing and evaluating framework.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -30,11 +32,16 @@
     <Compile Include="..\Expressive\Expression.cs" Link="Expression.cs" />
     <Compile Include="..\Expressive\ExpressionParser.cs" Link="ExpressionParser.cs" />
     <Compile Include="..\Expressive\Expressions\BinaryExpression.cs" Link="Expressions\BinaryExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\BinaryExpressionBase.cs" Link="Expressions\Binary\BinaryExpressionBase.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Logic\AndExpression.cs" Link="Expressions\Binary\Logic\AndExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Logic\OrExpression.cs" Link="Expressions\Binary\Logic\OrExpression.cs" />
     <Compile Include="..\Expressive\Expressions\ConstantValueExpression.cs" Link="Expressions\ConstantValueExpression.cs" />
     <Compile Include="..\Expressive\Expressions\FunctionExpression.cs" Link="Expressions\FunctionExpression.cs" />
     <Compile Include="..\Expressive\Expressions\IExpression.cs" Link="Expressions\IExpression.cs" />
     <Compile Include="..\Expressive\Expressions\ParenthesisedExpression.cs" Link="Expressions\ParenthesisedExpression.cs" />
     <Compile Include="..\Expressive\Expressions\UnaryExpression.cs" Link="Expressions\UnaryExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Unary\Logic\NotExpression.cs" Link="Expressions\Unary\Logic\NotExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Unary\UnaryExpressionBase.cs" Link="Expressions\Unary\UnaryExpressionBase.cs" />
     <Compile Include="..\Expressive\Expressions\VariableExpression.cs" Link="Expressions\VariableExpression.cs" />
     <Compile Include="..\Expressive\ExpressiveOptions.cs" Link="ExpressiveOptions.cs" />
     <Compile Include="..\Expressive\ExtensionMethods.cs" Link="ExtensionMethods.cs" />
@@ -135,7 +142,8 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
-    <Folder Include="Expressions\" />
+    <Folder Include="Expressions\Binary\Logic\" />
+    <Folder Include="Expressions\Unary\Logic\" />
     <Folder Include="Functions\Date\" />
     <Folder Include="Functions\Logical\" />
     <Folder Include="Functions\Mathematical\" />

@@ -1,6 +1,5 @@
 ﻿using Expressive.Expressions;
-using System.Collections.Generic;
-using System.Linq;
+using Expressive.Expressions.Unary.Logic;
 
 namespace Expressive.Operators.Logic
 {
@@ -8,11 +7,11 @@ namespace Expressive.Operators.Logic
     {
         #region IOperator Members
 
-        public override string[] Tags { get { return new[] { "!", "not" }; } }
+        public override string[] Tags => new[] { "!", "not" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {
-            return new UnaryExpression(UnaryExpressionType.Not, expressions[0] ?? expressions[1]);
+            return new NotExpression(expressions[0] ?? expressions[1]);
         }
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)
