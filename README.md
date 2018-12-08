@@ -28,8 +28,8 @@ Each individual `parameter` will only be evaluated at the point of being used wi
 The supported languages are:
 
 - C&#35;
-  - [GitHub release v1.1.0](https://github.com/bijington/expressive/releases/tag/v1.1.0)
-  - [Nuget release v1.1.0](https://www.nuget.org/packages/ExpressiveParser/)
+  - [GitHub release](https://github.com/bijington/expressive/releases/tag/v1.3.1)
+  - [Nuget release](https://www.nuget.org/packages/ExpressiveParser/)
 - Java
   - In beta testing
 - Swift (TBA)
