@@ -35,11 +35,11 @@ namespace Expressive
     {
         #region Fields
 
-        private IExpression _compiledExpression;
-        private readonly ExpressiveOptions _options;
-        private readonly string _originalExpression;
-        private readonly ExpressionParser _parser;
-        private string[] _variables;
+        private IExpression compiledExpression;
+        private readonly ExpressiveOptions options;
+        private readonly string originalExpression;
+        private readonly ExpressionParser parser;
+        private string[] variables;
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace Expressive
             {
                 this.CompileExpression();
 
-                return _variables;
+                return this.variables;
             }
         }
 
@@ -77,10 +77,10 @@ namespace Expressive
         /// <param name="options">The options to use when evaluating.</param>
         public Expression(string expression, ExpressiveOptions options)
         {
-            _originalExpression = expression;
-            _options = options;
+            this.originalExpression = expression;
+            this.options = options;
 
-            _parser = new ExpressionParser(_options);
+            this.parser = new ExpressionParser(this.options);
         }
 
         #endregion
@@ -112,12 +112,12 @@ namespace Expressive
                 this.CompileExpression();
 
                 if (variables != null &&
-                    _options.HasFlag(ExpressiveOptions.IgnoreCase))
+                    this.options.HasFlag(ExpressiveOptions.IgnoreCase))
                 {
                     variables = new Dictionary<string, object>(variables, StringComparer.OrdinalIgnoreCase);
                 }
 
-                result = _compiledExpression?.Evaluate(variables);
+                result = this.compiledExpression?.Evaluate(variables);
 
                 return result;
             }
@@ -180,7 +180,7 @@ namespace Expressive
         /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
         public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
         {
-            _parser.RegisterFunction(functionName, function);
+            this.parser.RegisterFunction(functionName, function);
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Expressive
         /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
         public void RegisterFunction(IFunction function)
         {
-            _parser.RegisterFunction(function);
+            this.parser.RegisterFunction(function);
         }
 
         #endregion
@@ -200,14 +200,14 @@ namespace Expressive
         private void CompileExpression()
         {
             // Cache the expression to save us having to recompile.
-            if (_compiledExpression == null ||
-                _options.HasFlag(ExpressiveOptions.NoCache))
+            if (this.compiledExpression == null ||
+                this.options.HasFlag(ExpressiveOptions.NoCache))
             {
                 var variables = new List<string>();
 
-                _compiledExpression = _parser.CompileExpression(_originalExpression, variables);
+                this.compiledExpression = this.parser.CompileExpression(this.originalExpression, variables);
 
-                _variables = variables.ToArray();
+                this.variables = variables.ToArray();
             }
         }
 

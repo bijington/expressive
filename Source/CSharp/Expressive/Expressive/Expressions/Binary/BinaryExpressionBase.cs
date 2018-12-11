@@ -11,8 +11,12 @@ namespace Expressive.Expressions.Binary
         #region Fields
 
         private readonly IExpression leftHandSide;
-        private readonly ExpressiveOptions options;
+        protected readonly ExpressiveOptions options;
         private readonly IExpression rightHandSide;
+
+        #endregion
+
+        #region Constructors
 
         internal BinaryExpressionBase(IExpression lhs, IExpression rhs, ExpressiveOptions options)
         {

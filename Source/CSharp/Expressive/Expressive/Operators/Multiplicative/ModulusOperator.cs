@@ -1,4 +1,5 @@
 ﻿using Expressive.Expressions;
+using Expressive.Expressions.Binary.Multiplicative;
 
 namespace Expressive.Operators.Multiplicative
 {
@@ -6,11 +7,11 @@ namespace Expressive.Operators.Multiplicative
     {
         #region OperatorBase Members
 
-        public override string[] Tags { get { return new[] { "%", "mod" }; } }
+        public override string[] Tags => new[] { "%", "mod" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {
-            return new BinaryExpression(BinaryExpressionType.Modulus, expressions[0], expressions[1], options);
+            return new ModulusExpression(expressions[0], expressions[1], options);
         }
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)

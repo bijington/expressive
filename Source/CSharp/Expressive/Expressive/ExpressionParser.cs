@@ -34,11 +34,11 @@ namespace Expressive
 
         #region Fields
 
-        private readonly char _decimalSeparator;
-        private readonly ExpressiveOptions _options;
-        private readonly IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> _registeredFunctions;
-        private readonly IDictionary<string, IOperator> _registeredOperators;
-        private readonly StringComparer _stringComparer;
+        private readonly char decimalSeparator;
+        private readonly ExpressiveOptions options;
+        private readonly IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> registeredFunctions;
+        private readonly IDictionary<string, IOperator> registeredOperators;
+        private readonly StringComparer stringComparer;
 
         #endregion
 
@@ -46,14 +46,14 @@ namespace Expressive
 
         internal ExpressionParser(ExpressiveOptions options)
         {
-            _options = options;
+            this.options = options;
             
             // Initialise the string comparer only once.
-            _stringComparer = _options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
+            this.stringComparer = this.options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
 
-            _decimalSeparator = Convert.ToChar(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
-            _registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(GetDictionaryComparer(options));
-            _registeredOperators = new Dictionary<string, IOperator>(GetDictionaryComparer(options));
+            this.decimalSeparator = Convert.ToChar(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
+            this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(GetDictionaryComparer(options));
+            this.registeredOperators = new Dictionary<string, IOperator>(GetDictionaryComparer(options));
 
             #region Operators
             // TODO: Do we allow for turning off operators?
@@ -63,7 +63,7 @@ namespace Expressive
             // Bitwise
             RegisterOperator(new BitwiseAndOperator());
             RegisterOperator(new BitwiseOrOperator());
-            RegisterOperator(new BitwiseXOrOperator());
+            RegisterOperator(new BitwiseExclusiveOrOperator());
             RegisterOperator(new LeftShiftOperator());
             RegisterOperator(new RightShiftOperator());
             // Conditional
@@ -193,18 +193,18 @@ namespace Expressive
         {
             CheckForExistingFunctionName(functionName);
 
-            _registeredFunctions.Add(functionName, function);
+            this.registeredFunctions.Add(functionName, function);
         }
 
         internal void RegisterFunction(IFunction function)
         {
             CheckForExistingFunctionName(function.Name);
 
-            _registeredFunctions.Add(function.Name, (p, a) =>
+            this.registeredFunctions.Add(function.Name, (p, a) =>
             {
                 function.Variables = a;
 
-                return function.Evaluate(p, _options);
+                return function.Evaluate(p, this.options);
             });
         }
 
@@ -212,15 +212,15 @@ namespace Expressive
         {
             foreach (var tag in op.Tags)
             {
-                _registeredOperators.Add(tag, op);
+                this.registeredOperators.Add(tag, op);
             }
         }
 
         internal void UnregisterFunction(string name)
         {
-            if (_registeredFunctions.ContainsKey(name))
+            if (this.registeredFunctions.ContainsKey(name))
             {
-                _registeredFunctions.Remove(name);
+                this.registeredFunctions.Remove(name);
             }
         }
 
@@ -244,7 +244,7 @@ namespace Expressive
                 Func<IExpression[], IDictionary<string, object>, object> function = null;
                 IOperator op = null;
 
-                if (_registeredOperators.TryGetValue(currentToken.CurrentToken, out op)) // Are we an IOperator?
+                if (this.registeredOperators.TryGetValue(currentToken.CurrentToken, out op)) // Are we an IOperator?
                 {
                     var precedence = op.GetPrecedence(previousToken);
 
@@ -278,7 +278,7 @@ namespace Expressive
                                 currentToken = new Token(")", -1);
                             }
 
-                            leftHandSide = op.BuildExpression(previousToken, new[] { leftHandSide, rightHandSide }, _options);
+                            leftHandSide = op.BuildExpression(previousToken, new[] { leftHandSide, rightHandSide }, this.options);
                         }
                     }
                     else
@@ -286,7 +286,7 @@ namespace Expressive
                         break;
                     }
                 }
-                else if (_registeredFunctions.TryGetValue(currentToken.CurrentToken, out function)) // or an IFunction?
+                else if (this.registeredFunctions.TryGetValue(currentToken.CurrentToken, out function)) // or an IFunction?
                 {
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
@@ -341,31 +341,26 @@ namespace Expressive
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
-                    int intValue = 0;
-                    decimal decimalValue = 0.0M;
-                    double doubleValue = 0.0;
-                    float floatValue = 0.0f;
-                    long longValue = 0;
 
-                    if (int.TryParse(currentToken.CurrentToken, out intValue))
+                    if (int.TryParse(currentToken.CurrentToken, out var intValue))
                     {
-                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Integer, intValue);
+                        leftHandSide = new ConstantValueExpression(intValue);
                     }
-                    else if (decimal.TryParse(currentToken.CurrentToken, out decimalValue))
+                    else if (decimal.TryParse(currentToken.CurrentToken, out var decimalValue))
                     {
-                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Decimal, decimalValue);
+                        leftHandSide = new ConstantValueExpression(decimalValue);
                     }
-                    else if (double.TryParse(currentToken.CurrentToken, out doubleValue))
+                    else if (double.TryParse(currentToken.CurrentToken, out var doubleValue))
                     {
-                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Double, doubleValue);
+                        leftHandSide = new ConstantValueExpression(doubleValue);
                     }
-                    else if (float.TryParse(currentToken.CurrentToken, out floatValue))
+                    else if (float.TryParse(currentToken.CurrentToken, out var floatValue))
                     {
-                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Float, floatValue);
+                        leftHandSide = new ConstantValueExpression(floatValue);
                     }
-                    else if (long.TryParse(currentToken.CurrentToken, out longValue))
+                    else if (long.TryParse(currentToken.CurrentToken, out var longValue))
                     {
-                        leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Long, longValue);
+                        leftHandSide = new ConstantValueExpression(longValue);
                     }
                 }
                 else if (currentToken.CurrentToken.StartsWith("[") && currentToken.CurrentToken.EndsWith("]")) // or a variable?
@@ -373,10 +368,10 @@ namespace Expressive
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
-                    string variableName = currentToken.CurrentToken.Replace("[", "").Replace("]", "");
+                    var variableName = currentToken.CurrentToken.Replace("[", "").Replace("]", "");
                     leftHandSide = new VariableExpression(variableName);
 
-                    if (!variables.Contains(variableName, _stringComparer))
+                    if (!variables.Contains(variableName, this.stringComparer))
                     {
                         variables.Add(variableName);
                     }
@@ -386,21 +381,21 @@ namespace Expressive
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
-                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Boolean, true);
+                    leftHandSide = new ConstantValueExpression(true);
                 }
                 else if (string.Equals(currentToken.CurrentToken, "false", StringComparison.OrdinalIgnoreCase))
                 {
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
-                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Boolean, false);
+                    leftHandSide = new ConstantValueExpression(false);
                 }
                 else if (string.Equals(currentToken.CurrentToken, "null", StringComparison.OrdinalIgnoreCase)) // or a null?
                 {
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
-                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Null, null);
+                    leftHandSide = new ConstantValueExpression(null);
                 }
                 else if (currentToken.CurrentToken.StartsWith(DateSeparator.ToString()) && currentToken.CurrentToken.EndsWith(DateSeparator.ToString())) // or a date?
                 {
@@ -428,7 +423,7 @@ namespace Expressive
                         }
                     }
 
-                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.DateTime, date);
+                    leftHandSide = new ConstantValueExpression(date);
                 }
                 else if ((currentToken.CurrentToken.StartsWith("'") && currentToken.CurrentToken.EndsWith("'")) ||
                     (currentToken.CurrentToken.StartsWith("\"") && currentToken.CurrentToken.EndsWith("\"")))
@@ -436,7 +431,7 @@ namespace Expressive
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
-                    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.String, CleanString(currentToken.CurrentToken.Substring(1, currentToken.Length - 2)));
+                    leftHandSide = new ConstantValueExpression(CleanString(currentToken.CurrentToken.Substring(1, currentToken.Length - 2)));
                 }
                 else if (string.Equals(currentToken.CurrentToken, ParameterSeparator.ToString(), StringComparison.Ordinal)) // Make sure we ignore the parameter separator
                 {
@@ -525,7 +520,7 @@ namespace Expressive
 
         private void CheckForExistingFunctionName(string functionName)
         {
-            if (_registeredFunctions.ContainsKey(functionName))
+            if (this.registeredFunctions.ContainsKey(functionName))
             {
                 throw new FunctionNameAlreadyRegisteredException(functionName);
             }
@@ -537,7 +532,7 @@ namespace Expressive
             {
                 if (isWithinFunction)
                 {
-                    throw new MissingTokenException("Missing token, expecting ','.", ',');
+                    throw new MissingTokenException("Missing token, expecting ','.", ',', token.StartIndex, token.Length);
                 }
                 
                 throw new ExpressiveException($"Unexpected token '{token.CurrentToken}' at index {token.StartIndex}");
@@ -588,9 +583,9 @@ namespace Expressive
             var character = expression[index];
 
             while ((index < expression.Length) &&
-                (char.IsDigit(character) || (!hasDecimalPoint && character == _decimalSeparator)))
+                (char.IsDigit(character) || (!hasDecimalPoint && character == this.decimalSeparator)))
             {
-                if (!hasDecimalPoint && character == _decimalSeparator)
+                if (!hasDecimalPoint && character == this.decimalSeparator)
                 {
                     hasDecimalPoint = true;
                 }
@@ -656,7 +651,7 @@ namespace Expressive
             }
 
             var expressionLength = expression.Length;
-            var operators = _registeredOperators.OrderByDescending(op => op.Key.Length);
+            var operators = this.registeredOperators.OrderByDescending(op => op.Key.Length);
             var tokens = new List<Token>();
             IList<char> unrecognised = null;
 
@@ -668,11 +663,11 @@ namespace Expressive
                 bool foundUnrecognisedCharacter = false;
 
                 // Functions would tend to have longer tags so check for these first.
-                foreach (var kvp in _registeredFunctions.OrderByDescending(f => f.Key.Length))
+                foreach (var kvp in this.registeredFunctions.OrderByDescending(f => f.Key.Length))
                 {
                     var lookAhead = expression.Substring(index, Math.Min(kvp.Key.Length, expressionLength - index));
 
-                    if (CheckForTag(kvp.Key, lookAhead, _options))
+                    if (CheckForTag(kvp.Key, lookAhead, this.options))
                     {
                         CheckForUnrecognised(unrecognised, tokens, index);
                         lengthProcessed = kvp.Key.Length;
@@ -688,7 +683,7 @@ namespace Expressive
                     {
                         var lookAhead = expression.Substring(index, Math.Min(op.Key.Length, expressionLength - index));
 
-                        if (CheckForTag(op.Key, lookAhead, _options))
+                        if (CheckForTag(op.Key, lookAhead, this.options))
                         {
                             CheckForUnrecognised(unrecognised, tokens, index);
                             lengthProcessed = op.Key.Length;

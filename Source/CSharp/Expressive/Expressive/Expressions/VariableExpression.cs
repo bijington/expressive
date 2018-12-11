@@ -5,11 +5,11 @@ namespace Expressive.Expressions
 {
     internal class VariableExpression : IExpression
     {
-        private readonly string _variableName;
+        private readonly string variableName;
 
         internal VariableExpression(string variableName)
         {
-            _variableName = variableName;
+            this.variableName = variableName;
         }
 
         #region IExpression Members
@@ -17,19 +17,19 @@ namespace Expressive.Expressions
         public object Evaluate(IDictionary<string, object> variables)
         {
             if (variables == null ||
-                !variables.ContainsKey(_variableName))
+                !variables.ContainsKey(this.variableName))
             {
-                throw new ArgumentException("The variable '" + _variableName + "' has not been supplied.");
+                throw new ArgumentException("The variable '" + this.variableName + "' has not been supplied.");
             }
 
             // Check to see if we have to referred to another expression.
-            var expression = variables[_variableName] as Expression;
+            var expression = variables[this.variableName] as Expression;
             if (expression != null)
             {
                 return expression.Evaluate(variables);
             }
 
-            return variables[_variableName];
+            return variables[this.variableName];
         }
 
         #endregion
