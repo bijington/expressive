@@ -35,7 +35,8 @@ namespace Expressive.Expressions.Binary
             {
                 throw new MissingParticipantException("The left hand side of the operation is missing.");
             }
-            else if (this.rightHandSide == null)
+
+            if (this.rightHandSide == null)
             {
                 throw new MissingParticipantException("The right hand side of the operation is missing.");
             }
@@ -43,191 +44,12 @@ namespace Expressive.Expressions.Binary
             // We will evaluate the left hand side but hold off on the right hand side as it may not be necessary
             var lhsResult = this.leftHandSide.Evaluate(variables);
 
-            var ignoreCase = this.options.HasFlag(ExpressiveOptions.IgnoreCase);
-
-            //switch (_expressionType)
-            //{
-            //    case BinaryExpressionType.Unknown:
-            //        break;
-            //    case BinaryExpressionType.And:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Convert.ToBoolean(l) && Convert.ToBoolean(r));
-            //    case BinaryExpressionType.Or:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Convert.ToBoolean(l) || Convert.ToBoolean(r));
-            //    case BinaryExpressionType.NotEqual:
-            //        {
-            //            object rhsResult = null;
-
-            //            // Use the type of the left operand to make the comparison
-            //            if (lhsResult == null)
-            //            {
-            //                rhsResult = _rightHandSide.Evaluate(variables);
-            //                if (rhsResult != null)
-            //                {
-            //                    // 2 nulls make a match!
-            //                    return true;
-            //                }
-
-            //                return false;
-            //            }
-            //            else
-            //            {
-            //                rhsResult = _rightHandSide.Evaluate(variables);
-
-            //                // If we got here then the lhsResult is not null.
-            //                if (rhsResult == null)
-            //                {
-            //                    return true;
-            //                }
-            //            }
-
-            //            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) != 0;
-            //        }
-            //    case BinaryExpressionType.LessThanOrEqual:
-            //        {
-            //            // Use the type of the left operand to make the comparison
-            //            if (lhsResult == null)
-            //            {
-            //                return null;
-            //            }
-
-            //            var rhsResult = _rightHandSide.Evaluate(variables);
-            //            if (rhsResult == null)
-            //            {
-            //                return null;
-            //            }
-
-            //            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) <= 0;
-            //        }
-            //    case BinaryExpressionType.GreaterThanOrEqual:
-            //        {
-            //            // Use the type of the left operand to make the comparison
-            //            if (lhsResult == null)
-            //            {
-            //                return null;
-            //            }
-
-            //            var rhsResult = _rightHandSide.Evaluate(variables);
-            //            if (rhsResult == null)
-            //            {
-            //                return null;
-            //            }
-
-            //            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) >= 0;
-            //        }
-            //    case BinaryExpressionType.LessThan:
-            //        {
-            //            // Use the type of the left operand to make the comparison
-            //            if (lhsResult == null)
-            //            {
-            //                return null;
-            //            }
-
-            //            var rhsResult = _rightHandSide.Evaluate(variables);
-            //            if (rhsResult == null)
-            //            {
-            //                return null;
-            //            }
-
-            //            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) < 0;
-            //        }
-            //    case BinaryExpressionType.GreaterThan:
-            //        {
-            //            // Use the type of the left operand to make the comparison
-            //            if (lhsResult == null)
-            //            {
-            //                return null;
-            //            }
-
-            //            var rhsResult = _rightHandSide.Evaluate(variables);
-            //            if (rhsResult == null)
-            //            {
-            //                return null;
-            //            }
-
-            //            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) > 0;
-            //        }
-            //    case BinaryExpressionType.Equal:
-            //        {
-            //            object rhsResult = null;
-
-            //            // Use the type of the left operand to make the comparison
-            //            if (lhsResult == null)
-            //            {
-            //                rhsResult = _rightHandSide.Evaluate(variables);
-            //                if (rhsResult == null)
-            //                {
-            //                    // 2 nulls make a match!
-            //                    return true;
-            //                }
-
-            //                return false;
-            //            }
-            //            else
-            //            {
-            //                rhsResult = _rightHandSide.Evaluate(variables);
-
-            //                // If we got here then the lhsResult is not null.
-            //                if (rhsResult == null)
-            //                {
-            //                    return false;
-            //                }
-            //            }
-
-            //            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, ignoreCase) == 0;
-            //        }
-            //    case BinaryExpressionType.Subtract:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Numbers.Subtract(l, r));
-            //    case BinaryExpressionType.Add:
-            //        if (lhsResult is string)
-            //        {
-            //            return ((string)lhsResult) + _rightHandSide.Evaluate(variables) as string;
-            //        }
-
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Numbers.Add(l, r));
-            //    case BinaryExpressionType.Modulus:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Numbers.Modulus(l, r));
-            //    case BinaryExpressionType.Divide:
-            //        {
-            //            var rhsResult = _rightHandSide.Evaluate(variables);
-
-            //            return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) =>
-            //            {
-            //                return (l == null || r == null || IsReal(l) || IsReal(r))
-            //                         ? Numbers.Divide(l, r)
-            //                         : Numbers.Divide(Convert.ToDouble(l), r);
-            //            });
-            //        }
-            //    case BinaryExpressionType.Multiply:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Numbers.Multiply(l, r));
-            //    case BinaryExpressionType.BitwiseOr:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Convert.ToUInt16(l) | Convert.ToUInt16(r));
-            //    case BinaryExpressionType.BitwiseAnd:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Convert.ToUInt16(l) & Convert.ToUInt16(r));
-            //    case BinaryExpressionType.BitwiseXOr:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Convert.ToUInt16(l) ^ Convert.ToUInt16(r));
-            //    case BinaryExpressionType.LeftShift:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Convert.ToUInt16(l) << Convert.ToUInt16(r));
-            //    case BinaryExpressionType.RightShift:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => Convert.ToUInt16(l) >> Convert.ToUInt16(r));
-            //    case BinaryExpressionType.NullCoalescing:
-            //        return this.Evaluate(lhsResult, _rightHandSide, variables, (l, r) => l ?? r);
-            //    default:
-            //        break;
-            //}
-
             return this.EvaluateImpl(lhsResult, this.rightHandSide, variables);
         }
 
         #endregion
 
         protected abstract object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables);
-
-        //private static bool IsReal(object value)
-        //{
-        //    var typeCode = TypeHelper.GetTypeCode(value);
-
-        //    return typeCode == TypeCode.Decimal || typeCode == TypeCode.Double || typeCode == TypeCode.Single;
-        //}
 
         protected object Evaluate(object lhsResult, IExpression rhs, IDictionary<string, object> variables, Func<object, object, object> resultSelector)
         {
@@ -240,16 +62,16 @@ namespace Expressive.Expressions.Binary
                 return resultSelector(lhsResult, rhsResult);
             }
 
-            if (lhsResult is ICollection)
+            if (lhsResult is ICollection leftCollection)
             {
-                foreach (var item in ((ICollection)lhsResult))
+                foreach (var item in leftCollection)
                 {
                     lhsParticipants.Add(item);
                 }
             }
-            if (rhsResult is ICollection)
+            if (rhsResult is ICollection rightCollection)
             {
-                foreach (var item in ((ICollection)rhsResult))
+                foreach (var item in rightCollection)
                 {
                     rhsParticipants.Add(item);
                 }
