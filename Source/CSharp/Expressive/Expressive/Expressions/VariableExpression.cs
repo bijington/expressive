@@ -23,8 +23,7 @@ namespace Expressive.Expressions
             }
 
             // Check to see if we have to referred to another expression.
-            var expression = variables[this.variableName] as Expression;
-            if (expression != null)
+            if (variables[this.variableName] is IExpression expression)
             {
                 return expression.Evaluate(variables);
             }

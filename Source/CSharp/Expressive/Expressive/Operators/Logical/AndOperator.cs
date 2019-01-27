@@ -1,7 +1,7 @@
 ﻿using Expressive.Expressions;
-using Expressive.Expressions.Binary.Logic;
+using Expressive.Expressions.Binary.Logical;
 
-namespace Expressive.Operators.Logic
+namespace Expressive.Operators.Logical
 {
     internal class AndOperator : OperatorBase
     {

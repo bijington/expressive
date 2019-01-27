@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Expressive.Expressions.Binary.Logic
+namespace Expressive.Expressions.Binary.Logical
 {
-    internal class OrExpression : BinaryExpressionBase
+    internal class AndExpression : BinaryExpressionBase
     {
         #region Constructors
 
-        public OrExpression(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
+        public AndExpression(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
         {
         }
 
@@ -17,7 +17,7 @@ namespace Expressive.Expressions.Binary.Logic
 
         protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
         {
-            return this.Evaluate(lhsResult, rightHandSide, variables, (l, r) => Convert.ToBoolean(l) || Convert.ToBoolean(r));
+            return this.Evaluate(lhsResult, rightHandSide, variables, (l, r) => Convert.ToBoolean(l) && Convert.ToBoolean(r));
         }
 
         #endregion

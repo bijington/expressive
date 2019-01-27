@@ -12,7 +12,7 @@ using Expressive.Operators.Additive;
 using Expressive.Operators.Bitwise;
 using Expressive.Operators.Conditional;
 using Expressive.Operators.Grouping;
-using Expressive.Operators.Logic;
+using Expressive.Operators.Logical;
 using Expressive.Operators.Multiplicative;
 using Expressive.Operators.Relational;
 using System;

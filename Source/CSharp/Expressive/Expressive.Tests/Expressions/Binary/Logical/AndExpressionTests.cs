@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
-using Expressive.Expressions.Binary.Logic;
+using Expressive.Expressions.Binary.Logical;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Expressive.Tests.Expressions.Binary.Logic
+namespace Expressive.Tests.Expressions.Binary.Logical
 {
     [TestClass]
     public class AndExpressionTests

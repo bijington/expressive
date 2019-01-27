@@ -75,9 +75,24 @@
     <Compile Include="Expressions\Binary\Bitwise\LeftShiftExpressionTests.cs" />
     <Compile Include="Expressions\Binary\Bitwise\RightShiftExpressionTests.cs" />
     <Compile Include="Expressions\Binary\Conditional\NullCoalescingExpressionTests.cs" />
-    <Compile Include="Expressions\Binary\Logic\AndExpressionTests.cs" />
-    <Compile Include="Expressions\Binary\Logic\OrExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Logical\AndExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Logical\OrExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Multiplicative\DivideExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Multiplicative\ModulusExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Multiplicative\MultiplyExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Relational\EqualExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Relational\GreaterThanExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Relational\GreaterThanOrEqualExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Relational\LessThanExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Relational\LessThanOrEqualExpressionTests.cs" />
+    <Compile Include="Expressions\Binary\Relational\NotEqualExpressionTests.cs" />
     <Compile Include="Expressions\ConstantValueExpressionTests.cs" />
+    <Compile Include="Expressions\FunctionExpressionTests.cs" />
+    <Compile Include="Expressions\ParenthesisedExpressionTests.cs" />
+    <Compile Include="Expressions\Unary\Additive\MinusExpressionTests.cs" />
+    <Compile Include="Expressions\Unary\Additive\PlusExpressionTests.cs" />
+    <Compile Include="Expressions\Unary\Logical\NotExpressionTests.cs" />
+    <Compile Include="Expressions\VariableExpressionTests.cs" />
     <Compile Include="ExpressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

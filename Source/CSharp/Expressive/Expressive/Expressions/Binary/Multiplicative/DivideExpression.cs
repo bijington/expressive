@@ -18,10 +18,8 @@ namespace Expressive.Expressions.Binary.Multiplicative
 
         protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
         {
-            var rhsResult = rightHandSide.Evaluate(variables);
-
             return this.Evaluate(lhsResult, rightHandSide, variables, (l, r) => 
-                (l == null || r == null || IsReal(l) || IsReal(r))
+                l == null || r == null || IsReal(l) || IsReal(r)
                     ? Numbers.Divide(l, r)
                     : Numbers.Divide(Convert.ToDouble(l), r));
         }

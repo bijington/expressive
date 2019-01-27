@@ -1,7 +1,7 @@
 ﻿using Expressive.Expressions;
-using Expressive.Expressions.Unary.Logic;
+using Expressive.Expressions.Unary.Logical;
 
-namespace Expressive.Operators.Logic
+namespace Expressive.Operators.Logical
 {
     internal class NotOperator : OperatorBase
     {

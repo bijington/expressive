@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Expressive.Expressions.Unary.Logic
+namespace Expressive.Expressions.Unary.Logical
 {
     internal class NotExpression : UnaryExpressionBase
     {
