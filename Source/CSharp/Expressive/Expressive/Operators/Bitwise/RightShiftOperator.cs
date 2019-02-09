@@ -16,7 +16,7 @@ namespace Expressive.Operators.Bitwise
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)
         {
-            return OperatorPrecedence.LeftShift;
+            return OperatorPrecedence.RightShift;
         }
 
         #endregion

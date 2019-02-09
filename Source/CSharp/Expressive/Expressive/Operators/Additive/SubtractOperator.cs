@@ -37,7 +37,7 @@ namespace Expressive.Operators.Additive
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)
         {
-            return IsUnary(previousToken) ? OperatorPrecedence.UnaryPlus : OperatorPrecedence.Add;
+            return IsUnary(previousToken) ? OperatorPrecedence.UnaryMinus : OperatorPrecedence.Subtract;
         }
 
         #endregion

@@ -64,7 +64,7 @@
     <Compile Include="Expressions\Binary\Bitwise\LeftShiftExpression.cs" />
     <Compile Include="Expressions\Binary\Bitwise\RightShiftExpression.cs" />
     <Compile Include="Expressions\Binary\Conditional\NullCoalescingExpression.cs" />
-    <Compile Include="Expressions\Binary\Logic\AndExpression.cs" />
+    <Compile Include="Expressions\Binary\Logical\AndExpression.cs" />
     <Compile Include="Expressions\Binary\BinaryExpressionBase.cs" />
     <Compile Include="Expressions\Binary\Multiplicative\DivideExpression.cs" />
     <Compile Include="Expressions\Binary\Multiplicative\ModulusExpression.cs" />
@@ -77,8 +77,8 @@
     <Compile Include="Expressions\Binary\Relational\NotEqualExpression.cs" />
     <Compile Include="Expressions\Unary\Additive\MinusExpression.cs" />
     <Compile Include="Expressions\Unary\Additive\PlusExpression.cs" />
-    <Compile Include="Expressions\Unary\Logic\NotExpression.cs" />
-    <Compile Include="Expressions\Binary\Logic\OrExpression.cs" />
+    <Compile Include="Expressions\Unary\Logical\NotExpression.cs" />
+    <Compile Include="Expressions\Binary\Logical\OrExpression.cs" />
     <Compile Include="Expressions\ConstantValueExpression.cs" />
     <Compile Include="Expressions\FunctionExpression.cs" />
     <Compile Include="Expressions\IExpression.cs" />
@@ -164,8 +164,8 @@
     <Compile Include="Operators\Grouping\ParenthesisCloseOperator.cs" />
     <Compile Include="Operators\Grouping\ParenthesisOpenOperator.cs" />
     <Compile Include="Operators\IOperator.cs" />
-    <Compile Include="Operators\Logic\AndOperator.cs" />
-    <Compile Include="Operators\Logic\OrOperator.cs" />
+    <Compile Include="Operators\Logical\AndOperator.cs" />
+    <Compile Include="Operators\Logical\OrOperator.cs" />
     <Compile Include="Operators\Multiplicative\DivideOperator.cs" />
     <Compile Include="Operators\Multiplicative\ModulusOperator.cs" />
     <Compile Include="Operators\Multiplicative\MultiplyOperator.cs" />
@@ -178,7 +178,7 @@
     <Compile Include="Operators\Relational\LessThanOperator.cs" />
     <Compile Include="Operators\Relational\LessThanOrEqualOperator.cs" />
     <Compile Include="Operators\Relational\NotEqualOperator.cs" />
-    <Compile Include="Operators\Logic\NotOperator.cs" />
+    <Compile Include="Operators\Logical\NotOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Token.cs" />
   </ItemGroup>
