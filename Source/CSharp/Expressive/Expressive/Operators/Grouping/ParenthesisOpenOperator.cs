@@ -9,7 +9,7 @@ namespace Expressive.Operators.Grouping
     {
         #region IOperator Members
 
-        public string[] Tags { get { return new[] { "(" }; } }
+        public string[] Tags => new[] { "(" };
 
         public IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {

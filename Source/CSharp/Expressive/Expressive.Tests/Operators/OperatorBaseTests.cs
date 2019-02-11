@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Expressive.Expressions;
+﻿using Expressive.Expressions;
 using Expressive.Operators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Expressive.Tests.Operators
 {
@@ -58,7 +58,7 @@ namespace Expressive.Tests.Operators
         }
 
         [TestMethod]
-        public void TestGetCaptiveTokens()
+        public virtual void TestGetCaptiveTokens()
         {
             var op = this.Operator;
 

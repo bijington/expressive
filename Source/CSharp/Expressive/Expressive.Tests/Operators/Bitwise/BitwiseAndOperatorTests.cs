@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Expressive.Expressions.Binary.Bitwise;
 using Expressive.Operators;
 using Expressive.Operators.Bitwise;

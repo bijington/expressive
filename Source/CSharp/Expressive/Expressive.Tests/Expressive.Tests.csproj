@@ -101,7 +101,22 @@
     <Compile Include="Operators\Bitwise\BitwiseOrOperatorTests.cs" />
     <Compile Include="Operators\Bitwise\LeftShiftOperatorTests.cs" />
     <Compile Include="Operators\Bitwise\RightShiftOperatorTests.cs" />
+    <Compile Include="Operators\Conditional\NullCoalescingOperatorTests.cs" />
+    <Compile Include="Operators\Grouping\ParenthesisCloseOperatorTests.cs" />
+    <Compile Include="Operators\Grouping\ParenthesisOpenOperatorTests.cs" />
+    <Compile Include="Operators\Logical\AndOperatorTests.cs" />
+    <Compile Include="Operators\Logical\NotOperatorTests.cs" />
+    <Compile Include="Operators\Logical\OrOperatorTests.cs" />
+    <Compile Include="Operators\Multiplicative\DivideOperatorTests.cs" />
+    <Compile Include="Operators\Multiplicative\ModulusOperatorTests.cs" />
+    <Compile Include="Operators\Multiplicative\MultiplyOperatorTests.cs" />
     <Compile Include="Operators\OperatorBaseTests.cs" />
+    <Compile Include="Operators\Relational\NotEqualOperatorTests.cs" />
+    <Compile Include="Operators\Relational\EqualOperatorTests.cs" />
+    <Compile Include="Operators\Relational\LessThanOrEqualOperatorTests.cs" />
+    <Compile Include="Operators\Relational\LessThanOperatorTests.cs" />
+    <Compile Include="Operators\Relational\GreaterThanOperatorTests.cs" />
+    <Compile Include="Operators\Relational\GreaterThanOrEqualOperatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
