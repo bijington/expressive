@@ -94,6 +94,13 @@
     <Compile Include="Expressions\Unary\Logical\NotExpressionTests.cs" />
     <Compile Include="Expressions\VariableExpressionTests.cs" />
     <Compile Include="ExpressionTests.cs" />
+    <Compile Include="Functions\Conversion\DateFunctionTests.cs" />
+    <Compile Include="Functions\Conversion\DecimalFunctionTests.cs" />
+    <Compile Include="Functions\Conversion\DoubleFunctionTests.cs" />
+    <Compile Include="Functions\Conversion\IntegerFunctionTests.cs" />
+    <Compile Include="Functions\Conversion\LongFunctionTests.cs" />
+    <Compile Include="Functions\Conversion\StringFunctionTests.cs" />
+    <Compile Include="Functions\FunctionBaseTests.cs" />
     <Compile Include="Operators\Additive\PlusOperatorTests.cs" />
     <Compile Include="Operators\Additive\SubtractOperatorTests.cs" />
     <Compile Include="Operators\Bitwise\BitwiseAndOperatorTests.cs" />

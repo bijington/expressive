@@ -8,13 +8,13 @@ namespace Expressive.Functions.Conversion
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Date"; } }
+        public override string Name => "Date";
 
         public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
-            var objectToConvert = parameters[0].Evaluate(Variables);
+            var objectToConvert = parameters[0].Evaluate(this.Variables);
             
             // No point converting if there is nothing to convert.
             if (objectToConvert == null) return null;
@@ -23,7 +23,7 @@ namespace Expressive.Functions.Conversion
             if (parameters.Length > 1 &&
                 objectToConvert is string dateString)
             {
-                var format = parameters[1].Evaluate(Variables);
+                var format = parameters[1].Evaluate(this.Variables);
 
                 if (format is string formatString)
                 {
