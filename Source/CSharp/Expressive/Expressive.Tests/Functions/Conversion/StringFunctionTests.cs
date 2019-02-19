@@ -38,7 +38,7 @@ namespace Expressive.Tests.Functions.Conversion
         public void TestEvaluateWithDateTimeAndNonStringFormat()
         {
             var dateTime = new DateTime(2019, 01, 01, 11, 00, 00);
-            const string dateString = "2019/01/01 11:00:00";
+            const string dateString = "01/01/2019 11:00:00";
 
             Assert.AreEqual(dateString, this.Evaluate(dateTime, 1234));
         }
