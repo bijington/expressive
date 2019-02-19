@@ -4,15 +4,17 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Expressive.Standard</PackageId>
-    <Version>1.3.0</Version>
+    <Version>1.3.1</Version>
     <Authors>Shaun Lawrence</Authors>
     <Company>Shaun Lawrence</Company>
     <PackageLicenseUrl>https://opensource.org/licenses/mit</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/bijington/expressive</PackageProjectUrl>
     <PackageTags>Expression Parser Evaluator</PackageTags>
     <Copyright>Copyright(c) 2018 Shaun Lawrence</Copyright>
-    <PackageReleaseNotes>Adding in support for .NET Standard 1.4</PackageReleaseNotes>
-    <Description>A multi-platform expression parsing and evaluating framework.</Description>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description>[DEPRECATED] Use ExpressiveParser.
+
+A multi-platform expression parsing and evaluating framework.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -29,12 +31,34 @@
     <Compile Include="..\Expressive\Exceptions\UnrecognisedTokenException.cs" Link="Exceptions\UnrecognisedTokenException.cs" />
     <Compile Include="..\Expressive\Expression.cs" Link="Expression.cs" />
     <Compile Include="..\Expressive\ExpressionParser.cs" Link="ExpressionParser.cs" />
-    <Compile Include="..\Expressive\Expressions\BinaryExpression.cs" Link="Expressions\BinaryExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Additive\AddExpression.cs" Link="Expressions\Binary\Additive\AddExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Additive\SubtractExpression.cs" Link="Expressions\Binary\Additive\SubtractExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\BinaryExpressionBase.cs" Link="Expressions\Binary\BinaryExpressionBase.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Bitwise\BitwiseAndExpression.cs" Link="Expressions\Binary\Bitwise\BitwiseAndExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Bitwise\BitwiseExclusiveOrExpression.cs" Link="Expressions\Binary\Bitwise\BitwiseExclusiveOrExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Bitwise\BitwiseOrExpression.cs" Link="Expressions\Binary\Bitwise\BitwiseOrExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Bitwise\LeftShiftExpression.cs" Link="Expressions\Binary\Bitwise\LeftShiftExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Bitwise\RightShiftExpression.cs" Link="Expressions\Binary\Bitwise\RightShiftExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Conditional\NullCoalescingExpression.cs" Link="Expressions\Binary\Conditional\NullCoalescingExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Logical\AndExpression.cs" Link="Expressions\Binary\Logical\AndExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Logical\OrExpression.cs" Link="Expressions\Binary\Logical\OrExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Multiplicative\DivideExpression.cs" Link="Expressions\Binary\Multiplicative\DivideExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Multiplicative\ModulusExpression.cs" Link="Expressions\Binary\Multiplicative\ModulusExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Multiplicative\MultiplyExpression.cs" Link="Expressions\Binary\Multiplicative\MultiplyExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Relational\EqualExpression.cs" Link="Expressions\Binary\Relational\EqualExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Relational\GreaterThanExpression.cs" Link="Expressions\Binary\Relational\GreaterThanExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Relational\GreaterThanOrEqualExpression.cs" Link="Expressions\Binary\Relational\GreaterThanOrEqualExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Relational\LessThanExpression.cs" Link="Expressions\Binary\Relational\LessThanExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Relational\LessThanOrEqualExpression.cs" Link="Expressions\Binary\Relational\LessThanOrEqualExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Binary\Relational\NotEqualExpression.cs" Link="Expressions\Binary\Relational\NotEqualExpression.cs" />
     <Compile Include="..\Expressive\Expressions\ConstantValueExpression.cs" Link="Expressions\ConstantValueExpression.cs" />
     <Compile Include="..\Expressive\Expressions\FunctionExpression.cs" Link="Expressions\FunctionExpression.cs" />
     <Compile Include="..\Expressive\Expressions\IExpression.cs" Link="Expressions\IExpression.cs" />
     <Compile Include="..\Expressive\Expressions\ParenthesisedExpression.cs" Link="Expressions\ParenthesisedExpression.cs" />
-    <Compile Include="..\Expressive\Expressions\UnaryExpression.cs" Link="Expressions\UnaryExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Unary\Additive\MinusExpression.cs" Link="Expressions\Unary\Additive\MinusExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Unary\Additive\PlusExpression.cs" Link="Expressions\Unary\Additive\PlusExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Unary\Logical\NotExpression.cs" Link="Expressions\Unary\Logical\NotExpression.cs" />
+    <Compile Include="..\Expressive\Expressions\Unary\UnaryExpressionBase.cs" Link="Expressions\Unary\UnaryExpressionBase.cs" />
     <Compile Include="..\Expressive\Expressions\VariableExpression.cs" Link="Expressions\VariableExpression.cs" />
     <Compile Include="..\Expressive\ExpressiveOptions.cs" Link="ExpressiveOptions.cs" />
     <Compile Include="..\Expressive\ExtensionMethods.cs" Link="ExtensionMethods.cs" />
@@ -108,17 +132,17 @@
     <Compile Include="..\Expressive\Operators\Additive\PlusOperator.cs" Link="Operators\Additive\PlusOperator.cs" />
     <Compile Include="..\Expressive\Operators\Additive\SubtractOperator.cs" Link="Operators\Additive\SubtractOperator.cs" />
     <Compile Include="..\Expressive\Operators\Bitwise\BitwiseAndOperator.cs" Link="Operators\Bitwise\BitwiseAndOperator.cs" />
+    <Compile Include="..\Expressive\Operators\Bitwise\BitwiseExclusiveOrOperator.cs" Link="Operators\Bitwise\BitwiseExclusiveOrOperator.cs" />
     <Compile Include="..\Expressive\Operators\Bitwise\BitwiseOrOperator.cs" Link="Operators\Bitwise\BitwiseOrOperator.cs" />
-    <Compile Include="..\Expressive\Operators\Bitwise\BitwiseXOrOperator.cs" Link="Operators\Bitwise\BitwiseXOrOperator.cs" />
     <Compile Include="..\Expressive\Operators\Bitwise\LeftShiftOperator.cs" Link="Operators\Bitwise\LeftShiftOperator.cs" />
     <Compile Include="..\Expressive\Operators\Bitwise\RightShiftOperator.cs" Link="Operators\Bitwise\RightShiftOperator.cs" />
     <Compile Include="..\Expressive\Operators\Conditional\NullCoalescingOperator.cs" Link="Operators\Conditional\NullCoalescingOperator.cs" />
     <Compile Include="..\Expressive\Operators\Grouping\ParenthesisCloseOperator.cs" Link="Operators\Grouping\ParenthesisCloseOperator.cs" />
     <Compile Include="..\Expressive\Operators\Grouping\ParenthesisOpenOperator.cs" Link="Operators\Grouping\ParenthesisOpenOperator.cs" />
     <Compile Include="..\Expressive\Operators\IOperator.cs" Link="Operators\IOperator.cs" />
-    <Compile Include="..\Expressive\Operators\Logic\AndOperator.cs" Link="Operators\Logic\AndOperator.cs" />
-    <Compile Include="..\Expressive\Operators\Logic\NotOperator.cs" Link="Operators\Logic\NotOperator.cs" />
-    <Compile Include="..\Expressive\Operators\Logic\OrOperator.cs" Link="Operators\Logic\OrOperator.cs" />
+    <Compile Include="..\Expressive\Operators\Logical\AndOperator.cs" Link="Operators\Logical\AndOperator.cs" />
+    <Compile Include="..\Expressive\Operators\Logical\NotOperator.cs" Link="Operators\Logical\NotOperator.cs" />
+    <Compile Include="..\Expressive\Operators\Logical\OrOperator.cs" Link="Operators\Logical\OrOperator.cs" />
     <Compile Include="..\Expressive\Operators\Multiplicative\DivideOperator.cs" Link="Operators\Multiplicative\DivideOperator.cs" />
     <Compile Include="..\Expressive\Operators\Multiplicative\ModulusOperator.cs" Link="Operators\Multiplicative\ModulusOperator.cs" />
     <Compile Include="..\Expressive\Operators\Multiplicative\MultiplyOperator.cs" Link="Operators\Multiplicative\MultiplyOperator.cs" />
@@ -135,7 +159,14 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
-    <Folder Include="Expressions\" />
+    <Folder Include="Expressions\Binary\Logical\" />
+    <Folder Include="Expressions\Binary\Additive\" />
+    <Folder Include="Expressions\Binary\Bitwise\" />
+    <Folder Include="Expressions\Binary\Conditional\" />
+    <Folder Include="Expressions\Binary\Multiplicative\" />
+    <Folder Include="Expressions\Binary\Relational\" />
+    <Folder Include="Expressions\Unary\Logical\" />
+    <Folder Include="Expressions\Unary\Additive\" />
     <Folder Include="Functions\Date\" />
     <Folder Include="Functions\Logical\" />
     <Folder Include="Functions\Mathematical\" />
@@ -145,7 +176,7 @@
     <Folder Include="Operators\Bitwise\" />
     <Folder Include="Operators\Conditional\" />
     <Folder Include="Operators\Grouping\" />
-    <Folder Include="Operators\Logic\" />
+    <Folder Include="Operators\Logical\" />
     <Folder Include="Operators\Multiplicative\" />
     <Folder Include="Operators\Relational\" />
   </ItemGroup>

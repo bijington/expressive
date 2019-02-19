@@ -1,21 +1,22 @@
 ﻿using Expressive.Expressions;
+using Expressive.Expressions.Binary.Bitwise;
 
-namespace Expressive.Operators.Logic
+namespace Expressive.Operators.Bitwise
 {
-    internal class OrOperator : OperatorBase
+    internal class BitwiseExclusiveOrOperator : OperatorBase
     {
         #region OperatorBase Members
 
-        public override string[] Tags { get { return new[] { "||", "or" }; } }
+        public override string[] Tags => new[] { "^" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {
-            return new BinaryExpression(BinaryExpressionType.Or, expressions[0], expressions[1], options);
+            return new BitwiseExclusiveOrExpression(expressions[0], expressions[1], options);
         }
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)
         {
-            return OperatorPrecedence.Or;
+            return OperatorPrecedence.BitwiseXOr;
         }
 
         #endregion

@@ -1,21 +1,22 @@
 ﻿using Expressive.Expressions;
+using Expressive.Expressions.Binary.Logical;
 
-namespace Expressive.Operators.Logic
+namespace Expressive.Operators.Logical
 {
-    internal class AndOperator : OperatorBase
+    internal class OrOperator : OperatorBase
     {
         #region OperatorBase Members
 
-        public override string[] Tags { get { return new[] { "&&", "and" }; } }
+        public override string[] Tags => new[] { "||", "or" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {
-            return new BinaryExpression(BinaryExpressionType.And, expressions[0], expressions[1], options);
+            return new OrExpression(expressions[0], expressions[1], options);
         }
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)
         {
-            return OperatorPrecedence.And;
+            return OperatorPrecedence.Or;
         }
 
         #endregion

@@ -28,12 +28,12 @@ namespace Expressive.Functions
         {
             if (expectedCount != -1 && (parameters == null || !parameters.Any() || parameters.Length != expectedCount))
             {
-                throw new ParameterCountMismatchException(this.Name + "() takes only " + expectedCount + " argument(s)");
+                throw new ParameterCountMismatchException($"{this.Name}() takes only {expectedCount} argument(s)");
             }
 
             if (minimumCount > 0 && (parameters == null || !parameters.Any() || parameters.Length < minimumCount))
             {
-                throw new ParameterCountMismatchException(this.Name + "() expects at least " + minimumCount + " argument(s)");
+                throw new ParameterCountMismatchException($"{this.Name}() expects at least {minimumCount} argument(s)");
             }
 
             return true;

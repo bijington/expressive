@@ -6,7 +6,7 @@ namespace Expressive.Operators.Grouping
     {
         #region OperatorBase Members
 
-        public override string[] Tags { get { return new[] { ")" }; } }
+        public override string[] Tags => new[] { ")" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
         {

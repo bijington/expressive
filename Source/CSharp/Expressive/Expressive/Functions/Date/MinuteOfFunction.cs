@@ -7,13 +7,13 @@ namespace Expressive.Functions.Date
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "MinuteOf"; } }
+        public override string Name => "MinuteOf";
 
         public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
         {
             this.ValidateParameterCount(parameters, 1, 1);
 
-            var dateObject = parameters[0].Evaluate(Variables);
+            var dateObject = parameters[0].Evaluate(this.Variables);
 
             if (dateObject == null) return null;
 
