@@ -532,7 +532,7 @@ namespace Expressive
             {
                 if (isWithinFunction)
                 {
-                    throw new MissingTokenException("Missing token, expecting ','.", ',', token.StartIndex, token.Length);
+                    throw new MissingTokenException("Missing token, expecting ','.", ',');
                 }
                 
                 throw new ExpressiveException($"Unexpected token '{token.CurrentToken}' at index {token.StartIndex}");
