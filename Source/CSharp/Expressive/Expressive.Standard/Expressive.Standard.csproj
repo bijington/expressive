@@ -16,7 +16,7 @@
 
 A multi-platform expression parsing and evaluating framework.</Description>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>C:\Git\expressive\Source\CSharp\Expressive\ExpressiveStrongName.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\ExpressiveStrongName.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
