@@ -3,23 +3,23 @@ using Expressive.Helpers;
 using System.Collections;
 using System.Linq;
 
-namespace Expressive.Functions.Mathematical
+namespace Expressive.Functions.Relational
 {
     internal class MaxFunction : FunctionBase
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Max"; } }
+        public override string Name => "Max";
 
         public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
-            object result = parameters[0].Evaluate(Variables);
+            var result = parameters[0].Evaluate(this.Variables);
 
             if (result is IEnumerable)
             {
-                result = this.Max((IEnumerable)result);
+                result = Max((IEnumerable)result);
             }
 
             // Null means we should bail out.
@@ -31,21 +31,22 @@ namespace Expressive.Functions.Mathematical
             // Skip the first item in the list as it has already been evaluated.
             foreach (var value in parameters.Skip(1))
             {
-                object evaluatedValue = value.Evaluate(Variables);
-                IEnumerable enumerable = evaluatedValue as IEnumerable;
+                var evaluatedValue = value.Evaluate(this.Variables);
 
-                if (enumerable != null)
+                if (evaluatedValue is IEnumerable enumerable)
                 {
-                    evaluatedValue = this.Max(enumerable);
+                    evaluatedValue = Max(enumerable);
                 }
-                
-                result = Numbers.Max(result, evaluatedValue);
 
                 // Null means we should bail out.
-                if (result == null)
+                if (evaluatedValue is null)
                 {
                     return null;
                 }
+
+                result = Comparison.CompareUsingMostPreciseType(result, evaluatedValue, false) > 0
+                    ? result
+                    : evaluatedValue;
             }
 
             return result;
@@ -53,7 +54,9 @@ namespace Expressive.Functions.Mathematical
 
         #endregion
 
-        private object Max(IEnumerable enumerable)
+        #region Private Methods
+
+        private static object Max(IEnumerable enumerable)
         {
             object enumerableResult = null;
 
@@ -70,11 +73,15 @@ namespace Expressive.Functions.Mathematical
                     enumerableResult = item;
                     continue;
                 }
-                
-                enumerableResult = Numbers.Max(enumerableResult, item);
+
+                enumerableResult = Comparison.CompareUsingMostPreciseType(enumerableResult, item, false) > 0
+                    ? enumerableResult
+                    : item;
             }
 
             return enumerableResult;
         }
+
+        #endregion
     }
 }

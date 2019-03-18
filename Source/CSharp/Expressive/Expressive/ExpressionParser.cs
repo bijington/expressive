@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Expressive.Functions.Relational;
 
 namespace Expressive
 {
@@ -129,8 +130,6 @@ namespace Expressive
             RegisterFunction(new IEEERemainderFunction());
             RegisterFunction(new Log10Function());
             RegisterFunction(new LogFunction());
-            RegisterFunction(new MaxFunction());
-            RegisterFunction(new MinFunction());
             RegisterFunction(new PowFunction());
             RegisterFunction(new RandomFunction());
             RegisterFunction(new RoundFunction());
@@ -143,6 +142,9 @@ namespace Expressive
             // Logical
             RegisterFunction(new IfFunction());
             RegisterFunction(new InFunction());
+            // Relational
+            RegisterFunction(new MaxFunction());
+            RegisterFunction(new MinFunction());
             // Statistical
             RegisterFunction(new AverageFunction());
             RegisterFunction(new MeanFunction());
