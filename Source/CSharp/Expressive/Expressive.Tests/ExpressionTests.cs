@@ -896,7 +896,7 @@ namespace Expressive.Tests
             Assert.AreEqual(6, new Expression("2+2*2").Evaluate());
 
             Assert.AreEqual(9d, new Expression("1 + 2 + 3 * 4 / 2").Evaluate());
-            Assert.AreEqual(13.5M, new Expression("18.0/2.0/2.0*3.0").Evaluate());
+            Assert.AreEqual(13.5d, new Expression("18.0/2.0/2.0*3.0").Evaluate());
         }
 
         [TestMethod]
@@ -1083,10 +1083,10 @@ namespace Expressive.Tests
             Assert.AreEqual(9.5M, (decimal)expression.Evaluate(arguments));
 
             expression = new Expression("[myDouble]/2.0");
-            Assert.AreEqual(2.0M, (decimal)expression.Evaluate(arguments));
+            Assert.AreEqual(2.0d, (double)expression.Evaluate(arguments));
 
             expression = new Expression("[myFloat]/2.0");
-            Assert.AreEqual(2.0M, (decimal)expression.Evaluate(arguments));
+            Assert.AreEqual(2.0f, (float)expression.Evaluate(arguments));
         }
 
         [TestMethod]
@@ -1115,10 +1115,13 @@ namespace Expressive.Tests
         [TestMethod]
         public void ShouldIgnoreCurrentCulture()
         {
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
 
             var invariantExpression = new Expression("1 + 2.34", ExpressiveOptions.None);
             Assert.AreEqual(3.34M, invariantExpression.Evaluate());
+
+            Thread.CurrentThread.CurrentCulture = currentCulture;
         }
     }
 }

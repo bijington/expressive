@@ -49,13 +49,25 @@ namespace Expressive.Expressions.Binary
 
         #endregion
 
+        private object CheckAndEvaluateSubExpression(object result, IDictionary<string, object> variables)
+        {
+            if (result is Expression lhsExpression)
+            {
+                return lhsExpression.Evaluate(variables);
+            }
+
+            return result;
+        }
+        
         protected abstract object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables);
 
         protected object Evaluate(object lhsResult, IExpression rhs, IDictionary<string, object> variables, Func<object, object, object> resultSelector)
         {
             IList<object> lhsParticipants = new List<object>();
             IList<object> rhsParticipants = new List<object>();
-            object rhsResult = rhs.Evaluate(variables);
+
+            lhsResult = this.CheckAndEvaluateSubExpression(lhsResult, variables);
+            var rhsResult = this.CheckAndEvaluateSubExpression(rhs.Evaluate(variables), variables);
 
             if (!(lhsResult is ICollection) && !(rhsResult is ICollection))
             {

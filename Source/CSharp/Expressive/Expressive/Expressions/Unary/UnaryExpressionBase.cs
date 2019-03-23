@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Expressive.Expressions.Unary
 {
@@ -21,30 +18,6 @@ namespace Expressive.Expressions.Unary
         #region IExpression Members
 
         public abstract object Evaluate(IDictionary<string, object> variables);
-        //{
-        //    switch (_expressionType)
-        //    {
-        //        case UnaryExpressionType.Minus:
-        //            return Numbers.Subtract(0, _expression.Evaluate(variables));
-        //        case UnaryExpressionType.Not:
-        //            var value = _expression.Evaluate(variables);
-
-        //            if (value != null)
-        //            {
-        //                if (value is bool)
-        //                {
-        //                    return !(bool)value;
-        //                }
-
-        //                return !Convert.ToBoolean(value);
-        //            }
-        //            break;
-        //        case UnaryExpressionType.Plus:
-        //            return Numbers.Add(0, _expression.Evaluate(variables));
-        //    }
-
-        //    return null;
-        //}
 
         #endregion
     }
