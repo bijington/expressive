@@ -3,7 +3,7 @@
 namespace Expressive.Helpers
 {
     //  Shout out to https://ncalc.codeplex.com/ for the bulk of this implementation.
-    internal class Numbers
+    internal static class Numbers
     {
         private static object ConvertIfString(object s)
         {
