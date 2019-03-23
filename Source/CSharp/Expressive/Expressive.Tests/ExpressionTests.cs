@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 
 namespace Expressive.Tests
@@ -1109,6 +1110,15 @@ namespace Expressive.Tests
             };
 
             Assert.AreEqual(true, new Expression("[DischargeStatus1_Value] > 00 AND[DischargeStatus2_Value] = 00", ExpressiveOptions.IgnoreCase).Evaluate(arguments));
+        }
+
+        [TestMethod]
+        public void ShouldIgnoreCurrentCulture()
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
+
+            var invariantExpression = new Expression("1 + 2.34", ExpressiveOptions.None);
+            Assert.AreEqual(3.34M, invariantExpression.Evaluate());
         }
     }
 }

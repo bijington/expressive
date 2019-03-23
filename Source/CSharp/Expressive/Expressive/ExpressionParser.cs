@@ -35,6 +35,7 @@ namespace Expressive
 
         #region Fields
 
+        private readonly CultureInfo currentCulture;
         private readonly char decimalSeparator;
         private readonly ExpressiveOptions options;
         private readonly IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> registeredFunctions;
@@ -49,116 +50,119 @@ namespace Expressive
         {
             this.options = options;
             
+            // For now we will ignore any specific cultures but keeping it in a single place to simplify changing later if required.
+            this.currentCulture = CultureInfo.InvariantCulture;
+
             // Initialise the string comparer only once.
             this.stringComparer = this.options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
 
-            this.decimalSeparator = Convert.ToChar(CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator);
-            this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(GetDictionaryComparer(options));
-            this.registeredOperators = new Dictionary<string, IOperator>(GetDictionaryComparer(options));
+            this.decimalSeparator = Convert.ToChar(this.currentCulture.NumberFormat.NumberDecimalSeparator);
+            this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(this.GetDictionaryComparer(options));
+            this.registeredOperators = new Dictionary<string, IOperator>(this.GetDictionaryComparer(options));
 
             #region Operators
             // TODO: Do we allow for turning off operators?
             // Additive
-            RegisterOperator(new PlusOperator());
-            RegisterOperator(new SubtractOperator());
+            this.RegisterOperator(new PlusOperator());
+            this.RegisterOperator(new SubtractOperator());
             // Bitwise
-            RegisterOperator(new BitwiseAndOperator());
-            RegisterOperator(new BitwiseOrOperator());
-            RegisterOperator(new BitwiseExclusiveOrOperator());
-            RegisterOperator(new LeftShiftOperator());
-            RegisterOperator(new RightShiftOperator());
+            this.RegisterOperator(new BitwiseAndOperator());
+            this.RegisterOperator(new BitwiseOrOperator());
+            this.RegisterOperator(new BitwiseExclusiveOrOperator());
+            this.RegisterOperator(new LeftShiftOperator());
+            this.RegisterOperator(new RightShiftOperator());
             // Conditional
-            RegisterOperator(new NullCoalescingOperator());
+            this.RegisterOperator(new NullCoalescingOperator());
             // Grouping
-            RegisterOperator(new ParenthesisCloseOperator());
-            RegisterOperator(new ParenthesisOpenOperator());
+            this.RegisterOperator(new ParenthesisCloseOperator());
+            this.RegisterOperator(new ParenthesisOpenOperator());
             // Logic
-            RegisterOperator(new AndOperator());
-            RegisterOperator(new NotOperator());
-            RegisterOperator(new OrOperator());
+            this.RegisterOperator(new AndOperator());
+            this.RegisterOperator(new NotOperator());
+            this.RegisterOperator(new OrOperator());
             // Multiplicative
-            RegisterOperator(new DivideOperator());
-            RegisterOperator(new ModulusOperator());
-            RegisterOperator(new MultiplyOperator());
+            this.RegisterOperator(new DivideOperator());
+            this.RegisterOperator(new ModulusOperator());
+            this.RegisterOperator(new MultiplyOperator());
             // Relational
-            RegisterOperator(new EqualOperator());
-            RegisterOperator(new GreaterThanOperator());
-            RegisterOperator(new GreaterThanOrEqualOperator());
-            RegisterOperator(new LessThanOperator());
-            RegisterOperator(new LessThanOrEqualOperator());
-            RegisterOperator(new NotEqualOperator());
+            this.RegisterOperator(new EqualOperator());
+            this.RegisterOperator(new GreaterThanOperator());
+            this.RegisterOperator(new GreaterThanOrEqualOperator());
+            this.RegisterOperator(new LessThanOperator());
+            this.RegisterOperator(new LessThanOrEqualOperator());
+            this.RegisterOperator(new NotEqualOperator());
             #endregion
 
             #region Functions
             // Conversion
-            RegisterFunction(new DateFunction());
-            RegisterFunction(new DecimalFunction());
-            RegisterFunction(new DoubleFunction());
-            RegisterFunction(new IntegerFunction());
-            RegisterFunction(new LongFunction());
-            RegisterFunction(new StringFunction());
+            this.RegisterFunction(new DateFunction());
+            this.RegisterFunction(new DecimalFunction());
+            this.RegisterFunction(new DoubleFunction());
+            this.RegisterFunction(new IntegerFunction());
+            this.RegisterFunction(new LongFunction());
+            this.RegisterFunction(new StringFunction());
             // Date
-            RegisterFunction(new AddDaysFunction());
-            RegisterFunction(new AddHoursFunction());
-            RegisterFunction(new AddMillisecondsFunction());
-            RegisterFunction(new AddMinutesFunction());
-            RegisterFunction(new AddMonthsFunction());
-            RegisterFunction(new AddSecondsFunction());
-            RegisterFunction(new AddYearsFunction());
-            RegisterFunction(new DayOfFunction());
-            RegisterFunction(new DaysBetweenFunction());
-            RegisterFunction(new HourOfFunction());
-            RegisterFunction(new HoursBetweenFunction());
-            RegisterFunction(new MillisecondOfFunction());
-            RegisterFunction(new MillisecondsBetweenFunction());
-            RegisterFunction(new MinuteOfFunction());
-            RegisterFunction(new MinutesBetweenFunction());
-            RegisterFunction(new MonthOfFunction());
-            RegisterFunction(new SecondOfFunction());
-            RegisterFunction(new SecondsBetweenFunction());
-            RegisterFunction(new YearOfFunction());
+            this.RegisterFunction(new AddDaysFunction());
+            this.RegisterFunction(new AddHoursFunction());
+            this.RegisterFunction(new AddMillisecondsFunction());
+            this.RegisterFunction(new AddMinutesFunction());
+            this.RegisterFunction(new AddMonthsFunction());
+            this.RegisterFunction(new AddSecondsFunction());
+            this.RegisterFunction(new AddYearsFunction());
+            this.RegisterFunction(new DayOfFunction());
+            this.RegisterFunction(new DaysBetweenFunction());
+            this.RegisterFunction(new HourOfFunction());
+            this.RegisterFunction(new HoursBetweenFunction());
+            this.RegisterFunction(new MillisecondOfFunction());
+            this.RegisterFunction(new MillisecondsBetweenFunction());
+            this.RegisterFunction(new MinuteOfFunction());
+            this.RegisterFunction(new MinutesBetweenFunction());
+            this.RegisterFunction(new MonthOfFunction());
+            this.RegisterFunction(new SecondOfFunction());
+            this.RegisterFunction(new SecondsBetweenFunction());
+            this.RegisterFunction(new YearOfFunction());
             // Mathematical
-            RegisterFunction(new AbsFunction());
-            RegisterFunction(new AcosFunction());
-            RegisterFunction(new AsinFunction());
-            RegisterFunction(new AtanFunction());
-            RegisterFunction(new CeilingFunction());
-            RegisterFunction(new CosFunction());
-            RegisterFunction(new CountFunction());
-            RegisterFunction(new ExpFunction());
-            RegisterFunction(new FloorFunction());
-            RegisterFunction(new IEEERemainderFunction());
-            RegisterFunction(new Log10Function());
-            RegisterFunction(new LogFunction());
-            RegisterFunction(new PowFunction());
-            RegisterFunction(new RandomFunction());
-            RegisterFunction(new RoundFunction());
-            RegisterFunction(new SignFunction());
-            RegisterFunction(new SinFunction());
-            RegisterFunction(new SqrtFunction());
-            RegisterFunction(new SumFunction());
-            RegisterFunction(new TanFunction());
-            RegisterFunction(new TruncateFunction());
+            this.RegisterFunction(new AbsFunction());
+            this.RegisterFunction(new AcosFunction());
+            this.RegisterFunction(new AsinFunction());
+            this.RegisterFunction(new AtanFunction());
+            this.RegisterFunction(new CeilingFunction());
+            this.RegisterFunction(new CosFunction());
+            this.RegisterFunction(new CountFunction());
+            this.RegisterFunction(new ExpFunction());
+            this.RegisterFunction(new FloorFunction());
+            this.RegisterFunction(new IEEERemainderFunction());
+            this.RegisterFunction(new Log10Function());
+            this.RegisterFunction(new LogFunction());
+            this.RegisterFunction(new PowFunction());
+            this.RegisterFunction(new RandomFunction());
+            this.RegisterFunction(new RoundFunction());
+            this.RegisterFunction(new SignFunction());
+            this.RegisterFunction(new SinFunction());
+            this.RegisterFunction(new SqrtFunction());
+            this.RegisterFunction(new SumFunction());
+            this.RegisterFunction(new TanFunction());
+            this.RegisterFunction(new TruncateFunction());
             // Logical
-            RegisterFunction(new IfFunction());
-            RegisterFunction(new InFunction());
+            this.RegisterFunction(new IfFunction());
+            this.RegisterFunction(new InFunction());
             // Relational
-            RegisterFunction(new MaxFunction());
-            RegisterFunction(new MinFunction());
+            this.RegisterFunction(new MaxFunction());
+            this.RegisterFunction(new MinFunction());
             // Statistical
-            RegisterFunction(new AverageFunction());
-            RegisterFunction(new MeanFunction());
-            RegisterFunction(new MedianFunction());
-            RegisterFunction(new ModeFunction());
+            this.RegisterFunction(new AverageFunction());
+            this.RegisterFunction(new MeanFunction());
+            this.RegisterFunction(new MedianFunction());
+            this.RegisterFunction(new ModeFunction());
             // String
-            RegisterFunction(new ContainsFunction());
-            RegisterFunction(new EndsWithFunction());
-            RegisterFunction(new LengthFunction());
-            RegisterFunction(new PadLeftFunction());
-            RegisterFunction(new PadRightFunction());
-            RegisterFunction(new RegexFunction());
-            RegisterFunction(new StartsWithFunction());
-            RegisterFunction(new SubstringFunction());            
+            this.RegisterFunction(new ContainsFunction());
+            this.RegisterFunction(new EndsWithFunction());
+            this.RegisterFunction(new LengthFunction());
+            this.RegisterFunction(new PadLeftFunction());
+            this.RegisterFunction(new PadRightFunction());
+            this.RegisterFunction(new RegexFunction());
+            this.RegisterFunction(new StartsWithFunction());
+            this.RegisterFunction(new SubstringFunction());            
             #endregion
         }
 
@@ -173,7 +177,7 @@ namespace Expressive
                 throw new ExpressiveException("An Expression cannot be empty.");
             }
 
-            var tokens = Tokenise(expression);
+            var tokens = this.Tokenise(expression);
 
             var openCount = tokens.Select(t => t.CurrentToken).Count(t => string.Equals(t, "(", StringComparison.Ordinal));
             var closeCount = tokens.Select(t => t.CurrentToken).Count(t => string.Equals(t, ")", StringComparison.Ordinal));
@@ -188,19 +192,19 @@ namespace Expressive
                 throw new ArgumentException("There are too many ')' symbols. Expected " + openCount + " but there is " + closeCount);
             }
 
-            return CompileExpression(new Queue<Token>(tokens), OperatorPrecedence.Minimum, variables, false);
+            return this.CompileExpression(new Queue<Token>(tokens), OperatorPrecedence.Minimum, variables, false);
         }
 
         internal void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
         {
-            CheckForExistingFunctionName(functionName);
+            this.CheckForExistingFunctionName(functionName);
 
             this.registeredFunctions.Add(functionName, function);
         }
 
         internal void RegisterFunction(IFunction function)
         {
-            CheckForExistingFunctionName(function.Name);
+            this.CheckForExistingFunctionName(function.Name);
 
             this.registeredFunctions.Add(function.Name, (p, a) =>
             {
@@ -234,7 +238,7 @@ namespace Expressive
         {
             if (tokens == null)
             {
-                throw new ArgumentNullException("tokens", "You must call Tokenise before compiling");
+                throw new ArgumentNullException(nameof(tokens), "You must call Tokenise before compiling");
             }
             
             IExpression leftHandSide = null;
@@ -243,10 +247,7 @@ namespace Expressive
 
             while (currentToken != null)
             {
-                Func<IExpression[], IDictionary<string, object>, object> function = null;
-                IOperator op = null;
-
-                if (this.registeredOperators.TryGetValue(currentToken.CurrentToken, out op)) // Are we an IOperator?
+                if (this.registeredOperators.TryGetValue(currentToken.CurrentToken, out var op)) // Are we an IOperator?
                 {
                     var precedence = op.GetPrecedence(previousToken);
 
@@ -269,13 +270,13 @@ namespace Expressive
                             if (captiveTokens.Length > 1)
                             {
                                 var innerTokens = op.GetInnerCaptiveTokens(captiveTokens);
-                                rightHandSide = CompileExpression(new Queue<Token>(innerTokens), OperatorPrecedence.Minimum, variables, isWithinFunction);
+                                rightHandSide = this.CompileExpression(new Queue<Token>(innerTokens), OperatorPrecedence.Minimum, variables, isWithinFunction);
 
                                 currentToken = captiveTokens[captiveTokens.Length - 1];
                             }
                             else
                             {
-                                rightHandSide = CompileExpression(tokens, precedence, variables, isWithinFunction);
+                                rightHandSide = this.CompileExpression(tokens, precedence, variables, isWithinFunction);
                                 // We are at the end of an expression so fake it up.
                                 currentToken = new Token(")", -1);
                             }
@@ -288,7 +289,7 @@ namespace Expressive
                         break;
                     }
                 }
-                else if (this.registeredFunctions.TryGetValue(currentToken.CurrentToken, out function)) // or an IFunction?
+                else if (this.registeredFunctions.TryGetValue(currentToken.CurrentToken, out var function)) // or an IFunction?
                 {
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
@@ -320,13 +321,13 @@ namespace Expressive
                         if (parenCount == 0 &&
                             captiveTokens.Any())
                         {
-                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: OperatorPrecedence.Minimum, variables: variables, isWithinFunction: true));
+                            expressions.Add(this.CompileExpression(captiveTokens, minimumPrecedence: OperatorPrecedence.Minimum, variables: variables, isWithinFunction: true));
                             captiveTokens.Clear();
                         }
                         else if (string.Equals(nextToken.CurrentToken, ParameterSeparator.ToString(), StringComparison.Ordinal) && parenCount == 1)
                         {
                             // TODO: Should we expect expressions to be null???
-                            expressions.Add(CompileExpression(captiveTokens, minimumPrecedence: 0, variables: variables, isWithinFunction: true));
+                            expressions.Add(this.CompileExpression(captiveTokens, minimumPrecedence: 0, variables: variables, isWithinFunction: true));
                             captiveTokens.Clear();
                         }
 
@@ -338,29 +339,29 @@ namespace Expressive
 
                     leftHandSide = new FunctionExpression(currentToken.CurrentToken, function, expressions.ToArray());
                 }
-                else if (currentToken.CurrentToken.IsNumeric()) // Or a number
+                else if (currentToken.CurrentToken.IsNumeric(this.currentCulture)) // Or a number
                 {
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
 
-                    if (int.TryParse(currentToken.CurrentToken, out var intValue))
+                    if (int.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var intValue))
                     {
                         leftHandSide = new ConstantValueExpression(intValue);
                     }
-                    else if (decimal.TryParse(currentToken.CurrentToken, out var decimalValue))
+                    else if (decimal.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var decimalValue))
                     {
                         leftHandSide = new ConstantValueExpression(decimalValue);
                     }
-                    else if (double.TryParse(currentToken.CurrentToken, out var doubleValue))
+                    else if (double.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var doubleValue))
                     {
                         leftHandSide = new ConstantValueExpression(doubleValue);
                     }
-                    else if (float.TryParse(currentToken.CurrentToken, out var floatValue))
+                    else if (float.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var floatValue))
                     {
                         leftHandSide = new ConstantValueExpression(floatValue);
                     }
-                    else if (long.TryParse(currentToken.CurrentToken, out var longValue))
+                    else if (long.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var longValue))
                     {
                         leftHandSide = new ConstantValueExpression(longValue);
                     }
@@ -405,11 +406,10 @@ namespace Expressive
 
                     tokens.Dequeue();
 
-                    string dateToken = currentToken.CurrentToken.Replace(DateSeparator.ToString(), "");
-                    DateTime date = DateTime.MinValue;
-                    
+                    var dateToken = currentToken.CurrentToken.Replace(DateSeparator.ToString(), "");
+
                     // If we can't parse the date let's check for some known tags.
-                    if (!DateTime.TryParse(dateToken, out date))
+                    if (!DateTime.TryParse(dateToken, out var date))
                     {
                         if (string.Equals("TODAY", dateToken, StringComparison.OrdinalIgnoreCase))
                         {
@@ -437,21 +437,11 @@ namespace Expressive
                 }
                 else if (string.Equals(currentToken.CurrentToken, ParameterSeparator.ToString(), StringComparison.Ordinal)) // Make sure we ignore the parameter separator
                 {
-                    // TODO should we throw an exception if we are not within a function?
                     if (!isWithinFunction)
                     {
                         throw new ExpressiveException($"Unexpected token '{currentToken}'");
                     }
                     tokens.Dequeue();
-
-                    //throw new InvalidOperationException("Unrecognised token '" + currentToken + "'");
-
-                    //if (!string.Equals(currentToken, ParameterSeparator.ToString(), StringComparison.Ordinal)) // Make sure we ignore the parameter separator
-                    //{
-                    //    currentToken = CleanString(currentToken);
-
-                    //    leftHandSide = new ConstantValueExpression(ConstantValueExpressionType.Unknown, currentToken);
-                    //}
                 }
                 else
                 {
