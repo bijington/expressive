@@ -3,7 +3,7 @@
   <metadata>
     <id>ExpressiveParser</id>
 	<title>Expressive Parser</title>
-    <version>1.3.1</version>
+    <version>1.4.0</version>
     <authors>Shaun Lawrence</authors>
     <owners>Shaun Lawrence</owners>
     <licenseUrl>https://opensource.org/licenses/mit</licenseUrl>
@@ -12,11 +12,13 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A multi-platform expression parsing and evaluating framework.</description>
     <releaseNotes> Version 1.3.1 includes
+	Improvements:
+	* GH-28: Enhance Max/Min functions to support more than just number types.
+	* GH-30: Strong named signing.
 	Bug fixes:	
-	* GH-23: Constant values in expressions now abide by the case sensitivity option.
-	* GH-24: Integers are now used as a known type when comparing numbers.
+	* GH-39: Improvements to parsing decimals in non UK/US locales.
 	</releaseNotes>
-    <copyright>Copyright(c) 2018 Shaun Lawrence</copyright>
+    <copyright>Copyright(c) 2019 Shaun Lawrence</copyright>
     <tags>Expression Parser Evaluator Cross-Platform Xamarin.Forms</tags>
   </metadata>
   <files>

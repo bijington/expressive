@@ -4,20 +4,20 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Expressive.Standard</PackageId>
-    <Version>1.3.1</Version>
+    <Version>1.4.0</Version>
     <Authors>Shaun Lawrence</Authors>
     <Company>Shaun Lawrence</Company>
     <PackageLicenseUrl>https://opensource.org/licenses/mit</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/bijington/expressive</PackageProjectUrl>
     <PackageTags>Expression Parser Evaluator</PackageTags>
-    <Copyright>Copyright(c) 2018 Shaun Lawrence</Copyright>
+    <Copyright>Copyright(c) 2019 Shaun Lawrence</Copyright>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Description>[DEPRECATED] Use ExpressiveParser.
-
-A multi-platform expression parsing and evaluating framework.</Description>
+    <Description>A multi-platform expression parsing and evaluating framework.</Description>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\ExpressiveStrongName.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
