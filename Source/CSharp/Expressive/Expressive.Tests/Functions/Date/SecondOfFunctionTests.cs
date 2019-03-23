@@ -24,7 +24,7 @@ namespace Expressive.Tests.Functions.Date
         [TestMethod]
         public void TestWithDateTime()
         {
-            Assert.AreEqual(29, this.Evaluate(new DateTime(2016, 02, 29)));
+            Assert.AreEqual(29, this.Evaluate(new DateTime(2016, 02, 29, 15, 00, 29)));
         }
 
         [TestMethod]

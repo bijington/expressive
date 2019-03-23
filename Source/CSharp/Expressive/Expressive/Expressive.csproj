@@ -142,10 +142,10 @@
     <Compile Include="Functions\String\LengthFunction.cs" />
     <Compile Include="Functions\Mathematical\Log10Function.cs" />
     <Compile Include="Functions\Mathematical\LogFunction.cs" />
-    <Compile Include="Functions\Mathematical\MaxFunction.cs" />
+    <Compile Include="Functions\Relational\MaxFunction.cs" />
     <Compile Include="Functions\Statistical\MeanFunction.cs" />
     <Compile Include="Functions\Statistical\MedianFunction.cs" />
-    <Compile Include="Functions\Mathematical\MinFunction.cs" />
+    <Compile Include="Functions\Relational\MinFunction.cs" />
     <Compile Include="Functions\Statistical\ModeFunction.cs" />
     <Compile Include="Functions\String\PadLeftFunction.cs" />
     <Compile Include="Functions\String\PadRightFunction.cs" />

@@ -3,23 +3,23 @@ using Expressive.Helpers;
 using System.Collections;
 using System.Linq;
 
-namespace Expressive.Functions.Mathematical
+namespace Expressive.Functions.Relational
 {
     internal class MinFunction : FunctionBase
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Min"; } }
+        public override string Name => "Min";
 
         public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
-            object result = parameters[0].Evaluate(Variables);
+            var result = parameters[0].Evaluate(this.Variables);
 
             if (result is IEnumerable)
             {
-                result = this.Min((IEnumerable)result);
+                result = Min((IEnumerable)result);
             }
 
             // Null means we should bail out.
@@ -31,15 +31,16 @@ namespace Expressive.Functions.Mathematical
             // Skip the first item in the list as it has already been evaluated.
             foreach (var value in parameters.Skip(1))
             {
-                object evaluatedValue = value.Evaluate(Variables);
-                IEnumerable enumerable = evaluatedValue as IEnumerable;
+                var evaluatedValue = value.Evaluate(this.Variables);
 
-                if (enumerable != null)
+                if (evaluatedValue is IEnumerable enumerable)
                 {
-                    evaluatedValue = this.Min(enumerable);
+                    evaluatedValue = Min(enumerable);
                 }
 
-                result = Numbers.Min(result, evaluatedValue);
+                result = Comparison.CompareUsingMostPreciseType(result, evaluatedValue, false) < 0
+                    ? result
+                    : evaluatedValue;
 
                 // Null means we should bail out.
                 if (result == null)
@@ -53,7 +54,7 @@ namespace Expressive.Functions.Mathematical
 
         #endregion
 
-        private object Min(IEnumerable enumerable)
+        private static object Min(IEnumerable enumerable)
         {
             object enumerableResult = null;
 
@@ -71,7 +72,9 @@ namespace Expressive.Functions.Mathematical
                     continue;
                 }
 
-                enumerableResult = Numbers.Min(enumerableResult, item);
+                enumerableResult = Comparison.CompareUsingMostPreciseType(enumerableResult, item, false) < 0
+                    ? enumerableResult
+                    : item;
             }
 
             return enumerableResult;

@@ -106,8 +106,6 @@ A multi-platform expression parsing and evaluating framework.</Description>
     <Compile Include="..\Expressive\Functions\Mathematical\IEEERemainderFunction.cs" Link="Functions\Mathematical\IEEERemainderFunction.cs" />
     <Compile Include="..\Expressive\Functions\Mathematical\Log10Function.cs" Link="Functions\Mathematical\Log10Function.cs" />
     <Compile Include="..\Expressive\Functions\Mathematical\LogFunction.cs" Link="Functions\Mathematical\LogFunction.cs" />
-    <Compile Include="..\Expressive\Functions\Mathematical\MaxFunction.cs" Link="Functions\Mathematical\MaxFunction.cs" />
-    <Compile Include="..\Expressive\Functions\Mathematical\MinFunction.cs" Link="Functions\Mathematical\MinFunction.cs" />
     <Compile Include="..\Expressive\Functions\Mathematical\PowFunction.cs" Link="Functions\Mathematical\PowFunction.cs" />
     <Compile Include="..\Expressive\Functions\Mathematical\RandomFunction.cs" Link="Functions\Mathematical\RandomFunction.cs" />
     <Compile Include="..\Expressive\Functions\Mathematical\RoundFunction.cs" Link="Functions\Mathematical\RoundFunction.cs" />
@@ -117,6 +115,8 @@ A multi-platform expression parsing and evaluating framework.</Description>
     <Compile Include="..\Expressive\Functions\Mathematical\SumFunction.cs" Link="Functions\Mathematical\SumFunction.cs" />
     <Compile Include="..\Expressive\Functions\Mathematical\TanFunction.cs" Link="Functions\Mathematical\TanFunction.cs" />
     <Compile Include="..\Expressive\Functions\Mathematical\TruncateFunction.cs" Link="Functions\Mathematical\TruncateFunction.cs" />
+    <Compile Include="..\Expressive\Functions\Relational\MaxFunction.cs" Link="Functions\Relational\MaxFunction.cs" />
+    <Compile Include="..\Expressive\Functions\Relational\MinFunction.cs" Link="Functions\Relational\MinFunction.cs" />
     <Compile Include="..\Expressive\Functions\Statistical\AverageFunction.cs" Link="Functions\Statistical\AverageFunction.cs" />
     <Compile Include="..\Expressive\Functions\Statistical\MeanFunction.cs" Link="Functions\Statistical\MeanFunction.cs" />
     <Compile Include="..\Expressive\Functions\Statistical\MedianFunction.cs" Link="Functions\Statistical\MedianFunction.cs" />
@@ -173,6 +173,7 @@ A multi-platform expression parsing and evaluating framework.</Description>
     <Folder Include="Functions\Date\" />
     <Folder Include="Functions\Logical\" />
     <Folder Include="Functions\Mathematical\" />
+    <Folder Include="Functions\Relational\" />
     <Folder Include="Functions\String\" />
     <Folder Include="Functions\Statistical\" />
     <Folder Include="Operators\Additive\" />
