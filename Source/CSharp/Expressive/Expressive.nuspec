@@ -6,12 +6,12 @@
     <version>1.4.0</version>
     <authors>Shaun Lawrence</authors>
     <owners>Shaun Lawrence</owners>
-    <licenseUrl>https://opensource.org/licenses/mit</licenseUrl>
+	<license type="file">license\license.txt</license>
     <projectUrl>https://github.com/bijington/expressive</projectUrl>
 	<iconUrl>https://raw.githubusercontent.com/bijington/expressive/master/Assets/logo-64.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A multi-platform expression parsing and evaluating framework.</description>
-    <releaseNotes> Version 1.3.1 includes
+    <releaseNotes> Version 1.4.0 includes
 	Improvements:
 	* GH-28: Enhance Max/Min functions to support more than just number types.
 	* GH-30: Strong named signing.
@@ -25,5 +25,7 @@
 	<file src="bin\net40\*" target="lib\net40" />
 	
 	<file src="bin\netstandard1.4\*" target="lib\netstandard1.4" />
+	
+	<file src="license.txt" target="license\license.txt" />
   </files>
 </package>
