@@ -1123,5 +1123,37 @@ namespace Expressive.Tests
 
             Thread.CurrentThread.CurrentCulture = currentCulture;
         }
+
+        #region Actual unit tests for the Expression class to remain.
+
+        [TestMethod]
+        public void ShouldEvaluateT()
+        {
+            var expression = new Expression("1 + 2.0 + 3 * 4.0");
+
+            Assert.AreEqual(15, expression.Evaluate<int>());
+        }
+
+        [TestMethod]
+        public void ShouldRethrowOnInvalidEvaluateT()
+        {
+            var expression = new Expression("1 + 2.0 + 3 * 4.0");
+
+            try
+            {
+                expression.Evaluate<DateTime>();
+            }
+            catch (ExpressiveException e)
+            {
+                if (e.InnerException is InvalidCastException)
+                {
+                    return;
+                }
+            }
+
+            Assert.Fail("Invalid handling of exceptions.");
+        }
+
+        #endregion
     }
 }
