@@ -17,6 +17,8 @@ namespace Expressive.Functions.Date
 
             if (dateObject == null) return null;
 
+            if (dateObject.ToString() == "") return null;
+
             DateTime date = Convert.ToDateTime(dateObject);
 
             return date.Millisecond;

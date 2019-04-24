@@ -18,6 +18,8 @@ namespace Expressive.Functions.Date
 
             if (dateObject == null || millisecondsObject == null) return null;
 
+            if (dateObject.ToString() == "" || millisecondsObject.ToString() == "") return null;
+
             DateTime date = Convert.ToDateTime(dateObject);
             double milliseconds = Convert.ToDouble(millisecondsObject);
 

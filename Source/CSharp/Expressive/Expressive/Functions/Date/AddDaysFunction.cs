@@ -18,6 +18,8 @@ namespace Expressive.Functions.Date
 
             if (dateObject == null || daysObject == null) return null;
 
+            if (dateObject.ToString() == "" || daysObject.ToString() == "") return null;
+
             DateTime date = Convert.ToDateTime(dateObject);
             double days = Convert.ToDouble(daysObject);
 

@@ -18,6 +18,8 @@ namespace Expressive.Functions.Date
 
             if (dateObject == null || monthsObject == null) return null;
 
+            if (dateObject.ToString() == "" || monthsObject.ToString() == "") return null;
+
             DateTime date = Convert.ToDateTime(dateObject);
             int months = Convert.ToInt32(monthsObject);
 

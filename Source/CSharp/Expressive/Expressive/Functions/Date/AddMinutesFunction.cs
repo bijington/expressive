@@ -18,6 +18,8 @@ namespace Expressive.Functions.Date
 
             if (dateObject == null || minutesObject == null) return null;
 
+            if(dateObject.ToString() == "" || minutesObject.ToString() == "") return null;
+            
             DateTime date = Convert.ToDateTime(dateObject);
             double days = Convert.ToDouble(minutesObject);
 

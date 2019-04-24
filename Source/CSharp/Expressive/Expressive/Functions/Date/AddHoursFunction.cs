@@ -18,6 +18,7 @@ namespace Expressive.Functions.Date
 
             if (dateObject == null || hoursObject == null) return null;
 
+            if (dateObject.ToString() == "" || hoursObject.ToString() == "") return null;
             DateTime date = Convert.ToDateTime(dateObject);
             double hours = Convert.ToDouble(hoursObject);
 

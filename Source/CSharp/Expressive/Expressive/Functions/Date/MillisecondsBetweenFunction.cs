@@ -18,6 +18,8 @@ namespace Expressive.Functions.Date
 
             if (startObject == null || endObject == null) return null;
 
+            if (startObject.ToString() == "" || endObject.ToString() == "") return null;
+
             DateTime start = Convert.ToDateTime(startObject);
             DateTime end = Convert.ToDateTime(endObject);
 

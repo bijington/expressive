@@ -18,6 +18,8 @@ namespace Expressive.Functions.Date
 
             if (dateObject == null || yearsObject == null) return null;
 
+            if (dateObject.ToString() == "" || yearsObject.ToString() == "") return null;
+
             DateTime date = Convert.ToDateTime(dateObject);
             int years = Convert.ToInt32(yearsObject);
 
