@@ -63,5 +63,27 @@ namespace Expressive.Tests.Expressions.Binary.Relational
 
             Assert.AreEqual(false, expression.Evaluate(null));
         }
+
+        [TestMethod]
+        public void TestIntFloatUnequal()
+        {
+            var expression = new EqualExpression(
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1.001),
+                ExpressiveOptions.None);
+
+            Assert.AreEqual(false, expression.Evaluate(null));
+        }
+
+        [TestMethod]
+        public void TestIntFloatEqual()
+        {
+            var expression = new EqualExpression(
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1.00),
+                ExpressiveOptions.None);
+
+            Assert.AreEqual(true, expression.Evaluate(null));
+        }
     }
 }
