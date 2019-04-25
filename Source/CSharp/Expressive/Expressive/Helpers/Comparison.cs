@@ -5,7 +5,15 @@ namespace Expressive.Helpers
 {
     internal static class Comparison
     {
-        private static readonly Type[] CommonTypes = { typeof(long), typeof(int), typeof(double), typeof(bool), typeof(DateTime), typeof(string), typeof(decimal) };
+        private static readonly Type[] CommonTypes = {
+            typeof(DateTime), // If it can be interpreted as a DateTime use that.
+            typeof(decimal),  // Decimal is stored as 96 bits of value, plus a sign, plus an exponent
+            typeof(double),   // Double is stored as a 64 bit floating point
+            typeof(long),     // 64 bit signed integer
+            typeof(int),      // 32 bit signed integer
+            typeof(bool),     // Process booleans before strings
+            typeof(string),   // If it's not anything else, it can be a string.
+        };
 
         internal static int CompareUsingMostPreciseType(object a, object b, bool ignoreCase)
         {
@@ -21,6 +29,10 @@ namespace Expressive.Helpers
 
         private static Type GetMostPreciseType(Type a, Type b)
         {
+            if (a == b)
+            {
+                return a; // If they're the same type, just return one of them.
+            }
             foreach (var t in Comparison.CommonTypes)
             {
                 if (a == t || b == t)
