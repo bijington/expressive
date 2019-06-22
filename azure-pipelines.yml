@@ -18,16 +18,26 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
+# Restore packages
+- script: dotnet restore
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration Release' # Update this to match your need
+
 # NuGet
 # Restore, pack, or push NuGet packages, or run a NuGet command. Supports NuGet.org and authenticated feeds like Package Management and MyGet. Uses NuGet.exe and works with .NET Framework apps. For .NET Core and .NET Standard apps, use the .NET Core task.
-- task: NuGetCommand@2
-  inputs:
-    command: 'restore' 
-    solution: 'Source\CSharp\Expressive\Expressive.sln'
+#- task: NuGetCommand@2
+#    command: 'restore' 
+#  inputs:
+#    solution: 'Source\CSharp\Expressive\Expressive.sln'
 
-- task: VSBuild@1
-  inputs:
-    solution: 'Source\CSharp\Expressive\Expressive.sln' 
+#- task: VSBuild@1
+#  inputs:
+#    solution: 'Source\CSharp\Expressive\Expressive.sln' 
     #vsVersion: 'latest' # Optional. Options: latest, 15.0, 14.0, 12.0, 11.0
     #msbuildArgs: # Optional
     #platform: # Optional
