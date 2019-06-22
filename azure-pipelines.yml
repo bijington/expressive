@@ -25,7 +25,7 @@ steps:
   displayName: Build
   inputs:
     command: build
-    projects: '**/*.csproj'
+    projects: 'Source\CSharp\Expressive\**/*.csproj'
     arguments: '--configuration Release' # Update this to match your need
 
 # NuGet
