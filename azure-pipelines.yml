@@ -10,44 +10,11 @@ pool:
   vmImage: 'vs2017-win2016'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
-# Restore packages
-- task: DotNetCoreCLI@2
-  inputs:
-    command: restore
-    projects: 'Source\CSharp\Expressive\**/*.csproj'
-
-#- task: DotNetCoreCLI@2
-#  displayName: Build
-#  inputs:
-#    command: build
-#    projects: 'Source\CSharp\Expressive\**/*.csproj'
-#    arguments: '--configuration Release' # Update this to match your need
-
-# NuGet
-# Restore, pack, or push NuGet packages, or run a NuGet command. Supports NuGet.org and authenticated feeds like Package Management and MyGet. Uses NuGet.exe and works with .NET Framework apps. For .NET Core and .NET Standard apps, use the .NET Core task.
-#- task: NuGetCommand@2
-#    command: 'restore' 
-#  inputs:
-#    solution: 'Source\CSharp\Expressive\Expressive.sln'
-
-- task: VSBuild@1
-  inputs:
-    solution: 'Source\CSharp\Expressive\Expressive.sln' 
-    #vsVersion: 'latest' # Optional. Options: latest, 15.0, 14.0, 12.0, 11.0
-    #msbuildArgs: # Optional
-    #platform: # Optional
-    #configuration: # Optional
-    #clean: false # Optional
-    #maximumCpuCount: false # Optional
-    #restoreNugetPackages: false # Optional
-    #msbuildArchitecture: 'x86' # Optional. Options: x86, x64
-    #logProjectEvents: true # Optional
-    #createLogFile: false # Optional
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: '# Write your powershell commands here.
+        
+        dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
+        
+        C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe .\Source\CSharp\Expressive\Expressive\Expressive.csproj /t:Build /p:Configuration=Release
