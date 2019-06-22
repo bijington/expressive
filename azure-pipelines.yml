@@ -19,7 +19,10 @@ steps:
   displayName: 'Run a multi-line script'
 
 # Restore packages
-- script: dotnet restore
+- task: DotNetCoreCLI@2
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
 
 #- task: DotNetCoreCLI@2
 #  displayName: Build
