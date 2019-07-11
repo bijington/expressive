@@ -600,18 +600,26 @@ namespace Expressive
             int index = startIndex;
             bool foundEndingQuote = false;
             var character = expression[index];
-            var previousCharacter = char.MinValue;
+            bool isEscape = false;
 
             while (index < expression.Length && !foundEndingQuote)
             {
                 if (index != startIndex &&
                     character == quoteCharacter &&
-                    previousCharacter != '\\') // Make sure the escape character wasn't previously used.
+                    !isEscape) // Make sure the escape character wasn't previously used.
                 {
                     foundEndingQuote = true;
                 }
 
-                previousCharacter = character;
+                if (isEscape && (character == '\"' || character == '\\'))
+                {
+                    isEscape = false;
+                }
+                else if (character == '\\' && !isEscape)
+                {
+                    isEscape = true;
+                }
+
                 index++;
 
                 if (index == expression.Length)
