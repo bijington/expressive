@@ -602,6 +602,8 @@ namespace Expressive
             var character = expression[index];
             bool isEscape = false;
 
+            char[] escapableCharacters = new char[] { '\\', '"', '\'', 't', 'n', 'r', 'b', 'f', '0' };
+
             while (index < expression.Length && !foundEndingQuote)
             {
                 if (index != startIndex &&
@@ -611,7 +613,7 @@ namespace Expressive
                     foundEndingQuote = true;
                 }
 
-                if (isEscape && (character == '\"' || character == '\\'))
+                if (isEscape && escapableCharacters.Contains(character))
                 {
                     isEscape = false;
                 }
