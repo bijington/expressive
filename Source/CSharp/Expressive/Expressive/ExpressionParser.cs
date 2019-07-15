@@ -1,4 +1,4 @@
-﻿using Expressive.Exceptions;
+using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
 using Expressive.Functions.Conversion;
@@ -490,6 +490,14 @@ namespace Expressive
                                 buffer[outIdx++] = '\'';
                                 i++;
                                 continue;
+                            case '\"':
+                                buffer[outIdx++] = '\"';
+                                i++;
+                                continue;
+                            case '\\':
+                                buffer[outIdx++] = '\\';
+                                i++;
+                                continue;
                         }
                     }
                 }
@@ -602,7 +610,7 @@ namespace Expressive
             var character = expression[index];
             bool isEscape = false;
 
-            char[] escapableCharacters = new char[] { '\\', '"', '\'', 't', 'n', 'r', 'b', 'f', '0' };
+            char[] escapableCharacters = new char[] { '\\', '"', '\'', 't', 'n', 'r' };
 
             while (index < expression.Length && !foundEndingQuote)
             {
