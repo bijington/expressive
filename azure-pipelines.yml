@@ -16,10 +16,20 @@ steps:
     restoreSolution: '**/*.sln'
     feedsToUse: 'select'
 
-- task: VSBuild@1
+- task: PowerShell@2
   inputs:
-    solution: '**\*.sln'
-    configuration: 'Release'
+    targetType: 'inline'
+    script: |
+      dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
+      
+      dotnet build .\Source\CSharp\Expressive\Expressive\Expressive.csproj -c release
+      
+      & "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe" -restore .\Source\CSharp\Expressive\Expressive\Expressive.csproj /t:Build /p:Configuration=Release
+
+# - task: VSBuild@1
+#   inputs:
+#     solution: '**\*.sln'
+#     configuration: 'Release'
 
 
   # - task: PowerShell@2
