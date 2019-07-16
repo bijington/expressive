@@ -31,16 +31,17 @@ steps:
     configuration: 'Release'
 
 - task: VSTest@2
+  displayName: "Unit testing"
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
-      **\*test*.dll
+      **\Expressive.Tests*.dll
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
 
 - task: ArchiveFiles@2
-  displayName: "Create Arvhice"
+  displayName: "Create Archive"
   inputs:
     rootFolderOrFile: '$(Build.BinariesDirectory)'
     includeRootFolder: true
