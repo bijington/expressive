@@ -1,4 +1,4 @@
-﻿using Expressive.Exceptions;
+using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
 using Expressive.Functions.Conversion;
@@ -490,6 +490,14 @@ namespace Expressive
                                 buffer[outIdx++] = '\'';
                                 i++;
                                 continue;
+                            case '\"':
+                                buffer[outIdx++] = '\"';
+                                i++;
+                                continue;
+                            case '\\':
+                                buffer[outIdx++] = '\\';
+                                i++;
+                                continue;
                         }
                     }
                 }
@@ -600,18 +608,28 @@ namespace Expressive
             int index = startIndex;
             bool foundEndingQuote = false;
             var character = expression[index];
-            var previousCharacter = char.MinValue;
+            bool isEscape = false;
+
+            char[] escapableCharacters = new char[] { '\\', '"', '\'', 't', 'n', 'r' };
 
             while (index < expression.Length && !foundEndingQuote)
             {
                 if (index != startIndex &&
                     character == quoteCharacter &&
-                    previousCharacter != '\\') // Make sure the escape character wasn't previously used.
+                    !isEscape) // Make sure the escape character wasn't previously used.
                 {
                     foundEndingQuote = true;
                 }
 
-                previousCharacter = character;
+                if (isEscape && escapableCharacters.Contains(character))
+                {
+                    isEscape = false;
+                }
+                else if (character == '\\' && !isEscape)
+                {
+                    isEscape = true;
+                }
+
                 index++;
 
                 if (index == expression.Length)
