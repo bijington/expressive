@@ -37,7 +37,7 @@ steps:
 - task: MSBuild@1
   displayName: "NET 4.0 Build"
   inputs:
-    solution: '\Source\CSharp\Expressive\Expressive\Expressive.csproj'
+    solution: '**\Expressive.csproj'
     configuration: 'Release'
 
 # - task: VSBuild@1
