@@ -23,16 +23,6 @@ steps:
     targetType: 'inline'
     script: |
       dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
-      
-      #dotnet build .\Source\CSharp\Expressive\Expressive\Expressive.csproj -c release
-      
-      #& "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe" -restore .\Source\CSharp\Expressive\Expressive\Expressive.csproj /t:Build /p:Configuration=Release
-
-# - task: MSBuild@1
-#   inputs:
-#     solution: '**/*.sln'
-#     msbuildVersion: '14.0'
-#     configuration: 'Release'
 
 - task: MSBuild@1
   displayName: "NET 4.0 Build"
@@ -40,16 +30,20 @@ steps:
     solution: '**\Expressive.csproj'
     configuration: 'Release'
 
-# - task: VSBuild@1
-#   inputs:
-#     solution: '**\*.sln'
-#     configuration: 'Release'
+- task: VSTest@2
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*test*.dll
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: '$(System.DefaultWorkingDirectory)'
 
-
-  # - task: PowerShell@2
-  #   inputs:
-  #     targetType: 'inline'
-  #     script: 
-  #       dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
-        
-  #       C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe .\Source\CSharp\Expressive\Expressive\Expressive.csproj /t:Build /p:Configuration=Release
+- task: ArchiveFiles@2
+  displayName: "Create Arvhice"
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
