@@ -4,36 +4,20 @@ namespace Expressive.Expressions
 {
     internal class ConstantValueExpression : IExpression
     {
-        private readonly ConstantValueExpressionType _expressionType;
-        private readonly object _value;
+        private readonly object value;
 
-        internal ConstantValueExpression(ConstantValueExpressionType type, object value)
+        internal ConstantValueExpression(object value)
         {
-            _expressionType = type;
-            _value = value;
+            this.value = value;
         }
 
         #region IExpression Members
 
         public object Evaluate(IDictionary<string, object> variables)
         {
-            return _value;
+            return this.value;
         }
 
         #endregion
-    }
-
-    internal enum ConstantValueExpressionType
-    {
-        Unknown,
-        Integer,
-        String,
-        DateTime,
-        Float,
-        Boolean,
-        Null,
-        Double,
-        Decimal,
-        Long,
     }
 }

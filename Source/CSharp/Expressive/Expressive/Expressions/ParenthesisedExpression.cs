@@ -5,23 +5,23 @@ namespace Expressive.Expressions
 {
     internal class ParenthesisedExpression : IExpression
     {
-        private readonly IExpression _innerExpression;
+        private readonly IExpression innerExpression;
 
         internal ParenthesisedExpression(IExpression innerExpression)
         {
-            _innerExpression = innerExpression;
+            this.innerExpression = innerExpression;
         }
 
         #region IExpression Members
 
         public object Evaluate(IDictionary<string, object> variables)
         {
-            if (_innerExpression == null)
+            if (this.innerExpression == null)
             {
                 throw new MissingParticipantException("Missing contents inside ().");
             }
 
-            return _innerExpression.Evaluate(variables);
+            return this.innerExpression.Evaluate(variables);
         }
 
         #endregion

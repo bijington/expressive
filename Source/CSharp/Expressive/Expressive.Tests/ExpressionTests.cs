@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 
 namespace Expressive.Tests
@@ -895,7 +896,7 @@ namespace Expressive.Tests
             Assert.AreEqual(6, new Expression("2+2*2").Evaluate());
 
             Assert.AreEqual(9d, new Expression("1 + 2 + 3 * 4 / 2").Evaluate());
-            Assert.AreEqual(13.5M, new Expression("18.0/2.0/2.0*3.0").Evaluate());
+            Assert.AreEqual(13.5d, new Expression("18.0/2.0/2.0*3.0").Evaluate());
         }
 
         [TestMethod]
@@ -1082,10 +1083,10 @@ namespace Expressive.Tests
             Assert.AreEqual(9.5M, (decimal)expression.Evaluate(arguments));
 
             expression = new Expression("[myDouble]/2.0");
-            Assert.AreEqual(2.0M, (decimal)expression.Evaluate(arguments));
+            Assert.AreEqual(2.0d, (double)expression.Evaluate(arguments));
 
             expression = new Expression("[myFloat]/2.0");
-            Assert.AreEqual(2.0M, (decimal)expression.Evaluate(arguments));
+            Assert.AreEqual(2.0f, (float)expression.Evaluate(arguments));
         }
 
         [TestMethod]
@@ -1110,5 +1111,49 @@ namespace Expressive.Tests
 
             Assert.AreEqual(true, new Expression("[DischargeStatus1_Value] > 00 AND[DischargeStatus2_Value] = 00", ExpressiveOptions.IgnoreCase).Evaluate(arguments));
         }
+
+        [TestMethod]
+        public void ShouldIgnoreCurrentCulture()
+        {
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
+
+            var invariantExpression = new Expression("1 + 2.34", ExpressiveOptions.None);
+            Assert.AreEqual(3.34M, invariantExpression.Evaluate());
+
+            Thread.CurrentThread.CurrentCulture = currentCulture;
+        }
+
+        #region Actual unit tests for the Expression class to remain.
+
+        [TestMethod]
+        public void ShouldEvaluateT()
+        {
+            var expression = new Expression("1 + 2.0 + 3 * 4.0");
+
+            Assert.AreEqual(15, expression.Evaluate<int>());
+        }
+
+        [TestMethod]
+        public void ShouldRethrowOnInvalidEvaluateT()
+        {
+            var expression = new Expression("1 + 2.0 + 3 * 4.0");
+
+            try
+            {
+                expression.Evaluate<DateTime>();
+            }
+            catch (ExpressiveException e)
+            {
+                if (e.InnerException is InvalidCastException)
+                {
+                    return;
+                }
+            }
+
+            Assert.Fail("Invalid handling of exceptions.");
+        }
+
+        #endregion
     }
 }

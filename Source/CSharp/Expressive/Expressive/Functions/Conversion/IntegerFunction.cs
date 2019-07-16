@@ -7,13 +7,13 @@ namespace Expressive.Functions.Conversion
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Integer"; } }
+        public override string Name => "Integer";
 
         public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
         {
             this.ValidateParameterCount(parameters, 1, 1);
 
-            var objectToConvert = parameters[0].Evaluate(Variables);
+            var objectToConvert = parameters[0].Evaluate(this.Variables);
 
             // No point converting if there is nothing to convert.
             if (objectToConvert == null) return null;

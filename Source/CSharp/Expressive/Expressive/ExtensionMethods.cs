@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Expressive
 {
@@ -16,10 +17,9 @@ namespace Expressive
                 string.Equals(source, "+", StringComparison.Ordinal);
         }
 
-        internal static bool IsNumeric(this string source)
+        internal static bool IsNumeric(this string source, CultureInfo cultureInfo)
         {
-            double test;
-            return double.TryParse(source, out test);
+            return double.TryParse(source, NumberStyles.Any, cultureInfo, out _);
         }
 
         internal static T PeekOrDefault<T>(this Queue<T> queue)

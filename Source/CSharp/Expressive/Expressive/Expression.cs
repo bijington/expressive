@@ -1,4 +1,4 @@
-﻿//Copyright(c) 2016 Shaun Lawrence
+﻿//Copyright(c) 2019 Shaun Lawrence
 
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -12,7 +12,7 @@
 
 //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE
 //AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -35,11 +35,11 @@ namespace Expressive
     {
         #region Fields
 
-        private IExpression _compiledExpression;
-        private readonly ExpressiveOptions _options;
-        private readonly string _originalExpression;
-        private readonly ExpressionParser _parser;
-        private string[] _variables;
+        private IExpression compiledExpression;
+        private readonly ExpressiveOptions options;
+        private readonly string originalExpression;
+        private readonly ExpressionParser parser;
+        private string[] referencedVariables;
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace Expressive
             {
                 this.CompileExpression();
 
-                return _variables;
+                return this.referencedVariables;
             }
         }
 
@@ -63,24 +63,16 @@ namespace Expressive
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Expression"/> class with no options.
-        /// </summary>
-        /// <param name="expression">The expression to be evaluated.</param>
-        public Expression(string expression) : this (expression, ExpressiveOptions.None)
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Expression"/> class with the specified options.
         /// </summary>
         /// <param name="expression">The expression to be evaluated.</param>
         /// <param name="options">The options to use when evaluating.</param>
-        public Expression(string expression, ExpressiveOptions options)
+        public Expression(string expression, ExpressiveOptions options = ExpressiveOptions.None)
         {
-            _originalExpression = expression;
-            _options = options;
+            this.originalExpression = expression;
+            this.options = options;
 
-            _parser = new ExpressionParser(_options);
+            this.parser = new ExpressionParser(this.options);
         }
 
         #endregion
@@ -88,38 +80,24 @@ namespace Expressive
         #region Public Methods
 
         /// <summary>
-        /// Evaluates the expression and returns the result.
-        /// </summary>
-        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
-        /// <returns>The result of the expression.</returns>
-        public object Evaluate()
-        {
-            return Evaluate(null);
-        }
-
-        /// <summary>
         /// Evaluates the expression using the supplied variables and returns the result.
         /// </summary>
         /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
         /// <param name="variables">The variables to be used in the evaluation.</param>
         /// <returns>The result of the expression.</returns>
-        public object Evaluate(IDictionary<string, object> variables)
+        public object Evaluate(IDictionary<string, object> variables = null)
         {
             try
             {
-                object result = null;
-
                 this.CompileExpression();
 
                 if (variables != null &&
-                    _options.HasFlag(ExpressiveOptions.IgnoreCase))
+                    this.options.HasFlag(ExpressiveOptions.IgnoreCase))
                 {
                     variables = new Dictionary<string, object>(variables, StringComparer.OrdinalIgnoreCase);
                 }
 
-                result = _compiledExpression?.Evaluate(variables);
-
-                return result;
+                return this.compiledExpression?.Evaluate(variables);
             }
             catch (Exception ex)
             {
@@ -128,13 +106,25 @@ namespace Expressive
         }
 
         /// <summary>
-        /// Evaluates the expression asynchronously and returns the result via the callback.
+        /// Evaluates the expression using the supplied variables and returns the result.
         /// </summary>
-        /// <exception cref="System.ArgumentNullException">Thrown if the callback is not supplied.</exception>
-        /// <param name="callback">Provides the result once the evaluation has completed.</param>
-        public void EvaluateAsync(Action<string, object> callback)
+        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
+        /// <param name="variables">The variables to be used in the evaluation.</param>
+        /// <returns>The result of the expression.</returns>
+        public T Evaluate<T>(IDictionary<string, object> variables = null)
         {
-            EvaluateAsync(callback, null);
+            try
+            {
+                return (T)this.Evaluate(variables);
+            }
+            catch (ExpressiveException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ExpressiveException(ex);
+            }
         }
 
         /// <summary>
@@ -143,11 +133,22 @@ namespace Expressive
         /// <exception cref="System.ArgumentNullException">Thrown if the callback is not supplied.</exception>
         /// <param name="callback">Provides the result once the evaluation has completed.</param>
         /// <param name="variables">The variables to be used in the evaluation.</param>
-        public void EvaluateAsync(Action<string, object> callback, IDictionary<string, object> variables)
+        public void EvaluateAsync(Action<string, object> callback, IDictionary<string, object> variables = null)
+        {
+            this.EvaluateAsync<object>(callback, variables);
+        }
+
+        /// <summary>
+        /// Evaluates the expression using the supplied variables asynchronously and returns the result via the callback.
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">Thrown if the callback is not supplied.</exception>
+        /// <param name="callback">Provides the result once the evaluation has completed.</param>
+        /// <param name="variables">The variables to be used in the evaluation.</param>
+        public void EvaluateAsync<T>(Action<string, T> callback, IDictionary<string, object> variables = null)
         {
             if (callback == null)
             {
-                throw new ArgumentNullException("callback");
+                throw new ArgumentNullException(nameof(callback));
             }
 
 #if NETSTANDARD1_4
@@ -156,19 +157,19 @@ namespace Expressive
             ThreadPool.QueueUserWorkItem((o) =>
 #endif
             {
-                object result = null;
+                var result = default(T);
                 string message = null;
 
                 try
                 {
-                    result = this.Evaluate(variables);
+                    result = this.Evaluate<T>(variables);
                 }
-                catch (Exception ex)
+                catch (ExpressiveException ex)
                 {
                     message = ex.Message;
                 }
 
-                callback?.Invoke(message, result);
+                callback.Invoke(message, result);
             });
         }
 
@@ -180,7 +181,7 @@ namespace Expressive
         /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
         public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
         {
-            _parser.RegisterFunction(functionName, function);
+            this.parser.RegisterFunction(functionName, function);
         }
 
         /// <summary>
@@ -190,7 +191,7 @@ namespace Expressive
         /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
         public void RegisterFunction(IFunction function)
         {
-            _parser.RegisterFunction(function);
+            this.parser.RegisterFunction(function);
         }
 
         #endregion
@@ -200,14 +201,14 @@ namespace Expressive
         private void CompileExpression()
         {
             // Cache the expression to save us having to recompile.
-            if (_compiledExpression == null ||
-                _options.HasFlag(ExpressiveOptions.NoCache))
+            if (this.compiledExpression == null ||
+                this.options.HasFlag(ExpressiveOptions.NoCache))
             {
                 var variables = new List<string>();
 
-                _compiledExpression = _parser.CompileExpression(_originalExpression, variables);
+                this.compiledExpression = this.parser.CompileExpression(this.originalExpression, variables);
 
-                _variables = variables.ToArray();
+                this.referencedVariables = variables.ToArray();
             }
         }
 

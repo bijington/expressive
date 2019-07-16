@@ -2,11 +2,11 @@
 {
     internal sealed class Token
     {
-        internal string CurrentToken { get; private set; }
+        internal string CurrentToken { get; }
 
-        internal int Length { get; private set; }
+        internal int Length { get; }
 
-        internal int StartIndex { get; private set; }
+        internal int StartIndex { get; }
 
         public Token(string currentToken, int startIndex)
         {
