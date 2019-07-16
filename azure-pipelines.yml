@@ -35,7 +35,8 @@ steps:
   inputs:
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
-      **\Expressive.Tests*.dll
+      **\Expressive.Tests.dll
+      **\Expressive.Tests.Standard.dll
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
