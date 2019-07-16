@@ -10,10 +10,16 @@ pool:
   vmImage: 'vs2017-win2016'
 
 steps:
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: 
-        dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
+- task: VSBuild@1
+  inputs:
+    solution: '**\*.sln'
+    configuration: 'Release'
+
+
+  # - task: PowerShell@2
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: 
+  #       dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
         
-        C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe .\Source\CSharp\Expressive\Expressive\Expressive.csproj /t:Build /p:Configuration=Release
+  #       C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe .\Source\CSharp\Expressive\Expressive\Expressive.csproj /t:Build /p:Configuration=Release
