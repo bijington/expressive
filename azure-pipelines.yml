@@ -11,12 +11,14 @@ pool:
 
 steps:
 - task: NuGetCommand@2
+  displayName: "NuGet Restore"
   inputs:
     command: 'restore'
     restoreSolution: '**/*.sln'
     feedsToUse: 'select'
 
 - task: PowerShell@2
+  displayName: "NET Standard Build"
   inputs:
     targetType: 'inline'
     script: |
@@ -26,10 +28,16 @@ steps:
       
       #& "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe" -restore .\Source\CSharp\Expressive\Expressive\Expressive.csproj /t:Build /p:Configuration=Release
 
+# - task: MSBuild@1
+#   inputs:
+#     solution: '**/*.sln'
+#     msbuildVersion: '14.0'
+#     configuration: 'Release'
+
 - task: MSBuild@1
+  displayName: "NET 4.0 Build"
   inputs:
-    solution: '**/*.sln'
-    msbuildVersion: '14.0'
+    solution: '\Source\CSharp\Expressive\Expressive\Expressive.csproj'
     configuration: 'Release'
 
 # - task: VSBuild@1
