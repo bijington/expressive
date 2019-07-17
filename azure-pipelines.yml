@@ -30,10 +30,10 @@ steps:
     solution: '**\Expressive.csproj'
     configuration: 'Release'
 
-- task: BatchScript@1
-  displayName: "Code coverage"
-  inputs:
-    filename: '.\Source\CSharp\Expressive\coverage.bat'
+# - task: BatchScript@1
+#   displayName: "Code coverage"
+#   inputs:
+#     filename: '.\Source\CSharp\Expressive\coverage.bat'
 
 # - task: VSTest@2
 #   displayName: "Unit testing"
@@ -45,6 +45,12 @@ steps:
 #       !**\*TestAdapter.dll
 #       !**\obj\**
 #     searchFolder: '$(System.DefaultWorkingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '.\Source\CSharp\Expressive\bin'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
 - task: ArchiveFiles@2
   displayName: "Create Archive"
