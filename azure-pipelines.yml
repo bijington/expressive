@@ -30,16 +30,21 @@ steps:
     solution: '**\Expressive.csproj'
     configuration: 'Release'
 
-- task: VSTest@2
-  displayName: "Unit testing"
+- task: BatchScript@1
+  displayName: "Code coverage"
   inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: |
-      **\Expressive.Tests.dll
-      **\Expressive.Tests.Standard.dll
-      !**\*TestAdapter.dll
-      !**\obj\**
-    searchFolder: '$(System.DefaultWorkingDirectory)'
+    filename: '.\Source\CSharp\Expressive\coverage.bat'
+
+# - task: VSTest@2
+#   displayName: "Unit testing"
+#   inputs:
+#     testSelector: 'testAssemblies'
+#     testAssemblyVer2: |
+#       **\Expressive.Tests.dll
+#       **\Expressive.Tests.Standard.dll
+#       !**\*TestAdapter.dll
+#       !**\obj\**
+#     searchFolder: '$(System.DefaultWorkingDirectory)'
 
 - task: ArchiveFiles@2
   displayName: "Create Archive"
