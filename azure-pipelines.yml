@@ -1,0 +1,53 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+steps:
+- task: NuGetCommand@2
+  displayName: "NuGet Restore"
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+
+- task: PowerShell@2
+  displayName: "NET Standard Build"
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
+
+- task: MSBuild@1
+  displayName: "NET 4.0 Build"
+  inputs:
+    solution: '**\Expressive.csproj'
+    configuration: 'Release'
+
+# - task: BatchScript@1
+#   displayName: "Code coverage"
+#   inputs:
+#     filename: '.\Source\CSharp\Expressive\coverage.bat'
+
+# - task: VSTest@2
+#   displayName: "Unit testing"
+#   inputs:
+#     testSelector: 'testAssemblies'
+#     testAssemblyVer2: |
+#       **\Expressive.Tests.dll
+#       **\Expressive.Tests.Standard.dll
+#       !**\*TestAdapter.dll
+#       !**\obj\**
+#     searchFolder: '$(System.DefaultWorkingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '.\Source\CSharp\Expressive\bin'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

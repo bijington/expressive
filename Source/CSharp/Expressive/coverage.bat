@@ -22,7 +22,7 @@ if %errorlevel% equ 0 (
 exit /b %errorlevel%
  
 :RunOpenCoverUnitTestMetrics
-.\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -target:"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\mstest.exe" -register:user -targetargs:"/testcontainer:\"Expressive.Tests\bin\Debug\Expressive.Tests.dll\" /resultsfile:\".\GeneratedReports\results.trx\"" -filter:"+[Expressive*]* -[Expressive.Tests]*" -mergebyhash -skipautoprops -output:".\GeneratedReports\Expressive.xml"
+.\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -target:"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\mstest.exe" -register:user -targetargs:"/testcontainer:\"Expressive.Tests\bin\Debug\Expressive.Tests.dll\" /resultsfile:\".\GeneratedReports\results.trx\"" -filter:"+[Expressive*]* -[Expressive.Tests]*" -mergebyhash -skipautoprops -output:".\GeneratedReports\Expressive.xml"
 
 exit /b %errorlevel%
 
