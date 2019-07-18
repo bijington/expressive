@@ -51,12 +51,3 @@ steps:
     PathtoPublish: '.\Source\CSharp\Expressive\bin'
     ArtifactName: 'drop'
     publishLocation: 'Container'
-
-- task: ArchiveFiles@2
-  displayName: "Create Archive"
-  inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
