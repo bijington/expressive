@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
@@ -26,6 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Expressive\Context.cs" Link="Context.cs" />
     <Compile Include="..\Expressive\Exceptions\ExpressiveException.cs" Link="Exceptions\ExpressiveException.cs" />
     <Compile Include="..\Expressive\Exceptions\FunctionNameAlreadyRegisteredException.cs" Link="Exceptions\FunctionNameAlreadyRegisteredException.cs" />
     <Compile Include="..\Expressive\Exceptions\MissingParticipantException.cs" Link="Exceptions\MissingParticipantException.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="..\Expressive\Operators\Relational\LessThanOrEqualOperator.cs" Link="Operators\Relational\LessThanOrEqualOperator.cs" />
     <Compile Include="..\Expressive\Operators\Relational\NotEqualOperator.cs" Link="Operators\Relational\NotEqualOperator.cs" />
     <Compile Include="..\Expressive\Token.cs" Link="Token.cs" />
+    <Compile Include="..\Expressive\Tokenisation\Tokeniser.cs" Link="Tokenisation\Tokeniser.cs" />
   </ItemGroup>
 
   <ItemGroup>
