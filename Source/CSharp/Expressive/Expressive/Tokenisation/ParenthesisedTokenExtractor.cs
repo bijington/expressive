@@ -37,22 +37,23 @@ namespace Expressive.Tokenisation
             return new Token(extracted, currentIndex);
         }
 
-        private static string GetString(string expression, int startIndex, char quoteCharacter)
+        private static string GetString(string expression, int startIndex, char expectedEndingCharacter)
         {
             var index = startIndex;
-            var foundEndingQuote = false;
+            var foundEndingCharacter = false;
             var character = expression[index];
             var isEscape = false;
 
+            // TODO: aim to remove this.
             var escapableCharacters = new List<char> { '\\', '"', '\'', 't', 'n', 'r' };
 
-            while (index < expression.Length && !foundEndingQuote)
+            while (index < expression.Length && !foundEndingCharacter)
             {
                 if (index != startIndex &&
-                    character == quoteCharacter &&
+                    character == expectedEndingCharacter &&
                     !isEscape) // Make sure the escape character wasn't previously used.
                 {
-                    foundEndingQuote = true;
+                    foundEndingCharacter = true;
                 }
 
                 if (isEscape && escapableCharacters.Contains(character))
@@ -74,12 +75,7 @@ namespace Expressive.Tokenisation
                 character = expression[index];
             }
 
-            if (foundEndingQuote)
-            {
-                return expression.Substring(startIndex, index - startIndex);
-            }
-
-            return null;
+            return foundEndingCharacter ? expression.Substring(startIndex, index - startIndex) : null;
         }
     }
 }

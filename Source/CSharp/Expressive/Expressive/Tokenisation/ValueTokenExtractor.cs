@@ -24,8 +24,8 @@ namespace Expressive.Tokenisation
 
             var initialToken = this.value.First();
 
-            if (character == initialToken &&
-                CanExtractValue(expression, expressionLength, currentIndex, this.value))
+            if (string.Equals(character.ToString(), initialToken.ToString(), context.StringComparison) &&
+                CanExtractValue(expression, expressionLength, currentIndex, this.value, context))
             {
                 return new Token(this.value, currentIndex);
             }
@@ -33,12 +33,12 @@ namespace Expressive.Tokenisation
             return null;
         }
 
-        private static bool CanExtractValue(string expression, int expressionLength, int index, string value)
+        private static bool CanExtractValue(string expression, int expressionLength, int index, string expectedValue, Context context)
         {
-            return string.Equals(value, ExtractValue(expression, expressionLength, index, value), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(expectedValue, ExtractValue(expression, expressionLength, index, expectedValue, context), context.StringComparison);
         }
 
-        private static string ExtractValue(string expression, int expressionLength, int index, string expectedValue)
+        private static string ExtractValue(string expression, int expressionLength, int index, string expectedValue, Context context)
         {
             string result = null;
             var valueLength = expectedValue.Length;
@@ -53,7 +53,7 @@ namespace Expressive.Tokenisation
                     isValidValue = !char.IsLetterOrDigit(expression[index + valueLength]);
                 }
 
-                if (string.Equals(valueString, expectedValue, StringComparison.OrdinalIgnoreCase) &&
+                if (string.Equals(valueString, expectedValue, context.StringComparison) &&
                     isValidValue)
                 {
                     result = valueString;

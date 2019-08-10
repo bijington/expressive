@@ -30,24 +30,26 @@ namespace Expressive
         //private const char DecimalSeparator = '.';
         internal const char ParameterSeparator = ',';
 
-        private readonly ExpressiveOptions options;
         private readonly IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> registeredFunctions;
         private readonly IDictionary<string, IOperator> registeredOperators;
-        private readonly StringComparer stringComparer;
 
         internal ExpressiveOptions Options { get; }
 
         internal CultureInfo CurrentCulture { get; }
-
-        internal StringComparison StringComparison => this.options.HasFlag(ExpressiveOptions.IgnoreCase)
-            ? StringComparison.OrdinalIgnoreCase
-            : StringComparison.Ordinal;
 
         internal char DecimalSeparator { get; }
 
         internal string[] FunctionNames => this.registeredFunctions.Keys.OrderByDescending(k => k.Length).ToArray();
 
         internal string[] OperatorNames => this.registeredOperators.Keys.OrderByDescending(k => k.Length).ToArray();
+
+        internal StringComparer StringComparer => Options.HasFlag(ExpressiveOptions.IgnoreCase)
+            ? StringComparer.OrdinalIgnoreCase
+            : StringComparer.Ordinal;
+
+        internal StringComparison StringComparison => Options.HasFlag(ExpressiveOptions.IgnoreCase)
+            ? StringComparison.OrdinalIgnoreCase
+            : StringComparison.Ordinal;
 
         internal Context(ExpressiveOptions options)
         {
@@ -56,12 +58,9 @@ namespace Expressive
             // For now we will ignore any specific cultures but keeping it in a single place to simplify changing later if required.
             this.CurrentCulture = CultureInfo.InvariantCulture;
 
-            // Initialise the string comparer only once.
-            this.stringComparer = this.options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal;
-
             DecimalSeparator = Convert.ToChar(this.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-            this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(this.stringComparer);
-            this.registeredOperators = new Dictionary<string, IOperator>(this.stringComparer);
+            this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(StringComparer);
+            this.registeredOperators = new Dictionary<string, IOperator>(StringComparer);
 
             #region Operators
             // TODO: Do we allow for turning off operators?
@@ -184,7 +183,7 @@ namespace Expressive
             {
                 function.Variables = a;
 
-                return function.Evaluate(p, this.options);
+                return function.Evaluate(p, Options);
             });
         }
 
