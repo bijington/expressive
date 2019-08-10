@@ -1,25 +1,10 @@
 using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
-using Expressive.Functions.Conversion;
-using Expressive.Functions.Date;
-using Expressive.Functions.Logical;
-using Expressive.Functions.Mathematical;
-using Expressive.Functions.Statistical;
-using Expressive.Functions.String;
 using Expressive.Operators;
-using Expressive.Operators.Additive;
-using Expressive.Operators.Bitwise;
-using Expressive.Operators.Conditional;
-using Expressive.Operators.Grouping;
-using Expressive.Operators.Logical;
-using Expressive.Operators.Multiplicative;
-using Expressive.Operators.Relational;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using Expressive.Functions.Relational;
 using Expressive.Tokenisation;
 
 namespace Expressive
@@ -201,46 +186,46 @@ namespace Expressive
 
                     leftHandSide = new FunctionExpression(currentToken.CurrentToken, function, expressions.ToArray());
                 }
-                else if (currentToken.CurrentToken.IsNumeric(this.currentCulture)) // Or a number
-                {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                //else if (currentToken.CurrentToken.IsNumeric(this.currentCulture)) // Or a number
+                //{
+                //    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
-                    tokens.Dequeue();
+                //    tokens.Dequeue();
 
-                    if (int.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var intValue))
-                    {
-                        leftHandSide = new ConstantValueExpression(intValue);
-                    }
-                    else if (decimal.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var decimalValue))
-                    {
-                        leftHandSide = new ConstantValueExpression(decimalValue);
-                    }
-                    else if (double.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var doubleValue))
-                    {
-                        leftHandSide = new ConstantValueExpression(doubleValue);
-                    }
-                    else if (float.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var floatValue))
-                    {
-                        leftHandSide = new ConstantValueExpression(floatValue);
-                    }
-                    else if (long.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var longValue))
-                    {
-                        leftHandSide = new ConstantValueExpression(longValue);
-                    }
-                }
-                else if (currentToken.CurrentToken.StartsWith("[") && currentToken.CurrentToken.EndsWith("]")) // or a variable?
-                {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                //    if (int.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var intValue))
+                //    {
+                //        leftHandSide = new ConstantValueExpression(intValue);
+                //    }
+                //    else if (decimal.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var decimalValue))
+                //    {
+                //        leftHandSide = new ConstantValueExpression(decimalValue);
+                //    }
+                //    else if (double.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var doubleValue))
+                //    {
+                //        leftHandSide = new ConstantValueExpression(doubleValue);
+                //    }
+                //    else if (float.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var floatValue))
+                //    {
+                //        leftHandSide = new ConstantValueExpression(floatValue);
+                //    }
+                //    else if (long.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var longValue))
+                //    {
+                //        leftHandSide = new ConstantValueExpression(longValue);
+                //    }
+                //}
+                //else if (currentToken.CurrentToken.StartsWith("[") && currentToken.CurrentToken.EndsWith("]")) // or a variable?
+                //{
+                //    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
-                    tokens.Dequeue();
-                    var variableName = currentToken.CurrentToken.Replace("[", "").Replace("]", "");
-                    leftHandSide = new VariableExpression(variableName);
+                //    tokens.Dequeue();
+                //    var variableName = currentToken.CurrentToken.Replace("[", "").Replace("]", "");
+                //    leftHandSide = new VariableExpression(variableName);
 
-                    if (!variables.Contains(variableName, this.stringComparer))
-                    {
-                        variables.Add(variableName);
-                    }
-                }
+                //    if (!variables.Contains(variableName, this.stringComparer))
+                //    {
+                //        variables.Add(variableName);
+                //    }
+                //}
                 else if (string.Equals(currentToken.CurrentToken, "true", StringComparison.OrdinalIgnoreCase)) // or a boolean?
                 {
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);

@@ -39,6 +39,10 @@ namespace Expressive
 
         internal CultureInfo CurrentCulture { get; }
 
+        internal StringComparison StringComparison => this.options.HasFlag(ExpressiveOptions.IgnoreCase)
+            ? StringComparison.OrdinalIgnoreCase
+            : StringComparison.Ordinal;
+
         internal char DecimalSeparator { get; }
 
         internal string[] FunctionNames => this.registeredFunctions.Keys.OrderByDescending(k => k.Length).ToArray();

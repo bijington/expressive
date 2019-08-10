@@ -191,7 +191,12 @@
     <Compile Include="Operators\Logical\NotOperator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Token.cs" />
+    <Compile Include="Tokenisation\ITokenExtractor.cs" />
+    <Compile Include="Tokenisation\KeywordTokenExtractor.cs" />
+    <Compile Include="Tokenisation\NumericTokenExtractor.cs" />
+    <Compile Include="Tokenisation\ParenthesisedTokenExtractor.cs" />
     <Compile Include="Tokenisation\Tokeniser.cs" />
+    <Compile Include="Tokenisation\ValueTokenExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\ExpressiveStrongName.snk">

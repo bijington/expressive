@@ -159,7 +159,12 @@
     <Compile Include="..\Expressive\Operators\Relational\LessThanOrEqualOperator.cs" Link="Operators\Relational\LessThanOrEqualOperator.cs" />
     <Compile Include="..\Expressive\Operators\Relational\NotEqualOperator.cs" Link="Operators\Relational\NotEqualOperator.cs" />
     <Compile Include="..\Expressive\Token.cs" Link="Token.cs" />
+    <Compile Include="..\Expressive\Tokenisation\ITokenExtractor.cs" Link="Tokenisation\ITokenExtractor.cs" />
+    <Compile Include="..\Expressive\Tokenisation\KeywordTokenExtractor.cs" Link="Tokenisation\KeywordTokenExtractor.cs" />
+    <Compile Include="..\Expressive\Tokenisation\NumericTokenExtractor.cs" Link="Tokenisation\NumericTokenExtractor.cs" />
+    <Compile Include="..\Expressive\Tokenisation\ParenthesisedTokenExtractor.cs" Link="Tokenisation\ParenthesisedTokenExtractor.cs" />
     <Compile Include="..\Expressive\Tokenisation\Tokeniser.cs" Link="Tokenisation\Tokeniser.cs" />
+    <Compile Include="..\Expressive\Tokenisation\ValueTokenExtractor.cs" Link="Tokenisation\ValueTokenExtractor.cs" />
   </ItemGroup>
 
   <ItemGroup>
