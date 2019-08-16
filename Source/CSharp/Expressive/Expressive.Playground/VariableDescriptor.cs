@@ -49,6 +49,8 @@ namespace Expressive.Playground
                         return Convert.ToBoolean(_value);
                     case VariableType.Null:
                         return null;
+					case VariableType.Expression:
+						return new Expression(_value as string);
                     case VariableType.None:
                     default:
                         return null;
