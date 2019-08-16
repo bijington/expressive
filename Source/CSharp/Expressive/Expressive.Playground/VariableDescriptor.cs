@@ -64,7 +64,7 @@ namespace Expressive.Playground
             set
             {
                 this.SetField(ref _value, value);
-                
+
                 // Let's see if we can auto detect the type.
                 if (_type == VariableType.None)
                 {
@@ -159,5 +159,6 @@ namespace Expressive.Playground
         Date = 3,
         Boolean = 4,
         Null = 5,
+		Expression = 6
     }
 }
