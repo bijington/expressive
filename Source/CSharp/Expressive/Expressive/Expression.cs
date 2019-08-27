@@ -31,7 +31,7 @@ namespace Expressive
     /// <summary>
     /// Class definition for an Expression that can be evaluated.
     /// </summary>
-    public sealed class Expression
+    public sealed class Expression : IExpression
     {
         #region Fields
 

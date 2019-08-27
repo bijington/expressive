@@ -123,6 +123,10 @@ namespace Expressive.Tests
             Assert.AreEqual(true, new Expression("!false").Evaluate());
             Assert.AreEqual(true, new Expression("false || 1").Evaluate());
             Assert.AreEqual(false, new Expression("false || !(true && true)").Evaluate());
+			Assert.AreEqual(false, new Expression("[child1] == true || [child2] == true").Evaluate(new Dictionary<string, object> { ["child1"] = new Expression("1 == 0"), ["child2"] = new Expression("1 == 0") }));
+			Assert.AreEqual(true, new Expression("[child1] == false || [child2] == true").Evaluate(new Dictionary<string, object> { ["child1"] = new Expression("1 == 0"), ["child2"] = new Expression("1 == 0") }));
+			Assert.AreEqual(false, new Expression("[child1] == true && [child2] == true").Evaluate(new Dictionary<string, object> { ["child1"] = new Expression("1 == 0"), ["child2"] = new Expression("1 == 0") }));
+			Assert.AreEqual(true, new Expression("[child1] == false && [child2] == false").Evaluate(new Dictionary<string, object> { ["child1"] = new Expression("1 == 0"), ["child2"] = new Expression("1 == 0") }));
         }
 
         [TestMethod]
