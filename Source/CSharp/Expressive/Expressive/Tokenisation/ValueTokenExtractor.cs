@@ -9,12 +9,7 @@ namespace Expressive.Tokenisation
 
         public ValueTokenExtractor(string value)
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            this.value = value;
+            this.value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         public Token ExtractToken(string expression, int currentIndex, Context context)
@@ -50,7 +45,8 @@ namespace Expressive.Tokenisation
                 if (expressionLength > index + valueLength)
                 {
                     // If the next character is not a continuation of the word then we are valid.
-                    isValidValue = !char.IsLetterOrDigit(expression[index + valueLength]);
+                    isValidValue = !char.IsLetterOrDigit(expression[index + valueLength]) ||
+                        string.Equals(expectedValue, Context.ParameterSeparator.ToString(), context.StringComparison); // TODO: perhaps the parameter separator handling should be done inside a specific extractor...
                 }
 
                 if (string.Equals(valueString, expectedValue, context.StringComparison) &&

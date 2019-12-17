@@ -4,6 +4,7 @@ using Expressive.Functions;
 using Expressive.Operators;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Expressive.Tokenisation;
 
@@ -13,9 +14,9 @@ namespace Expressive
     {
         #region Constants
 
-        private const char DateSeparator = '#';
+        //private const char DateSeparator = '#';
         //private const char DecimalSeparator = '.';
-        private const char ParameterSeparator = ',';
+        //private const char ParameterSeparator = ',';
 
         #endregion
 
@@ -171,7 +172,7 @@ namespace Expressive
                             expressions.Add(this.CompileExpression(captiveTokens, minimumPrecedence: OperatorPrecedence.Minimum, variables: variables, isWithinFunction: true));
                             captiveTokens.Clear();
                         }
-                        else if (string.Equals(nextToken.CurrentToken, ParameterSeparator.ToString(), StringComparison.Ordinal) && parenCount == 1)
+                        else if (string.Equals(nextToken.CurrentToken, Context.ParameterSeparator.ToString(), StringComparison.Ordinal) && parenCount == 1)
                         {
                             // TODO: Should we expect expressions to be null???
                             expressions.Add(this.CompileExpression(captiveTokens, minimumPrecedence: 0, variables: variables, isWithinFunction: true));
@@ -186,46 +187,46 @@ namespace Expressive
 
                     leftHandSide = new FunctionExpression(currentToken.CurrentToken, function, expressions.ToArray());
                 }
-                //else if (currentToken.CurrentToken.IsNumeric(this.currentCulture)) // Or a number
-                //{
-                //    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                else if (currentToken.CurrentToken.IsNumeric(this.context.CurrentCulture)) // Or a number
+                {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
-                //    tokens.Dequeue();
+                    tokens.Dequeue();
 
-                //    if (int.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var intValue))
-                //    {
-                //        leftHandSide = new ConstantValueExpression(intValue);
-                //    }
-                //    else if (decimal.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var decimalValue))
-                //    {
-                //        leftHandSide = new ConstantValueExpression(decimalValue);
-                //    }
-                //    else if (double.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var doubleValue))
-                //    {
-                //        leftHandSide = new ConstantValueExpression(doubleValue);
-                //    }
-                //    else if (float.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var floatValue))
-                //    {
-                //        leftHandSide = new ConstantValueExpression(floatValue);
-                //    }
-                //    else if (long.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.currentCulture, out var longValue))
-                //    {
-                //        leftHandSide = new ConstantValueExpression(longValue);
-                //    }
-                //}
-                //else if (currentToken.CurrentToken.StartsWith("[") && currentToken.CurrentToken.EndsWith("]")) // or a variable?
-                //{
-                //    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    if (int.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var intValue))
+                    {
+                        leftHandSide = new ConstantValueExpression(intValue);
+                    }
+                    else if (decimal.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var decimalValue))
+                    {
+                        leftHandSide = new ConstantValueExpression(decimalValue);
+                    }
+                    else if (double.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var doubleValue))
+                    {
+                        leftHandSide = new ConstantValueExpression(doubleValue);
+                    }
+                    else if (float.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var floatValue))
+                    {
+                        leftHandSide = new ConstantValueExpression(floatValue);
+                    }
+                    else if (long.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var longValue))
+                    {
+                        leftHandSide = new ConstantValueExpression(longValue);
+                    }
+                }
+                else if (currentToken.CurrentToken.StartsWith("[") && currentToken.CurrentToken.EndsWith("]")) // or a variable?
+                {
+                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
-                //    tokens.Dequeue();
-                //    var variableName = currentToken.CurrentToken.Replace("[", "").Replace("]", "");
-                //    leftHandSide = new VariableExpression(variableName);
+                    tokens.Dequeue();
+                    var variableName = currentToken.CurrentToken.Replace("[", "").Replace("]", "");
+                    leftHandSide = new VariableExpression(variableName);
 
-                //    if (!variables.Contains(variableName, this.stringComparer))
-                //    {
-                //        variables.Add(variableName);
-                //    }
-                //}
+                    if (!variables.Contains(variableName, this.context.StringComparer))
+                    {
+                        variables.Add(variableName);
+                    }
+                }
                 else if (string.Equals(currentToken.CurrentToken, "true", StringComparison.OrdinalIgnoreCase)) // or a boolean?
                 {
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
@@ -247,13 +248,13 @@ namespace Expressive
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(null);
                 }
-                else if (currentToken.CurrentToken.StartsWith(DateSeparator.ToString()) && currentToken.CurrentToken.EndsWith(DateSeparator.ToString())) // or a date?
+                else if (currentToken.CurrentToken.StartsWith(Context.DateSeparator.ToString()) && currentToken.CurrentToken.EndsWith(Context.DateSeparator.ToString())) // or a date?
                 {
                     this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
 
-                    var dateToken = currentToken.CurrentToken.Replace(DateSeparator.ToString(), "");
+                    var dateToken = currentToken.CurrentToken.Replace(Context.DateSeparator.ToString(), "");
 
                     // If we can't parse the date let's check for some known tags.
                     if (!DateTime.TryParse(dateToken, out var date))
@@ -282,7 +283,7 @@ namespace Expressive
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(CleanString(currentToken.CurrentToken.Substring(1, currentToken.Length - 2)));
                 }
-                else if (string.Equals(currentToken.CurrentToken, ParameterSeparator.ToString(), StringComparison.Ordinal)) // Make sure we ignore the parameter separator
+                else if (string.Equals(currentToken.CurrentToken, Context.ParameterSeparator.ToString(), StringComparison.Ordinal)) // Make sure we ignore the parameter separator
                 {
                     if (!isWithinFunction)
                     {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
@@ -27,9 +26,9 @@ namespace Expressive
     internal class Context
     {
         internal const char DateSeparator = '#';
-        //private const char DecimalSeparator = '.';
         internal const char ParameterSeparator = ',';
 
+        // TODO: Perhaps this knowledge is better held under specific expression compilers? Or is that a level too far?
         private readonly IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> registeredFunctions;
         private readonly IDictionary<string, IOperator> registeredOperators;
 
@@ -39,9 +38,9 @@ namespace Expressive
 
         internal char DecimalSeparator { get; }
 
-        internal string[] FunctionNames => this.registeredFunctions.Keys.OrderByDescending(k => k.Length).ToArray();
+        internal IEnumerable<string> FunctionNames => this.registeredFunctions.Keys.OrderByDescending(k => k.Length);
 
-        internal string[] OperatorNames => this.registeredOperators.Keys.OrderByDescending(k => k.Length).ToArray();
+        internal IEnumerable<string> OperatorNames => this.registeredOperators.Keys.OrderByDescending(k => k.Length);
 
         internal StringComparer StringComparer => Options.HasFlag(ExpressiveOptions.IgnoreCase)
             ? StringComparer.OrdinalIgnoreCase
