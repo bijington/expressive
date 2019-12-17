@@ -75,6 +75,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ContextTests.cs" />
     <Compile Include="Expressions\Binary\Additive\AddExpressionTests.cs" />
     <Compile Include="Expressions\Binary\Additive\SubtractExpressionTests.cs" />
     <Compile Include="Expressions\Binary\BinaryExpressionBaseTests.cs" />

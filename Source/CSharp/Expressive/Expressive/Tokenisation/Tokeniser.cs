@@ -14,6 +14,7 @@ namespace Expressive.Tokenisation
 
         #region Constructors
 
+        // TODO: This should be passed a collection of ITokenExtractors rather than constructing them itself.
         public Tokeniser(Context context)
         {
             this.context = context;
