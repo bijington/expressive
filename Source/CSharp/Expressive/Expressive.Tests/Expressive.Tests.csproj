@@ -159,6 +159,7 @@
     <Compile Include="Tokenisation\KeywordTokenExtractorTests.cs" />
     <Compile Include="Tokenisation\NumericTokenExtractorTests.cs" />
     <Compile Include="Tokenisation\ParenthesisedTokenExtractorTests.cs" />
+    <Compile Include="Tokenisation\TokeniserTests.cs" />
     <Compile Include="Tokenisation\ValueTokenExtractorTests.cs" />
   </ItemGroup>
   <ItemGroup>

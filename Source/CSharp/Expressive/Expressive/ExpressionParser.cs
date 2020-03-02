@@ -38,7 +38,28 @@ namespace Expressive
         internal ExpressionParser(ExpressiveOptions options)
         {
             this.context = new Context(options);
-            this.tokeniser = new Tokeniser(this.context);
+            this.tokeniser = new Tokeniser(
+                this.context,
+                new List<ITokenExtractor>
+                {
+                    new KeywordTokenExtractor(context.FunctionNames),
+                    new KeywordTokenExtractor(context.OperatorNames),
+                    // Variables
+                    new ParenthesisedTokenExtractor('[', ']'),
+                    new NumericTokenExtractor(),
+                    // Dates
+                    new ParenthesisedTokenExtractor('#'),
+                    new ValueTokenExtractor(","),
+                    new ParenthesisedTokenExtractor('"'),
+                    new ParenthesisedTokenExtractor('\''),
+                    // TODO: Probably a better way to achieve this.
+                    new ValueTokenExtractor("true"),
+                    new ValueTokenExtractor("TRUE"),
+                    new ValueTokenExtractor("false"),
+                    new ValueTokenExtractor("FALSE"),
+                    new ValueTokenExtractor("null"),
+                    new ValueTokenExtractor("NULL")
+                });
         }
 
         #endregion

@@ -8,37 +8,17 @@ namespace Expressive.Tokenisation
         #region Fields
 
         private readonly Context context;
-        private readonly IList<ITokenExtractor> tokenExtractors;
+        private readonly IEnumerable<ITokenExtractor> tokenExtractors;
 
         #endregion
 
         #region Constructors
 
-        // TODO: This should be passed a collection of ITokenExtractors rather than constructing them itself.
-        public Tokeniser(Context context)
+        public Tokeniser(Context context, IEnumerable<ITokenExtractor> tokenExtractors)
         {
             this.context = context;
 
-            this.tokenExtractors = new List<ITokenExtractor>
-            {
-                new KeywordTokenExtractor(context.FunctionNames),
-                new KeywordTokenExtractor(context.OperatorNames),
-                // Variables
-                new ParenthesisedTokenExtractor('[', ']'),
-                new NumericTokenExtractor(),
-                // Dates
-                new ParenthesisedTokenExtractor('#'),
-                new ValueTokenExtractor(","),
-                new ParenthesisedTokenExtractor('"'),
-                new ParenthesisedTokenExtractor('\''),
-                // TODO: Probably a better way to achieve this.
-                new ValueTokenExtractor("true"),
-                new ValueTokenExtractor("TRUE"),
-                new ValueTokenExtractor("false"),
-                new ValueTokenExtractor("FALSE"),
-                new ValueTokenExtractor("null"),
-                new ValueTokenExtractor("NULL")
-            };
+            this.tokenExtractors = tokenExtractors;
         }
 
         #endregion
@@ -105,7 +85,7 @@ namespace Expressive.Tokenisation
 
         #region Private Methods
 
-        private static void CheckForUnrecognised(IList<char> unrecognised, IList<Token> tokens, int index)
+        private static void CheckForUnrecognised(IList<char> unrecognised, ICollection<Token> tokens, int index)
         {
             if (unrecognised == null)
             {
@@ -113,7 +93,7 @@ namespace Expressive.Tokenisation
             }
 
             var currentToken = new string(unrecognised.ToArray());
-            tokens.Add(new Token(currentToken, index - currentToken.Length)); // The index supplied is the current location not the start of the unrecoginsed token.
+            tokens.Add(new Token(currentToken, index - currentToken.Length)); // The index supplied is the current location not the start of the unrecognised token.
         }
 
         #endregion

@@ -23,14 +23,20 @@ using Expressive.Operators.Relational;
 
 namespace Expressive
 {
-    internal class Context
+    public class Context
     {
         internal const char DateSeparator = '#';
         internal const char ParameterSeparator = ',';
 
+        #region Fields
+
         // TODO: Perhaps this knowledge is better held under specific expression compilers? Or is that a level too far?
         private readonly IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> registeredFunctions;
         private readonly IDictionary<string, IOperator> registeredOperators;
+
+        #endregion
+
+        #region Properties
 
         internal ExpressiveOptions Options { get; }
 
@@ -49,6 +55,10 @@ namespace Expressive
         internal StringComparison StringComparison => Options.HasFlag(ExpressiveOptions.IgnoreCase)
             ? StringComparison.OrdinalIgnoreCase
             : StringComparison.Ordinal;
+
+        #endregion
+
+        #region Constructors
 
         internal Context(ExpressiveOptions options)
         {
@@ -167,6 +177,10 @@ namespace Expressive
             #endregion
         }
 
+        #endregion
+
+        #region Internal Methods
+
         internal void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
         {
             this.CheckForExistingFunctionName(functionName);
@@ -196,13 +210,9 @@ namespace Expressive
             return this.registeredOperators.TryGetValue(operatorName, out value);
         }
 
-        private void RegisterOperator(IOperator op)
-        {
-            foreach (var tag in op.Tags)
-            {
-                this.registeredOperators.Add(tag, op);
-            }
-        }
+        #endregion
+
+        #region Private Methods
 
         private void CheckForExistingFunctionName(string functionName)
         {
@@ -211,5 +221,15 @@ namespace Expressive
                 throw new FunctionNameAlreadyRegisteredException(functionName);
             }
         }
+
+        private void RegisterOperator(IOperator op)
+        {
+            foreach (var tag in op.Tags)
+            {
+                this.registeredOperators.Add(tag, op);
+            }
+        }
+
+        #endregion
     }
 }

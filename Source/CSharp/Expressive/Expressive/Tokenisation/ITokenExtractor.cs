@@ -1,6 +1,6 @@
 ﻿namespace Expressive.Tokenisation
 {
-    internal interface ITokenExtractor
+    public interface ITokenExtractor
     {
         Token ExtractToken(string expression, int currentIndex, Context context);
     }
