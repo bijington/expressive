@@ -40,12 +40,13 @@ namespace Expressive.Tokenisation
 
             while (index < expressionLength)
             {
-                var foundUnrecognisedCharacter = false;
-
                 var token = this.tokenExtractors.Select(t => t.ExtractToken(expression, index, this.context)).FirstOrDefault(t => t != null);
 
                 if (token != null)
                 {
+                    CheckForUnrecognised(unrecognised, tokens, index);
+                    unrecognised = null;
+
                     tokens.Add(token);
                 }
                 else
@@ -59,17 +60,13 @@ namespace Expressive.Tokenisation
                         {
                             unrecognised = new List<char>();
                         }
-
-                        foundUnrecognisedCharacter = true;
                         unrecognised.Add(character);
                     }
-                }
-
-                // Clear down the unrecognised buffer;
-                if (!foundUnrecognisedCharacter)
-                {
-                    CheckForUnrecognised(unrecognised, tokens, index);
-                    unrecognised = null;
+                    else
+                    {
+                        CheckForUnrecognised(unrecognised, tokens, index);
+                        unrecognised = null;
+                    }
                 }
 
                 index += token?.Length ?? 1;
