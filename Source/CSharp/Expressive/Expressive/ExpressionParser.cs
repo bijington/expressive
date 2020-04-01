@@ -12,22 +12,8 @@ namespace Expressive
 {
     internal sealed class ExpressionParser
     {
-        #region Constants
-
-        //private const char DateSeparator = '#';
-        //private const char DecimalSeparator = '.';
-        //private const char ParameterSeparator = ',';
-
-        #endregion
-
         #region Fields
 
-        //private readonly CultureInfo currentCulture;
-        //private readonly char decimalSeparator;
-        //private readonly ExpressiveOptions options;
-        //private readonly IDictionary<string, Func<IExpression[], IDictionary<string, object>, object>> registeredFunctions;
-        //private readonly IDictionary<string, IOperator> registeredOperators;
-        //private readonly StringComparer stringComparer;
         private readonly Context context;
         private readonly Tokeniser tokeniser;
 
