@@ -797,45 +797,45 @@ namespace Expressive.Tests
 
         #region General
 
-        [TestMethod]
-        public void TestAsync()
-        {
-            Expression expression = new Expression("1+3");
+        //[TestMethod]
+        //public void TestAsync()
+        //{
+        //    Expression expression = new Expression("1+3");
 
-            AutoResetEvent waitHandle = new AutoResetEvent(false);
+        //    AutoResetEvent waitHandle = new AutoResetEvent(false);
 
-            object result = null;
+        //    object result = null;
 
-            expression.EvaluateAsync((m, r) =>
-            {
-                Assert.IsNull(m);
-                result = r;
-                waitHandle.Set();
-            });
+        //    expression.EvaluateAsync((m, r) =>
+        //    {
+        //        Assert.IsNull(m);
+        //        result = r;
+        //        waitHandle.Set();
+        //    });
 
-            waitHandle.WaitOne();
-            Assert.AreEqual(4, result);
-        }
+        //    waitHandle.WaitOne();
+        //    Assert.AreEqual(4, result);
+        //}
 
-        [TestMethod]
-        public void TestAsyncSafety()
-        {
-            Expression expression = new Expression("1+3+[abc]");
+        //[TestMethod]
+        //public void TestAsyncSafety()
+        //{
+        //    Expression expression = new Expression("1+3+[abc]");
 
-            AutoResetEvent waitHandle = new AutoResetEvent(false);
+        //    AutoResetEvent waitHandle = new AutoResetEvent(false);
 
-            object result = null;
+        //    object result = null;
 
-            expression.EvaluateAsync((m, r) =>
-            {
-                Assert.AreEqual(m, "The variable 'abc' has not been supplied.");
-                result = r;
-                waitHandle.Set();
-            });
+        //    expression.EvaluateAsync((m, r) =>
+        //    {
+        //        Assert.AreEqual(m, "The variable 'abc' has not been supplied.");
+        //        result = r;
+        //        waitHandle.Set();
+        //    });
 
-            waitHandle.WaitOne();
-            Assert.IsNull(result);
-        }
+        //    waitHandle.WaitOne();
+        //    Assert.IsNull(result);
+        //}
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "There aren't enough ')' symbols. Expected 2 but there is only 1")]
         public void ShouldIdentifyParenthesisMismatch()
@@ -1120,12 +1120,18 @@ namespace Expressive.Tests
         public void ShouldIgnoreCurrentCulture()
         {
             var currentCulture = Thread.CurrentThread.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
 
-            var invariantExpression = new Expression("1 + 2.34", ExpressiveOptions.None);
-            Assert.AreEqual(3.34M, invariantExpression.Evaluate());
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
 
-            Thread.CurrentThread.CurrentCulture = currentCulture;
+                var invariantExpression = new Expression("1 + 2.34", ExpressiveOptions.None);
+                Assert.AreEqual(3.34M, invariantExpression.Evaluate());
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = currentCulture;
+            }
         }
 
         #region Actual unit tests for the Expression class to remain.

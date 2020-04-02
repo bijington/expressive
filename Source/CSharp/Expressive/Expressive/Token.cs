@@ -1,6 +1,6 @@
 ﻿namespace Expressive
 {
-    internal sealed class Token
+    public sealed class Token
     {
         internal string CurrentToken { get; }
 
