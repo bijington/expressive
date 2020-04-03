@@ -17,12 +17,12 @@ steps:
     restoreSolution: '**/*.sln'
     feedsToUse: 'select'
 
-- task: PowerShell@2
-  displayName: "NET Standard Build"
-  inputs:
-    targetType: 'inline'
-    script: |
-      dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
+# - task: PowerShell@2
+#   displayName: "NET Standard Build"
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
 
 - task: MSBuild@1
   displayName: "NET 4.0 Build"
