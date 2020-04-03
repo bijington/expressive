@@ -1,218 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{64525626-8340-4F9C-9A19-F26E40D1F496}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Expressive</RootNamespace>
-    <AssemblyName>Expressive</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <DocumentationFile>
-    </DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\bin\net40\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\net40\Expressive.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFrameworks>netstandard1.4;net45</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>C:\Work\expressive\Source\CSharp\Expressive\ExpressiveStrongName.snk</AssemblyOriginatorKeyFile>
+    <AssemblyVersion>1.4.2.0</AssemblyVersion>
+    <FileVersion>1.4.2.0</FileVersion>
+    <PackageId>ExpressiveParser</PackageId>
+    <Version>1.4.2</Version>
+    <Authors>Shaun Lawrence</Authors>
+    <RepositoryUrl>https://github.com/bijington/expressive</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/bijington/expressive</PackageProjectUrl>
+    <Product>Expressive Parser</Product>
+    <Description>A multi-platform expression parsing and evaluating framework.</Description>
+    <Copyright>Copyright(c) 2020 Shaun Lawrence</Copyright>
+    <PackageTags>Expression Parser Evaluator Cross-Platform NET Standard Xamarin Xamarin.Forms</PackageTags>
+    <PackageIcon>logo-64.png</PackageIcon>
+    <PackageIconUrl />
+    <PackageLicenseFile>license.txt</PackageLicenseFile>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\ExpressiveStrongName.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DelaySign>false</DelaySign>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Context.cs" />
-    <Compile Include="Exceptions\ExpressiveException.cs" />
-    <Compile Include="Exceptions\FunctionNameAlreadyRegisteredException.cs" />
-    <Compile Include="Exceptions\MissingParticipantException.cs" />
-    <Compile Include="Exceptions\MissingTokenException.cs" />
-    <Compile Include="Exceptions\ParameterCountMismatchException.cs" />
-    <Compile Include="Exceptions\UnrecognisedTokenException.cs" />
-    <Compile Include="Expression.cs" />
-    <Compile Include="ExpressionParser.cs" />
-    <Compile Include="Expressions\Binary\Additive\AddExpression.cs" />
-    <Compile Include="Expressions\Binary\Additive\SubtractExpression.cs" />
-    <Compile Include="Expressions\Binary\Bitwise\BitwiseAndExpression.cs" />
-    <Compile Include="Expressions\Binary\Bitwise\BitwiseExclusiveOrExpression.cs" />
-    <Compile Include="Expressions\Binary\Bitwise\BitwiseOrExpression.cs" />
-    <Compile Include="Expressions\Binary\Bitwise\LeftShiftExpression.cs" />
-    <Compile Include="Expressions\Binary\Bitwise\RightShiftExpression.cs" />
-    <Compile Include="Expressions\Binary\Conditional\NullCoalescingExpression.cs" />
-    <Compile Include="Expressions\Binary\Logical\AndExpression.cs" />
-    <Compile Include="Expressions\Binary\BinaryExpressionBase.cs" />
-    <Compile Include="Expressions\Binary\Multiplicative\DivideExpression.cs" />
-    <Compile Include="Expressions\Binary\Multiplicative\ModulusExpression.cs" />
-    <Compile Include="Expressions\Binary\Multiplicative\MultiplyExpression.cs" />
-    <Compile Include="Expressions\Binary\Relational\EqualExpression.cs" />
-    <Compile Include="Expressions\Binary\Relational\GreaterThanExpression.cs" />
-    <Compile Include="Expressions\Binary\Relational\GreaterThanOrEqualExpression.cs" />
-    <Compile Include="Expressions\Binary\Relational\LessThanExpression.cs" />
-    <Compile Include="Expressions\Binary\Relational\LessThanOrEqualExpression.cs" />
-    <Compile Include="Expressions\Binary\Relational\NotEqualExpression.cs" />
-    <Compile Include="Expressions\Unary\Additive\MinusExpression.cs" />
-    <Compile Include="Expressions\Unary\Additive\PlusExpression.cs" />
-    <Compile Include="Expressions\Unary\Logical\NotExpression.cs" />
-    <Compile Include="Expressions\Binary\Logical\OrExpression.cs" />
-    <Compile Include="Expressions\ConstantValueExpression.cs" />
-    <Compile Include="Expressions\FunctionExpression.cs" />
-    <Compile Include="Expressions\IExpression.cs" />
-    <Compile Include="Expressions\ParenthesisedExpression.cs" />
-    <Compile Include="Expressions\Unary\UnaryExpressionBase.cs" />
-    <Compile Include="Expressions\VariableExpression.cs" />
-    <Compile Include="ExpressiveOptions.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Functions\Conversion\DateFunction.cs" />
-    <Compile Include="Functions\Conversion\DecimalFunction.cs" />
-    <Compile Include="Functions\Conversion\DoubleFunction.cs" />
-    <Compile Include="Functions\Conversion\IntegerFunction.cs" />
-    <Compile Include="Functions\Conversion\LongFunction.cs" />
-    <Compile Include="Functions\Conversion\StringFunction.cs" />
-    <Compile Include="Functions\Date\AddDaysFunction.cs" />
-    <Compile Include="Functions\Date\AddHoursFunction.cs" />
-    <Compile Include="Functions\Date\AddMillisecondsFunction.cs" />
-    <Compile Include="Functions\Date\AddMinutesFunction.cs" />
-    <Compile Include="Functions\Date\AddMonthsFunction.cs" />
-    <Compile Include="Functions\Date\AddSecondsFunction.cs" />
-    <Compile Include="Functions\Date\AddYearsFunction.cs" />
-    <Compile Include="Functions\Date\DayOfFunction.cs" />
-    <Compile Include="Functions\Date\DaysBetweenFunction.cs" />
-    <Compile Include="Functions\Date\HourOfFunction.cs" />
-    <Compile Include="Functions\Date\HoursBetweenFunction.cs" />
-    <Compile Include="Functions\Date\MillisecondOfFunction.cs" />
-    <Compile Include="Functions\Date\MillisecondsBetweenFunction.cs" />
-    <Compile Include="Functions\Date\MinuteOfFunction.cs" />
-    <Compile Include="Functions\Date\MinutesBetweenFunction.cs" />
-    <Compile Include="Functions\Date\MonthOfFunction.cs" />
-    <Compile Include="Functions\Date\SecondOfFunction.cs" />
-    <Compile Include="Functions\Date\SecondsBetweenFunction.cs" />
-    <Compile Include="Functions\Date\YearOfFunction.cs" />
-    <Compile Include="Functions\Mathematical\AbsFunction.cs" />
-    <Compile Include="Functions\Mathematical\AcosFunction.cs" />
-    <Compile Include="Functions\Mathematical\AsinFunction.cs" />
-    <Compile Include="Functions\Mathematical\AtanFunction.cs" />
-    <Compile Include="Functions\Mathematical\RandomFunction.cs" />
-    <Compile Include="Functions\Statistical\AverageFunction.cs" />
-    <Compile Include="Functions\Mathematical\CeilingFunction.cs" />
-    <Compile Include="Functions\Mathematical\CosFunction.cs" />
-    <Compile Include="Functions\Mathematical\CountFunction.cs" />
-    <Compile Include="Functions\Mathematical\ExpFunction.cs" />
-    <Compile Include="Functions\Mathematical\FloorFunction.cs" />
-    <Compile Include="Functions\FunctionBase.cs" />
-    <Compile Include="Functions\Mathematical\IEEERemainderFunction.cs" />
-    <Compile Include="Functions\Logical\IfFunction.cs" />
-    <Compile Include="Functions\IFunction.cs" />
-    <Compile Include="Functions\Logical\InFunction.cs" />
-    <Compile Include="Functions\String\ContainsFunction.cs" />
-    <Compile Include="Functions\String\EndsWithFunction.cs" />
-    <Compile Include="Functions\String\LengthFunction.cs" />
-    <Compile Include="Functions\Mathematical\Log10Function.cs" />
-    <Compile Include="Functions\Mathematical\LogFunction.cs" />
-    <Compile Include="Functions\Relational\MaxFunction.cs" />
-    <Compile Include="Functions\Statistical\MeanFunction.cs" />
-    <Compile Include="Functions\Statistical\MedianFunction.cs" />
-    <Compile Include="Functions\Relational\MinFunction.cs" />
-    <Compile Include="Functions\Statistical\ModeFunction.cs" />
-    <Compile Include="Functions\String\PadLeftFunction.cs" />
-    <Compile Include="Functions\String\PadRightFunction.cs" />
-    <Compile Include="Functions\Mathematical\PowFunction.cs" />
-    <Compile Include="Functions\String\RegexFunction.cs" />
-    <Compile Include="Functions\Mathematical\RoundFunction.cs" />
-    <Compile Include="Functions\Mathematical\SignFunction.cs" />
-    <Compile Include="Functions\Mathematical\SinFunction.cs" />
-    <Compile Include="Functions\Mathematical\SqrtFunction.cs" />
-    <Compile Include="Functions\String\StartsWithFunction.cs" />
-    <Compile Include="Functions\String\SubstringFunction.cs" />
-    <Compile Include="Functions\Mathematical\SumFunction.cs" />
-    <Compile Include="Functions\Mathematical\TanFunction.cs" />
-    <Compile Include="Functions\Mathematical\TruncateFunction.cs" />
-    <Compile Include="Helpers\Comparison.cs" />
-    <Compile Include="Helpers\Numbers.cs" />
-    <Compile Include="Helpers\TypeHelper.cs" />
-    <Compile Include="Operators\Additive\PlusOperator.cs" />
-    <Compile Include="Operators\Additive\SubtractOperator.cs" />
-    <Compile Include="Operators\Bitwise\BitwiseAndOperator.cs" />
-    <Compile Include="Operators\Bitwise\BitwiseOrOperator.cs" />
-    <Compile Include="Operators\Bitwise\BitwiseExclusiveOrOperator.cs" />
-    <Compile Include="Operators\Bitwise\LeftShiftOperator.cs" />
-    <Compile Include="Operators\Bitwise\RightShiftOperator.cs" />
-    <Compile Include="Operators\Grouping\ParenthesisCloseOperator.cs" />
-    <Compile Include="Operators\Grouping\ParenthesisOpenOperator.cs" />
-    <Compile Include="Operators\IOperator.cs" />
-    <Compile Include="Operators\Logical\AndOperator.cs" />
-    <Compile Include="Operators\Logical\OrOperator.cs" />
-    <Compile Include="Operators\Multiplicative\DivideOperator.cs" />
-    <Compile Include="Operators\Multiplicative\ModulusOperator.cs" />
-    <Compile Include="Operators\Multiplicative\MultiplyOperator.cs" />
-    <Compile Include="Operators\Conditional\NullCoalescingOperator.cs" />
-    <Compile Include="Operators\OperatorBase.cs" />
-    <Compile Include="Operators\OperatorPrecedence.cs" />
-    <Compile Include="Operators\Relational\EqualOperator.cs" />
-    <Compile Include="Operators\Relational\GreaterThanOperator.cs" />
-    <Compile Include="Operators\Relational\GreaterThanOrEqualOperator.cs" />
-    <Compile Include="Operators\Relational\LessThanOperator.cs" />
-    <Compile Include="Operators\Relational\LessThanOrEqualOperator.cs" />
-    <Compile Include="Operators\Relational\NotEqualOperator.cs" />
-    <Compile Include="Operators\Logical\NotOperator.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="Tokenisation\ITokenExtractor.cs" />
-    <Compile Include="Tokenisation\KeywordTokenExtractor.cs" />
-    <Compile Include="Tokenisation\NumericTokenExtractor.cs" />
-    <Compile Include="Tokenisation\ParenthesisedTokenExtractor.cs" />
-    <Compile Include="Tokenisation\Tokeniser.cs" />
-    <Compile Include="Tokenisation\ValueTokenExtractor.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\ExpressiveStrongName.snk">
-      <Link>ExpressiveStrongName.snk</Link>
+    <None Include="..\..\..\..\Assets\logo-64.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\ExpressiveStrongName.snk" Link="ExpressiveStrongName.snk" />
+    <None Include="..\license.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
