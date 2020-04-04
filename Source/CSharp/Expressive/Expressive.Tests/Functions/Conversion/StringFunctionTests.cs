@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
 using Expressive.Exceptions;
 using Expressive.Functions;
 using Expressive.Functions.Conversion;
@@ -37,10 +38,21 @@ namespace Expressive.Tests.Functions.Conversion
         [TestMethod]
         public void TestEvaluateWithDateTimeAndNonStringFormat()
         {
-            var dateTime = new DateTime(2019, 01, 01, 11, 00, 00);
-            const string dateString = "01/01/2019 11:00:00";
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
 
-            Assert.AreEqual(dateString, this.Evaluate(dateTime, 1234));
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-GB");
+
+                var dateTime = new DateTime(2019, 01, 01, 11, 00, 00);
+                const string dateString = "01/01/2019 11:00:00";
+
+                Assert.AreEqual(dateString, this.Evaluate(dateTime, 1234));
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = currentCulture;
+            }
         }
 
         [TestMethod]

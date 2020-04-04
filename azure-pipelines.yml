@@ -30,24 +30,8 @@ steps:
     solution: '**\Expressive.csproj'
     configuration: 'Release'
 
-# - task: BatchScript@1
-#   displayName: "Code coverage"
-#   inputs:
-#     filename: '.\Source\CSharp\Expressive\coverage.bat'
-
-# - task: VSTest@2
-#   displayName: "Unit testing"
-#   inputs:
-#     testSelector: 'testAssemblies'
-#     testAssemblyVer2: |
-#       **\Expressive.Tests.dll
-#       **\Expressive.Tests.Standard.dll
-#       !**\*TestAdapter.dll
-#       !**\obj\**
-#     searchFolder: '$(System.DefaultWorkingDirectory)'
-
-- task: PublishBuildArtifacts@1
+- task: DotNetCoreCLI@2
   inputs:
-    PathtoPublish: '.\Source\CSharp\Expressive\bin'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    command: 'test'
+    projects: '**/*.csproj'
+    testRunTitle: 'Run all tests'
