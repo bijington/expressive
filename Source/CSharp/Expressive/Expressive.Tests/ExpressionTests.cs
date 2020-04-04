@@ -781,10 +781,13 @@ namespace Expressive.Tests
                 ["myDecimal"] = 4.4M
             };
 
-            var expression = new Expression("String([myDate])");
-            Assert.AreEqual("10/01/2018 12:34:56", (string)expression.Evaluate(arguments));
+            ExecuteUnderCulture("en-GB", () =>
+                {
+                    var dateExpression = new Expression("String([myDate])");
+                    Assert.AreEqual("10/01/2018 12:34:56", (string)dateExpression.Evaluate(arguments));
+                });
 
-            expression = new Expression("String([myDate], 'yyyy-MM-dd')");
+            var expression = new Expression("String([myDate], 'yyyy-MM-dd')");
             Assert.AreEqual("2018-01-10", (string)expression.Evaluate(arguments));
 
             expression = new Expression("String([myDecimal])");
@@ -1119,19 +1122,11 @@ namespace Expressive.Tests
         [TestMethod]
         public void ShouldIgnoreCurrentCulture()
         {
-            var currentCulture = Thread.CurrentThread.CurrentCulture;
-
-            try
-            {
-                Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("de-DE");
-
-                var invariantExpression = new Expression("1 + 2.34", ExpressiveOptions.None);
-                Assert.AreEqual(3.34M, invariantExpression.Evaluate());
-            }
-            finally
-            {
-                Thread.CurrentThread.CurrentCulture = currentCulture;
-            }
+            ExecuteUnderCulture("de-DE", () =>
+                {
+                    var invariantExpression = new Expression("1 + 2.34", ExpressiveOptions.None);
+                    Assert.AreEqual(3.34M, invariantExpression.Evaluate());
+                });
         }
 
         #region Actual unit tests for the Expression class to remain.
@@ -1165,5 +1160,21 @@ namespace Expressive.Tests
         }
 
         #endregion
+
+        private void ExecuteUnderCulture(string localeCode, Action action)
+        {
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
+
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(localeCode);
+
+                action.Invoke();
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = currentCulture;
+            }
+        }
     }
 }
