@@ -78,6 +78,22 @@ namespace Expressive.Tests
             Assert.AreEqual(-5, value);
         }
 
+        [TestMethod]
+        public void ScientificNotation()
+        {
+            var expression = new Expression("1.23e2");
+
+            Assert.AreEqual(123, expression.Evaluate());
+        }
+
+        [TestMethod]
+        public void ScientificNotationWithLargeNumber()
+        {
+            var expression = new Expression("1.23e22");
+
+            Assert.AreEqual(12300000000000000000000M, expression.Evaluate());
+        }
+
         #region Subtract Operator
 
         [TestMethod]
