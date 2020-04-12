@@ -11,19 +11,19 @@ namespace Expressive.Functions.Relational
 
         public override string Name => "Max";
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
             var result = parameters[0].Evaluate(this.Variables);
 
-            if (result is IEnumerable)
+            if (result is IEnumerable enumerableResult)
             {
-                result = Max((IEnumerable)result);
+                result = Max(enumerableResult, context);
             }
 
             // Null means we should bail out.
-            if (result == null)
+            if (result is null)
             {
                 return null;
             }
@@ -35,7 +35,7 @@ namespace Expressive.Functions.Relational
 
                 if (evaluatedValue is IEnumerable enumerable)
                 {
-                    evaluatedValue = Max(enumerable);
+                    evaluatedValue = Max(enumerable, context);
                 }
 
                 // Null means we should bail out.
@@ -44,7 +44,7 @@ namespace Expressive.Functions.Relational
                     return null;
                 }
 
-                result = Comparison.CompareUsingMostPreciseType(result, evaluatedValue, false) > 0
+                result = Comparison.CompareUsingMostPreciseType(result, evaluatedValue, context) > 0
                     ? result
                     : evaluatedValue;
             }
@@ -56,25 +56,25 @@ namespace Expressive.Functions.Relational
 
         #region Private Methods
 
-        private static object Max(IEnumerable enumerable)
+        private static object Max(IEnumerable enumerable, Context context)
         {
             object enumerableResult = null;
 
             foreach (var item in enumerable)
             {
                 // Null means we should bail out.
-                if (item == null)
+                if (item is null)
                 {
                     return null;
                 }
 
-                if (enumerableResult == null)
+                if (enumerableResult is null)
                 {
                     enumerableResult = item;
                     continue;
                 }
 
-                enumerableResult = Comparison.CompareUsingMostPreciseType(enumerableResult, item, false) > 0
+                enumerableResult = Comparison.CompareUsingMostPreciseType(enumerableResult, item, context) > 0
                     ? enumerableResult
                     : item;
             }

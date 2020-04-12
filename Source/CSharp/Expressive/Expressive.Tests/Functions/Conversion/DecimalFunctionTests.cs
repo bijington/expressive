@@ -71,7 +71,7 @@ namespace Expressive.Tests.Functions.Conversion
                 {
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)longValue)
                 },
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(12345M, result);
         }

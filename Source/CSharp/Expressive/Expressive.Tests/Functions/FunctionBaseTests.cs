@@ -18,7 +18,7 @@ namespace Expressive.Tests.Functions
             {
                 this.Function.Evaluate(
                     values?.Select(v => Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == v)).ToArray(),
-                    ExpressiveOptions.None);
+                    new Context(ExpressiveOptions.None));
             }
             catch (Exception e)
             {
@@ -34,7 +34,7 @@ namespace Expressive.Tests.Functions
         {
             return this.Function.Evaluate(
                 values?.Select(v => Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == v)).ToArray(),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
         }
     }
 }

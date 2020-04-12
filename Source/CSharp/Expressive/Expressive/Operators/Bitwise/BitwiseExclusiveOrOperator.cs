@@ -9,9 +9,9 @@ namespace Expressive.Operators.Bitwise
 
         public override string[] Tags => new[] { "^" };
 
-        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
+        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context)
         {
-            return new BitwiseExclusiveOrExpression(expressions[0], expressions[1], options);
+            return new BitwiseExclusiveOrExpression(expressions[0], expressions[1], context);
         }
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)

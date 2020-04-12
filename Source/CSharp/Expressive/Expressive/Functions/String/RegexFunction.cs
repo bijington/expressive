@@ -9,7 +9,7 @@ namespace Expressive.Functions.String
 
         public override string Name { get { return "Regex"; } }
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 2, 2);
             

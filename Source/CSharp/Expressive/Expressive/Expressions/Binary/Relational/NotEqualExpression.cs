@@ -10,7 +10,7 @@ namespace Expressive.Expressions.Binary.Relational
     {
         #region Constructors
 
-        public NotEqualExpression(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
+        public NotEqualExpression(IExpression lhs, IExpression rhs, Context context) : base(lhs, rhs, context)
         {
         }
 
@@ -21,7 +21,7 @@ namespace Expressive.Expressions.Binary.Relational
         protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
         {
             // Use the type of the left operand to make the comparison
-            if (lhsResult == null)
+            if (lhsResult is null)
             {
                 return rightHandSide.Evaluate(variables) != null;
             }
@@ -29,12 +29,12 @@ namespace Expressive.Expressions.Binary.Relational
             var rhsResult = rightHandSide.Evaluate(variables);
 
             // If we got here then the lhsResult is not null.
-            if (rhsResult == null)
+            if (rhsResult is null)
             {
                 return true;
             }
 
-            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, this.options.HasFlag(ExpressiveOptions.IgnoreCase)) != 0;
+            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, this.context) != 0;
         }
 
         #endregion

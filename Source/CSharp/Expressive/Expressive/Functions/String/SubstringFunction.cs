@@ -14,13 +14,13 @@ namespace Expressive.Functions.String
             }
         }
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 3, 3);
 
             object value = parameters[0].Evaluate(Variables);
 
-            if (value == null)
+            if (value is null)
             {
                 return null;
             }

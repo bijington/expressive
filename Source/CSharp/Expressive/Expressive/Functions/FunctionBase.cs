@@ -5,15 +5,18 @@ using System.Linq;
 
 namespace Expressive.Functions
 {
-    internal abstract class FunctionBase : IFunction
+    public abstract class FunctionBase : IFunction
     {
         #region IFunction Members
 
+        /// <inheritdoc />
         public IDictionary<string, object> Variables { get; set; }
 
+        /// <inheritdoc />
         public abstract string Name { get; }
 
-        public abstract object Evaluate(IExpression[] parameters, ExpressiveOptions options);
+        /// <inheritdoc />
+        public abstract object Evaluate(IExpression[] parameters, Context context);
 
         #endregion
 
@@ -26,12 +29,12 @@ namespace Expressive.Functions
         /// <returns>True if the correct number are present, false otherwise.</returns>
         protected bool ValidateParameterCount(IExpression[] parameters, int expectedCount, int minimumCount)
         {
-            if (expectedCount != -1 && (parameters == null || !parameters.Any() || parameters.Length != expectedCount))
+            if (expectedCount != -1 && (parameters is null || !parameters.Any() || parameters.Length != expectedCount))
             {
                 throw new ParameterCountMismatchException($"{this.Name}() takes only {expectedCount} argument(s)");
             }
 
-            if (minimumCount > 0 && (parameters == null || !parameters.Any() || parameters.Length < minimumCount))
+            if (minimumCount > 0 && (parameters is null || !parameters.Any() || parameters.Length < minimumCount))
             {
                 throw new ParameterCountMismatchException($"{this.Name}() expects at least {minimumCount} argument(s)");
             }

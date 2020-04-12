@@ -48,7 +48,7 @@ namespace Expressive
         /// <summary>
         /// Gets a list of the Variable names that are contained within this Expression.
         /// </summary>
-        public string[] ReferencedVariables
+        public IReadOnlyCollection<string> ReferencedVariables
         {
             get
             {
@@ -146,7 +146,7 @@ namespace Expressive
         /// <param name="variables">The variables to be used in the evaluation.</param>
         public void EvaluateAsync<T>(Action<string, T> callback, IDictionary<string, object> variables = null)
         {
-            if (callback == null)
+            if (callback is null)
             {
                 throw new ArgumentNullException(nameof(callback));
             }
@@ -201,7 +201,7 @@ namespace Expressive
         private void CompileExpression()
         {
             // Cache the expression to save us having to recompile.
-            if (this.compiledExpression == null ||
+            if (this.compiledExpression is null ||
                 this.options.HasFlag(ExpressiveOptions.NoCache))
             {
                 var variables = new List<string>();

@@ -15,7 +15,7 @@ namespace Expressive.Tests.Expressions.Binary.Multiplicative
             var expression = new DivideExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(1d, expression.Evaluate(null));
         }

@@ -16,7 +16,7 @@ namespace Expressive.Expressions
 
         public object Evaluate(IDictionary<string, object> variables)
         {
-            if (variables == null ||
+            if (variables is null ||
                 !variables.ContainsKey(this.variableName))
             {
                 throw new ArgumentException("The variable '" + this.variableName + "' has not been supplied.");

@@ -14,26 +14,20 @@ namespace Expressive.Functions.String
             }
         }
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
-            string text = (string)parameters[0].Evaluate(Variables);
-            string value = (string)parameters[1].Evaluate(Variables);
+            // TODO: evaluate (no pun intended) whether a cast is correct here.
+            var text = (string)parameters[0].Evaluate(Variables);
+            var value = (string)parameters[1].Evaluate(Variables);
 
-            if (value == null)
+            if (value is null)
             {
                 return false;
             }
 
-            if (options.HasFlag(ExpressiveOptions.IgnoreCase))
-            {
-                text = text?.ToLower();
-                value = value?.ToLower();
-            }
-
-            // Not very safe at present but let's see for now.
-            return text?.Contains(value) == true;
+            return text?.IndexOf(value, context.StringComparison) >= 0;
         }
 
         #endregion

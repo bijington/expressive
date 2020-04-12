@@ -9,17 +9,17 @@ namespace Expressive.Functions.Date
 
         public override string Name => "AddSeconds";
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
             var dateObject = parameters[0].Evaluate(this.Variables);
             var secondsObject = parameters[1].Evaluate(this.Variables);
 
-            if (dateObject == null || secondsObject == null) return null;
+            if (dateObject is null || secondsObject is null) { return null; }
 
-            DateTime date = Convert.ToDateTime(dateObject);
-            double seconds = Convert.ToDouble(secondsObject);
+            var date = Convert.ToDateTime(dateObject, context.CurrentCulture);
+            var seconds = Convert.ToDouble(secondsObject, context.CurrentCulture);
 
             return date.AddSeconds(seconds);
         }

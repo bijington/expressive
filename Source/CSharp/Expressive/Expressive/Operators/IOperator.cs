@@ -13,7 +13,7 @@ namespace Expressive.Operators
         /// </summary>
         string[] Tags { get; }
 
-        IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options);
+        IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context);
 
         bool CanGetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens);
         Token[] GetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens);

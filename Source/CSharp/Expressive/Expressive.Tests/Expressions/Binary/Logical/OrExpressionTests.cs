@@ -15,7 +15,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             var expression = new OrExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }
@@ -26,7 +26,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             var expression = new OrExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }
@@ -37,7 +37,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             var expression = new OrExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(false, expression.Evaluate(null));
         }
@@ -48,7 +48,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             var expression = new OrExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }

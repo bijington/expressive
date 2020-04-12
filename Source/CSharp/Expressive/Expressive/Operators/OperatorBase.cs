@@ -9,7 +9,7 @@ namespace Expressive.Operators
 
         public abstract string[] Tags { get; }
 
-        public abstract IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options);
+        public abstract IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context);
 
         public virtual bool CanGetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens)
         {

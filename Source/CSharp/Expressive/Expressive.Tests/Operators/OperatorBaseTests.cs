@@ -44,7 +44,7 @@ namespace Expressive.Tests.Operators
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null),
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
                 },
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.IsInstanceOfType(expression, this.ExpectedExpressionType);
         }

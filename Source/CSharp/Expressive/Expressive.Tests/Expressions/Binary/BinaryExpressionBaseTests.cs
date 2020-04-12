@@ -13,7 +13,7 @@ namespace Expressive.Tests.Expressions.Binary
         [TestMethod, ExpectedException(typeof(MissingParticipantException))]
         public void TestNullLeftEvaluate()
         {
-            var expression = new BinaryExpressionBaseImplementation(null, null, ExpressiveOptions.All);
+            var expression = new BinaryExpressionBaseImplementation(null, null, new Context(ExpressiveOptions.All));
 
             expression.Evaluate(null);
         }
@@ -21,14 +21,14 @@ namespace Expressive.Tests.Expressions.Binary
         [TestMethod, ExpectedException(typeof(MissingParticipantException))]
         public void TestNullRightEvaluate()
         {
-            var expression = new BinaryExpressionBaseImplementation(new BinaryExpressionBaseImplementation(null, null, ExpressiveOptions.All), null, ExpressiveOptions.All);
+            var expression = new BinaryExpressionBaseImplementation(new BinaryExpressionBaseImplementation(null, null, new Context(ExpressiveOptions.All)), null, new Context(ExpressiveOptions.All));
 
             expression.Evaluate(null);
         }
 
         private class BinaryExpressionBaseImplementation : BinaryExpressionBase
         {
-            public BinaryExpressionBaseImplementation(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
+            public BinaryExpressionBaseImplementation(IExpression lhs, IExpression rhs, Context context) : base(lhs, rhs, context)
             {
             }
 

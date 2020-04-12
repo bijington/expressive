@@ -15,7 +15,7 @@ namespace Expressive.Tests.Expressions.Binary.Bitwise
             var expression = new BitwiseExclusiveOrExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1111),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)0001),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(1110, expression.Evaluate(null));
         }

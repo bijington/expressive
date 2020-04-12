@@ -15,7 +15,7 @@ namespace Expressive.Tests.Expressions.Binary.Multiplicative
             var expression = new ModulusExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(1, expression.Evaluate(null));
         }

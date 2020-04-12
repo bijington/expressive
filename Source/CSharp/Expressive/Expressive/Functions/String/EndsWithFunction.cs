@@ -1,5 +1,4 @@
 ﻿using Expressive.Expressions;
-using System;
 
 namespace Expressive.Functions.String
 {
@@ -15,19 +14,19 @@ namespace Expressive.Functions.String
             }
         }
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
-            string text = (string)parameters[0].Evaluate(Variables);
-            string value = (string)parameters[1].Evaluate(Variables);
+            var text = (string)parameters[0].Evaluate(Variables);
+            var value = (string)parameters[1].Evaluate(Variables);
 
-            if (value == null)
+            if (value is null)
             {
                 return false;
             }
             
-            return text?.EndsWith(value, options.HasFlag(ExpressiveOptions.IgnoreCase) ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal) == true;
+            return text?.EndsWith(value, context.StringComparison) == true;
         }
 
         #endregion

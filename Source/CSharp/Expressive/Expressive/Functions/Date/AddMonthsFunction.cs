@@ -9,17 +9,17 @@ namespace Expressive.Functions.Date
 
         public override string Name => "AddMonths";
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
             var dateObject = parameters[0].Evaluate(this.Variables);
             var monthsObject = parameters[1].Evaluate(this.Variables);
 
-            if (dateObject == null || monthsObject == null) return null;
+            if (dateObject is null || monthsObject is null) { return null; }
 
-            DateTime date = Convert.ToDateTime(dateObject);
-            int months = Convert.ToInt32(monthsObject);
+            var date = Convert.ToDateTime(dateObject, context.CurrentCulture);
+            var months = Convert.ToInt32(monthsObject, context.CurrentCulture);
 
             return date.AddMonths(months);
         }

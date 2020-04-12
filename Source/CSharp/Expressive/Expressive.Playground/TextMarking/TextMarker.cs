@@ -23,7 +23,7 @@ namespace Expressive.Playground.TextMarking
 
         public TextMarker(TextMarkerService service, int startOffset, int length)
         {
-            if (service == null)
+            if (service is null)
                 throw new ArgumentNullException("service");
             _service = service;
             StartOffset = startOffset;

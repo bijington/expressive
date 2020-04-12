@@ -8,7 +8,7 @@ namespace Expressive.Expressions.Binary.Multiplicative
     {
         #region Constructors
 
-        public DivideExpression(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
+        public DivideExpression(IExpression lhs, IExpression rhs, Context context) : base(lhs, rhs, context)
         {
         }
 
@@ -19,7 +19,7 @@ namespace Expressive.Expressions.Binary.Multiplicative
         protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
         {
             return this.Evaluate(lhsResult, rightHandSide, variables, (l, r) => 
-                l == null || r == null || IsReal(l) || IsReal(r)
+                l is null || r is null || IsReal(l) || IsReal(r)
                     ? Numbers.Divide(l, r)
                     : Numbers.Divide(Convert.ToDouble(l), r));
         }

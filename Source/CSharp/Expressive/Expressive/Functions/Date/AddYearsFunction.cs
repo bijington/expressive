@@ -9,17 +9,17 @@ namespace Expressive.Functions.Date
 
         public override string Name => "AddYears";
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
             var dateObject = parameters[0].Evaluate(this.Variables);
             var yearsObject = parameters[1].Evaluate(this.Variables);
 
-            if (dateObject == null || yearsObject == null) return null;
+            if (dateObject is null || yearsObject is null) { return null; }
 
-            DateTime date = Convert.ToDateTime(dateObject);
-            int years = Convert.ToInt32(yearsObject);
+            var date = Convert.ToDateTime(dateObject, context.CurrentCulture);
+            var years = Convert.ToInt32(yearsObject, context.CurrentCulture);
 
             return date.AddYears(years);
         }

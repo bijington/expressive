@@ -9,15 +9,15 @@ namespace Expressive.Functions.Date
 
         public override string Name => "YearOf";
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 1, 1);
 
             var dateObject = parameters[0].Evaluate(this.Variables);
 
-            if (dateObject == null) return null;
+            if (dateObject is null) { return null; }
 
-            DateTime date = Convert.ToDateTime(dateObject);
+            var date = Convert.ToDateTime(dateObject, context.CurrentCulture);
 
             return date.Year;
         }

@@ -9,7 +9,7 @@ namespace Expressive.Functions.Logical
 
         public override string Name { get { return "If"; } }
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 3, 3);
 

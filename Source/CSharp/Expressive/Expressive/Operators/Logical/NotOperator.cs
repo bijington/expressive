@@ -9,7 +9,7 @@ namespace Expressive.Operators.Logical
 
         public override string[] Tags => new[] { "!", "not" };
 
-        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
+        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context)
         {
             return new NotExpression(expressions[0] ?? expressions[1]);
         }

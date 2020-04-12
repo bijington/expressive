@@ -7,7 +7,7 @@ namespace Expressive.Expressions.Binary.Logical
     {
         #region Constructors
 
-        public AndExpression(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
+        public AndExpression(IExpression lhs, IExpression rhs, Context context) : base(lhs, rhs, context)
         {
         }
 

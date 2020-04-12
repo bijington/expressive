@@ -165,8 +165,8 @@ namespace Expressive.Tests
             Assert.AreEqual(true, new Expression("[date1] == '01/01/2016 00:00:00'").Evaluate(new Dictionary<string, object> { ["date1"] = new DateTime(2016, 01, 01) }));
 
             // Null safety
-            Assert.AreEqual(true, new Expression("[number1] == null").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(false, new Expression("[number1] == null").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
+            Assert.AreEqual(true, new Expression("[number1] is null").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
+            Assert.AreEqual(false, new Expression("[number1] is null").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
             Assert.AreEqual(false, new Expression("[number1] != null").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
             Assert.AreEqual(true, new Expression("[number1] != null").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
             Assert.AreEqual(true, new Expression("[number1] <> 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
@@ -959,7 +959,7 @@ namespace Expressive.Tests
         {
             var expression = new Expression("([a] + [b] * [c]) + ([a] * [b])");
 
-            Assert.AreEqual(3, expression.ReferencedVariables.Length);
+            Assert.AreEqual(3, expression.ReferencedVariables.Count);
         }
 
         [TestMethod]
