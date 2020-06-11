@@ -12,7 +12,7 @@ namespace Expressive.Tests.Functions.Date
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("DayOf", this.Function.Name);
+            Assert.AreEqual("DayOf", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@ namespace Expressive.Tests.Functions.Date
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new DayOfFunction();
+        protected override IFunction ActualFunction => new DayOfFunction();
 
         #endregion
     }

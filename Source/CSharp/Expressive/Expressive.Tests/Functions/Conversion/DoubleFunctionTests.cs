@@ -12,7 +12,7 @@ namespace Expressive.Tests.Functions.Conversion
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("Double", this.Function.Name);
+            Assert.AreEqual("Double", this.ActualFunction.Name);
         }
 
         [TestMethod, ExpectedException(typeof(InvalidCastException))]
@@ -71,7 +71,7 @@ namespace Expressive.Tests.Functions.Conversion
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new DoubleFunction();
+        protected override IFunction ActualFunction => new DoubleFunction();
 
         #endregion
     }

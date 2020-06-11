@@ -11,7 +11,7 @@ namespace Expressive.Tests.Functions.Relational
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("Min", this.Function.Name);
+            Assert.AreEqual("Min", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace Expressive.Tests.Functions.Relational
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new MinFunction();
+        protected override IFunction ActualFunction => new MinFunction();
 
         #endregion
     }

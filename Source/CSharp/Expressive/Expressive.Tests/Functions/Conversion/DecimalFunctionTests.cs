@@ -15,7 +15,7 @@ namespace Expressive.Tests.Functions.Conversion
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("Decimal", this.Function.Name);
+            Assert.AreEqual("Decimal", this.ActualFunction.Name);
         }
 
         [TestMethod, ExpectedException(typeof(InvalidCastException))]
@@ -84,7 +84,7 @@ namespace Expressive.Tests.Functions.Conversion
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new DecimalFunction();
+        protected override IFunction ActualFunction => new DecimalFunction();
 
         #endregion
     }

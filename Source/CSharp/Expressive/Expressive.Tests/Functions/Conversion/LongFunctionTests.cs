@@ -16,7 +16,7 @@ namespace Expressive.Tests.Functions.Conversion
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("Long", this.Function.Name);
+            Assert.AreEqual("Long", this.ActualFunction.Name);
         }
 
         [TestMethod, ExpectedException(typeof(InvalidCastException))]
@@ -75,7 +75,7 @@ namespace Expressive.Tests.Functions.Conversion
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new LongFunction();
+        protected override IFunction ActualFunction => new LongFunction();
 
         #endregion
     }

@@ -11,7 +11,7 @@ namespace Expressive.Tests.Functions.Relational
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("Max", this.Function.Name);
+            Assert.AreEqual("Max", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace Expressive.Tests.Functions.Relational
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new MaxFunction();
+        protected override IFunction ActualFunction => new MaxFunction();
 
         #endregion
     }

@@ -16,9 +16,9 @@ namespace Expressive.Tests.Tokenisation
 
             var tokeniser = new Tokeniser(context, new[]
             {
-                CreateTokenExtractor("hello", 0, context),
-                CreateTokenExtractor("world", 6, context),
-                CreateTokenExtractor("hello world", 0, context)
+                CreateTokenExtractor("hello", context),
+                CreateTokenExtractor("world", context),
+                CreateTokenExtractor("hello world", context)
             });
 
             var tokens = tokeniser.Tokenise("hello world");
@@ -29,9 +29,9 @@ namespace Expressive.Tests.Tokenisation
 
             tokeniser = new Tokeniser(context, new[]
             {
-                CreateTokenExtractor("hello world", 0, context),
-                CreateTokenExtractor("hello", 0, context),
-                CreateTokenExtractor("world", 6, context)
+                CreateTokenExtractor("hello world", context),
+                CreateTokenExtractor("hello", context),
+                CreateTokenExtractor("world", context)
             });
 
             tokens = tokeniser.Tokenise("hello world");
@@ -56,8 +56,8 @@ namespace Expressive.Tests.Tokenisation
 
             var tokeniser = new Tokeniser(context, new []
             {
-                CreateTokenExtractor("hello", 0, context),
-                CreateTokenExtractor("world", 6, context)
+                CreateTokenExtractor("hello", context),
+                CreateTokenExtractor("world", context)
             });
 
             var tokens = tokeniser.Tokenise("hello world");
@@ -74,8 +74,8 @@ namespace Expressive.Tests.Tokenisation
 
             var tokeniser = new Tokeniser(context, new[]
             {
-                CreateTokenExtractor("hel", 0, context),
-                CreateTokenExtractor("rld", 6, context)
+                CreateTokenExtractor("hel", context),
+                CreateTokenExtractor("rld", context)
             });
 
             var tokens = tokeniser.Tokenise("hello world");
@@ -87,7 +87,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("rld", tokens[3].CurrentToken);
         }
 
-        private static ITokenExtractor CreateTokenExtractor(string matchingToken, int expectedIndex, Context context)
+        private static ITokenExtractor CreateTokenExtractor(string matchingToken, Context context)
         {
             var tokenExtractor = new Mock<ITokenExtractor>();
 
