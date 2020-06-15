@@ -23,7 +23,9 @@ namespace Expressive.Operators
 
         public virtual Token[] GetInnerCaptiveTokens(Token[] allCaptiveTokens)
         {
+#pragma warning disable CA1825 // Avoid zero-length array allocations. - Array.Empty does not exist in net 4.5
             return new Token[0];
+#pragma warning restore CA1825 // Avoid zero-length array allocations.
         }
 
         public abstract OperatorPrecedence GetPrecedence(Token previousToken);

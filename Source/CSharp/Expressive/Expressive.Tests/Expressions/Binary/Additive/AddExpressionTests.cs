@@ -34,10 +34,12 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         [TestMethod]
         public void TestEvaluateWithEmptyLeftArray()
         {
+#pragma warning disable CA1825 // Avoid zero-length array allocations. - Array.Empty does not exist in net 4.5
             var expression = new AddExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new int[0]),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
                 new Context(ExpressiveOptions.None));
+#pragma warning restore CA1825 // Avoid zero-length array allocations.
 
             var result = (object[])expression.Evaluate(null);
             Assert.IsTrue(result.Length == 3);
