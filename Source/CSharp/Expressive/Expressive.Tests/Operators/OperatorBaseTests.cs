@@ -17,7 +17,9 @@ namespace Expressive.Tests.Operators
 
         internal abstract OperatorPrecedence ExpectedOperatorPrecedence { get; }
 
+#pragma warning disable CA1819 // Properties should not return arrays
         protected abstract string[] ExpectedTags { get; }
+#pragma warning restore CA1819 // Properties should not return arrays
 
         [TestMethod]
         public void TestTags()
@@ -44,7 +46,7 @@ namespace Expressive.Tests.Operators
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null),
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
                 },
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.IsInstanceOfType(expression, this.ExpectedExpressionType);
         }

@@ -7,7 +7,7 @@ namespace Expressive.Expressions.Binary.Additive
     {
         #region Constructors
 
-        public AddExpression(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
+        public AddExpression(IExpression lhs, IExpression rhs, Context context) : base(lhs, rhs, context)
         {
         }
 

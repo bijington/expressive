@@ -15,7 +15,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             var expression = new AddExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(3, expression.Evaluate(null));
         }
@@ -26,7 +26,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             var expression = new AddExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1 }),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.IsNull(expression.Evaluate(null));
         }
@@ -34,15 +34,17 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         [TestMethod]
         public void TestEvaluateWithEmptyLeftArray()
         {
+#pragma warning disable CA1825 // Avoid zero-length array allocations. - Array.Empty does not exist in net 4.5
             var expression = new AddExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new int[0]),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
+#pragma warning restore CA1825 // Avoid zero-length array allocations.
 
             var result = (object[])expression.Evaluate(null);
             Assert.IsTrue(result.Length == 3);
 
-            // TODO: Is this result correct? Currently null + 1 == null so technically yes but should it be the same for an empty array or default to the data types default e.g. default(int)
+            // TODO: Is this result correct? Currently null + 1 is null so technically yes but should it be the same for an empty array or default to the data types default e.g. default(int)
             Assert.AreEqual(result[0], null);
             Assert.AreEqual(result[1], null);
             Assert.AreEqual(result[2], null);
@@ -54,7 +56,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             var expression = new AddExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             var result = (object[])expression.Evaluate(null);
             Assert.IsTrue(result.Length == 3);
@@ -69,7 +71,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             var expression = new AddExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             var result = (object[])expression.Evaluate(null);
             Assert.IsTrue(result.Length == 3);
@@ -84,7 +86,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             var expression = new AddExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)"1"),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual("12", expression.Evaluate(null));
         }

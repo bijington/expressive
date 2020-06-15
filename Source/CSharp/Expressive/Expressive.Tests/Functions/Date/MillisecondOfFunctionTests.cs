@@ -12,7 +12,7 @@ namespace Expressive.Tests.Functions.Date
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("MillisecondOf", this.Function.Name);
+            Assert.AreEqual("MillisecondOf", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@ namespace Expressive.Tests.Functions.Date
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new MillisecondOfFunction();
+        protected override IFunction ActualFunction => new MillisecondOfFunction();
 
         #endregion
     }

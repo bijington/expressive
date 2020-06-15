@@ -12,7 +12,7 @@ namespace Expressive.Tests.Functions.Date
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("MinuteOf", this.Function.Name);
+            Assert.AreEqual("MinuteOf", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@ namespace Expressive.Tests.Functions.Date
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new MinuteOfFunction();
+        protected override IFunction ActualFunction => new MinuteOfFunction();
 
         #endregion
     }

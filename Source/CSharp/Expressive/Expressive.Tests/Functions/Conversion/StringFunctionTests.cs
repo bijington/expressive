@@ -14,7 +14,7 @@ namespace Expressive.Tests.Functions.Conversion
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("String", this.Function.Name);
+            Assert.AreEqual("String", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace Expressive.Tests.Functions.Conversion
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new StringFunction();
+        protected override IFunction ActualFunction => new StringFunction();
 
         #endregion
     }

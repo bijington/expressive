@@ -9,17 +9,17 @@ namespace Expressive.Functions.Date
 
         public override string Name => "HoursBetween";
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
             var startObject = parameters[0].Evaluate(this.Variables);
             var endObject = parameters[1].Evaluate(this.Variables);
 
-            if (startObject == null || endObject == null) return null;
+            if (startObject is null || endObject is null) { return null; }
 
-            DateTime start = Convert.ToDateTime(startObject);
-            DateTime end = Convert.ToDateTime(endObject);
+            var start = Convert.ToDateTime(startObject, context.CurrentCulture);
+            var end = Convert.ToDateTime(endObject, context.CurrentCulture);
 
             return (end - start).TotalHours;
         }

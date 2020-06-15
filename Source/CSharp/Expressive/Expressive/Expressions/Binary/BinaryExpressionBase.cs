@@ -11,17 +11,17 @@ namespace Expressive.Expressions.Binary
         #region Fields
 
         private readonly IExpression leftHandSide;
-        protected readonly ExpressiveOptions options;
+        protected readonly Context context;
         private readonly IExpression rightHandSide;
 
         #endregion
 
         #region Constructors
 
-        internal BinaryExpressionBase(IExpression lhs, IExpression rhs, ExpressiveOptions options)
+        internal BinaryExpressionBase(IExpression lhs, IExpression rhs, Context context)
         {
             this.leftHandSide = lhs;
-            this.options = options;
+            this.context = context;
             this.rightHandSide = rhs;
         }
 
@@ -31,12 +31,12 @@ namespace Expressive.Expressions.Binary
 
         public object Evaluate(IDictionary<string, object> variables)
         {
-            if (this.leftHandSide == null)
+            if (this.leftHandSide is null)
             {
                 throw new MissingParticipantException("The left hand side of the operation is missing.");
             }
 
-            if (this.rightHandSide == null)
+            if (this.rightHandSide is null)
             {
                 throw new MissingParticipantException("The right hand side of the operation is missing.");
             }
@@ -49,7 +49,7 @@ namespace Expressive.Expressions.Binary
 
         #endregion
 
-        private object CheckAndEvaluateSubExpression(object result, IDictionary<string, object> variables)
+        private static object CheckAndEvaluateSubExpression(object result, IDictionary<string, object> variables)
         {
             if (result is Expression lhsExpression)
             {
@@ -66,8 +66,8 @@ namespace Expressive.Expressions.Binary
             IList<object> lhsParticipants = new List<object>();
             IList<object> rhsParticipants = new List<object>();
 
-            lhsResult = this.CheckAndEvaluateSubExpression(lhsResult, variables);
-            var rhsResult = this.CheckAndEvaluateSubExpression(rhs.Evaluate(variables), variables);
+            lhsResult = CheckAndEvaluateSubExpression(lhsResult, variables);
+            var rhsResult = CheckAndEvaluateSubExpression(rhs.Evaluate(variables), variables);
 
             if (!(lhsResult is ICollection) && !(rhsResult is ICollection))
             {

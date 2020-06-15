@@ -9,9 +9,9 @@ namespace Expressive.Operators.Multiplicative
 
         public override string[] Tags => new[] { "%", "mod" };
 
-        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
+        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context)
         {
-            return new ModulusExpression(expressions[0], expressions[1], options);
+            return new ModulusExpression(expressions[0], expressions[1], context);
         }
 
         public override OperatorPrecedence GetPrecedence(Token previousToken)

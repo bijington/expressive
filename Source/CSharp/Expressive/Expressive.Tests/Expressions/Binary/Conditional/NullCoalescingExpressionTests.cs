@@ -15,7 +15,7 @@ namespace Expressive.Tests.Expressions.Binary.Conditional
             var expression = new NullCoalescingExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)"Non null"),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)"Never used"),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual("Non null", expression.Evaluate(null));
         }
@@ -26,7 +26,7 @@ namespace Expressive.Tests.Expressions.Binary.Conditional
             var expression = new NullCoalescingExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)"Now used"),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual("Now used", expression.Evaluate(null));
         }

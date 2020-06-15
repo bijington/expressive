@@ -16,7 +16,7 @@ namespace Expressive.Expressions
 
         public object Evaluate(IDictionary<string, object> variables)
         {
-            if (this.innerExpression == null)
+            if (this.innerExpression is null)
             {
                 throw new MissingParticipantException("Missing contents inside ().");
             }

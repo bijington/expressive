@@ -12,7 +12,7 @@ namespace Expressive.Tests.Functions.Date
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("SecondOf", this.Function.Name);
+            Assert.AreEqual("SecondOf", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@ namespace Expressive.Tests.Functions.Date
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new SecondOfFunction();
+        protected override IFunction ActualFunction => new SecondOfFunction();
 
         #endregion
     }

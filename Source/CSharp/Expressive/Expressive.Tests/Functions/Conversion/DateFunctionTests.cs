@@ -15,7 +15,7 @@ namespace Expressive.Tests.Functions.Conversion
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("Date", this.Function.Name);
+            Assert.AreEqual("Date", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace Expressive.Tests.Functions.Conversion
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new DateFunction();
+        protected override IFunction ActualFunction => new DateFunction();
 
         #endregion
     }

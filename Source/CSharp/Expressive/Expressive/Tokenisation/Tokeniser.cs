@@ -56,7 +56,7 @@ namespace Expressive.Tokenisation
                     if (!char.IsWhiteSpace(character))
                     {
                         // If we don't recognise this item then we had better keep going until we find something we know about.
-                        if (unrecognised == null)
+                        if (unrecognised is null)
                         {
                             unrecognised = new List<char>();
                         }
@@ -84,7 +84,7 @@ namespace Expressive.Tokenisation
 
         private static void CheckForUnrecognised(IList<char> unrecognised, ICollection<Token> tokens, int index)
         {
-            if (unrecognised == null)
+            if (unrecognised is null)
             {
                 return;
             }

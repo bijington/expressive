@@ -7,7 +7,7 @@ namespace Expressive.Expressions.Binary.Additive
     {
         #region Constructors
 
-        public SubtractExpression(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
+        public SubtractExpression(IExpression lhs, IExpression rhs, Context context) : base(lhs, rhs, context)
         {
         }
 

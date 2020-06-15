@@ -15,7 +15,7 @@ namespace Expressive.Tests.Functions.Conversion
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("Decimal", this.Function.Name);
+            Assert.AreEqual("Decimal", this.ActualFunction.Name);
         }
 
         [TestMethod, ExpectedException(typeof(InvalidCastException))]
@@ -71,7 +71,7 @@ namespace Expressive.Tests.Functions.Conversion
                 {
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)longValue)
                 },
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(12345M, result);
         }
@@ -84,7 +84,7 @@ namespace Expressive.Tests.Functions.Conversion
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new DecimalFunction();
+        protected override IFunction ActualFunction => new DecimalFunction();
 
         #endregion
     }

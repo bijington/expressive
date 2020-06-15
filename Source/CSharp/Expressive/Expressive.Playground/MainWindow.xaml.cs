@@ -269,7 +269,7 @@ namespace Expressive.Playground
             var matchingFunctions = _functions.Where(f => f.Text.StartsWith(e.Text, StringComparison.OrdinalIgnoreCase));
 
             if (matchingFunctions.Any() &&
-                _completionWindow == null&&
+                _completionWindow is null&&
                 this.textEditor.Text[Math.Max(this.textEditor.CaretOffset - 2, 0)] != '[' &&
                 this.textEditor.Text[Math.Max(this.textEditor.CaretOffset - 2, 0)] != '\'' &&
                 this.textEditor.Text[Math.Max(this.textEditor.CaretOffset - 2, 0)] != '#') // Prevent showing the function intellisense if we entering a variable.
@@ -500,7 +500,7 @@ namespace Expressive.Playground
 
         private void UpdateTimer()
         {
-            if (_evaluationTimer == null)
+            if (_evaluationTimer is null)
             {
                 _evaluationTimer = new DispatcherTimer();
                 _evaluationTimer.Tick += EvaluationTimer_Tick;

@@ -9,17 +9,17 @@ namespace Expressive.Functions.Date
 
         public override string Name => "AddMilliseconds";
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, 2, 2);
 
             var dateObject = parameters[0].Evaluate(this.Variables);
             var millisecondsObject = parameters[1].Evaluate(this.Variables);
 
-            if (dateObject == null || millisecondsObject == null) return null;
+            if (dateObject is null || millisecondsObject is null) { return null; }
 
-            DateTime date = Convert.ToDateTime(dateObject);
-            double milliseconds = Convert.ToDouble(millisecondsObject);
+            var date = Convert.ToDateTime(dateObject, context.CurrentCulture);
+            var milliseconds = Convert.ToDouble(millisecondsObject, context.CurrentCulture);
 
             return date.AddMilliseconds(milliseconds);
         }

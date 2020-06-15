@@ -28,8 +28,8 @@ namespace Expressive
                 this.context,
                 new List<ITokenExtractor>
                 {
-                    new KeywordTokenExtractor(context.FunctionNames),
-                    new KeywordTokenExtractor(context.OperatorNames),
+                    new KeywordTokenExtractor(this.context.FunctionNames),
+                    new KeywordTokenExtractor(this.context.OperatorNames),
                     // Variables
                     new ParenthesisedTokenExtractor('[', ']'),
                     new NumericTokenExtractor(),
@@ -93,7 +93,7 @@ namespace Expressive
 
         private IExpression CompileExpression(Queue<Token> tokens, OperatorPrecedence minimumPrecedence, IList<string> variables, bool isWithinFunction)
         {
-            if (tokens == null)
+            if (tokens is null)
             {
                 throw new ArgumentNullException(nameof(tokens), "You must call Tokenise before compiling");
             }
@@ -137,7 +137,7 @@ namespace Expressive
                             currentToken = new Token(")", -1);
                         }
 
-                        leftHandSide = op.BuildExpression(previousToken, new[] { leftHandSide, rightHandSide }, this.context.Options);
+                        leftHandSide = op.BuildExpression(previousToken, new[] { leftHandSide, rightHandSide }, this.context);
                     }
                     else
                     {
@@ -146,7 +146,7 @@ namespace Expressive
                 }
                 else if (this.context.TryGetFunction(currentToken.CurrentToken, out var function)) // or an IFunction?
                 {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     var expressions = new List<IExpression>();
                     var captiveTokens = new Queue<Token>();
@@ -194,36 +194,36 @@ namespace Expressive
 
                     leftHandSide = new FunctionExpression(currentToken.CurrentToken, function, expressions.ToArray());
                 }
-                else if (currentToken.CurrentToken.IsNumeric(this.context.CurrentCulture)) // Or a number
+                else if (currentToken.CurrentToken.IsNumeric(this.context.DecimalCurrentCulture)) // Or a number
                 {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
 
-                    if (int.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var intValue))
+                    if (int.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.DecimalCurrentCulture, out var intValue))
                     {
                         leftHandSide = new ConstantValueExpression(intValue);
                     }
-                    else if (decimal.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var decimalValue))
+                    else if (decimal.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.DecimalCurrentCulture, out var decimalValue))
                     {
                         leftHandSide = new ConstantValueExpression(decimalValue);
                     }
-                    else if (double.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var doubleValue))
+                    else if (double.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.DecimalCurrentCulture, out var doubleValue))
                     {
                         leftHandSide = new ConstantValueExpression(doubleValue);
                     }
-                    else if (float.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var floatValue))
+                    else if (float.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.DecimalCurrentCulture, out var floatValue))
                     {
                         leftHandSide = new ConstantValueExpression(floatValue);
                     }
-                    else if (long.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.CurrentCulture, out var longValue))
+                    else if (long.TryParse(currentToken.CurrentToken, NumberStyles.Any, this.context.DecimalCurrentCulture, out var longValue))
                     {
                         leftHandSide = new ConstantValueExpression(longValue);
                     }
                 }
                 else if (currentToken.CurrentToken.StartsWith("[") && currentToken.CurrentToken.EndsWith("]")) // or a variable?
                 {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
                     var variableName = currentToken.CurrentToken.Replace("[", "").Replace("]", "");
@@ -236,28 +236,28 @@ namespace Expressive
                 }
                 else if (string.Equals(currentToken.CurrentToken, "true", StringComparison.OrdinalIgnoreCase)) // or a boolean?
                 {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(true);
                 }
                 else if (string.Equals(currentToken.CurrentToken, "false", StringComparison.OrdinalIgnoreCase))
                 {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(false);
                 }
                 else if (string.Equals(currentToken.CurrentToken, "null", StringComparison.OrdinalIgnoreCase)) // or a null?
                 {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(null);
                 }
                 else if (currentToken.CurrentToken.StartsWith(Context.DateSeparator.ToString()) && currentToken.CurrentToken.EndsWith(Context.DateSeparator.ToString())) // or a date?
                 {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
 
@@ -285,7 +285,7 @@ namespace Expressive
                 else if ((currentToken.CurrentToken.StartsWith("'") && currentToken.CurrentToken.EndsWith("'")) ||
                     (currentToken.CurrentToken.StartsWith("\"") && currentToken.CurrentToken.EndsWith("\"")))
                 {
-                    this.CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
+                    CheckForExistingParticipant(leftHandSide, currentToken, isWithinFunction);
 
                     tokens.Dequeue();
                     leftHandSide = new ConstantValueExpression(CleanString(currentToken.CurrentToken.Substring(1, currentToken.Length - 2)));
@@ -314,15 +314,15 @@ namespace Expressive
 
         private static string CleanString(string input)
         {
-            if (input.Length <= 1) return input;
+            if (input.Length <= 1) { return input; }
 
             // the input string can only get shorter
             // so init the buffer so we won't have to reallocate later
-            char[] buffer = new char[input.Length];
-            int outIdx = 0;
-            for (int i = 0; i < input.Length; i++)
+            var buffer = new char[input.Length];
+            var outIdx = 0;
+            for (var i = 0; i < input.Length; i++)
             {
-                char c = input[i];
+                var c = input[i];
                 if (c == '\\')
                 {
                     if (i < input.Length - 1)
@@ -363,7 +363,7 @@ namespace Expressive
             return new string(buffer, 0, outIdx);
         }
 
-        private void CheckForExistingParticipant(IExpression participant, Token token, bool isWithinFunction)
+        private static void CheckForExistingParticipant(IExpression participant, Token token, bool isWithinFunction)
         {
             if (participant != null)
             {

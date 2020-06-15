@@ -15,16 +15,19 @@ namespace Expressive.Helpers
             typeof(string),   // If it's not anything else, it can be a string.
         };
 
-        internal static int CompareUsingMostPreciseType(object a, object b, bool ignoreCase)
+        internal static int CompareUsingMostPreciseType(object a, object b, Context context)
         {
             var mostPreciseType = GetMostPreciseType(a?.GetType(), b?.GetType());
 
             if (mostPreciseType == typeof(string))
             {
-                return string.Compare((string)Convert.ChangeType(a, mostPreciseType), (string)Convert.ChangeType(b, mostPreciseType), ignoreCase);
+                return string.Compare(
+                    (string)Convert.ChangeType(a, mostPreciseType, context.CurrentCulture),
+                    (string)Convert.ChangeType(b, mostPreciseType, context.CurrentCulture),
+                    context.StringComparison);
             }
 
-            return Comparison.Compare(a, b, mostPreciseType, ignoreCase);
+            return Comparison.Compare(a, b, mostPreciseType, context);
         }
 
         private static Type GetMostPreciseType(Type a, Type b)
@@ -44,20 +47,20 @@ namespace Expressive.Helpers
             return a;
         }
 
-        private static int Compare(object lhs, object rhs, Type mostPreciseType, bool ignoreCase)
+        private static int Compare(object lhs, object rhs, Type mostPreciseType, Context context)
         {
             // If at least one is null then the check is simple.
-            if (lhs == null && rhs == null)
+            if (lhs is null && rhs is null)
             {
                 return 0;
             }
 
-            if (lhs == null)
+            if (lhs is null)
             {
                 return -1;
             }
 
-            if (rhs == null)
+            if (rhs is null)
             {
                 return 1;
             }
@@ -75,16 +78,18 @@ namespace Expressive.Helpers
             {
                 if (lhsType == mostPreciseType)
                 {
-                    rhs = Convert.ChangeType(rhs, mostPreciseType);
+                    rhs = Convert.ChangeType(rhs, mostPreciseType, context.CurrentCulture);
                 }
                 else
                 {
-                    lhs = Convert.ChangeType(lhs, mostPreciseType);
+                    lhs = Convert.ChangeType(lhs, mostPreciseType, context.CurrentCulture);
                 }
 
                 return Comparer<object>.Default.Compare(lhs, rhs);
             }
-            catch (System.Exception)
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
 
             }
@@ -92,9 +97,11 @@ namespace Expressive.Helpers
             // Attempt to convert the RHS to match the LHS.
             try
             {
-                return Comparer<object>.Default.Compare(lhs, Convert.ChangeType(rhs, lhsType));
+                return Comparer<object>.Default.Compare(lhs, Convert.ChangeType(rhs, lhsType, context.CurrentCulture));
             }
-            catch (System.Exception)
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
 
             }
@@ -102,9 +109,11 @@ namespace Expressive.Helpers
             // Attempt to convert the LHS to match the RHS.
             try
             {
-                return Comparer<object>.Default.Compare(lhs, Convert.ChangeType(rhs, lhsType));
+                return Comparer<object>.Default.Compare(lhs, Convert.ChangeType(rhs, lhsType, context.CurrentCulture));
             }
-            catch (System.Exception)
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
 
             }
@@ -112,11 +121,14 @@ namespace Expressive.Helpers
             // Failing that resort to a string.
             try
             {
-                return string.Compare((string)Convert.ChangeType(lhs, typeof(string)),
-                    (string)Convert.ChangeType(rhs, typeof(string)),
-                    ignoreCase);
+                return string.Compare(
+                    (string)Convert.ChangeType(lhs, typeof(string), context.CurrentCulture),
+                    (string)Convert.ChangeType(rhs, typeof(string), context.CurrentCulture),
+                    context.StringComparison);
             }
-            catch (System.Exception)
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
 
             }

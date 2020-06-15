@@ -959,7 +959,7 @@ namespace Expressive.Tests
         {
             var expression = new Expression("([a] + [b] * [c]) + ([a] * [b])");
 
-            Assert.AreEqual(3, expression.ReferencedVariables.Length);
+            Assert.AreEqual(3, expression.ReferencedVariables.Count);
         }
 
         [TestMethod]

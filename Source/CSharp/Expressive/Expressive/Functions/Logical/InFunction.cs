@@ -9,18 +9,18 @@ namespace Expressive.Functions.Logical
 
         public override string Name { get { return "In"; } }
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, -1, 2);
 
-            bool found = false;
+            var found = false;
 
-            object parameter = parameters[0].Evaluate(Variables);
+            var parameter = parameters[0].Evaluate(Variables);
 
             // Goes through any values, and stop whe one is found
-            for (int i = 1; i < parameters.Length; i++)
+            for (var i = 1; i < parameters.Length; i++)
             {
-                if (Comparison.CompareUsingMostPreciseType(parameter, parameters[i].Evaluate(Variables), options.HasFlag(ExpressiveOptions.IgnoreCase)) == 0)
+                if (Comparison.CompareUsingMostPreciseType(parameter, parameters[i].Evaluate(Variables), context) == 0)
                 {
                     found = true;
                     break;

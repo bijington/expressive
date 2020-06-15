@@ -6,7 +6,7 @@ namespace Expressive.Expressions.Binary.Conditional
     {
         #region Constructors
 
-        public NullCoalescingExpression(IExpression lhs, IExpression rhs, ExpressiveOptions options) : base(lhs, rhs, options)
+        public NullCoalescingExpression(IExpression lhs, IExpression rhs, Context context) : base(lhs, rhs, context)
         {
         }
 

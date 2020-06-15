@@ -12,7 +12,7 @@ namespace Expressive.Tests.Functions.Date
         [TestMethod]
         public void TestName()
         {
-            Assert.AreEqual("MillisecondsBetween", this.Function.Name);
+            Assert.AreEqual("MillisecondsBetween", this.ActualFunction.Name);
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace Expressive.Tests.Functions.Date
 
         #region FunctionBaseTests Members
 
-        protected override IFunction Function => new MillisecondsBetweenFunction();
+        protected override IFunction ActualFunction => new MillisecondsBetweenFunction();
 
         #endregion
     }

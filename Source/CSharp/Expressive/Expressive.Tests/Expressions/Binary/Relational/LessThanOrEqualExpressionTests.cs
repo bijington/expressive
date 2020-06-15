@@ -15,7 +15,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(null, expression.Evaluate(null));
         }
@@ -26,7 +26,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }
@@ -37,7 +37,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(false, expression.Evaluate(null));
         }
@@ -48,7 +48,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)"abc"),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(null, expression.Evaluate(null));
         }
@@ -59,7 +59,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }
@@ -70,7 +70,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(null, expression.Evaluate(null));
         }
@@ -81,7 +81,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1.0),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }
@@ -92,7 +92,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1.001),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }
@@ -103,7 +103,7 @@ namespace Expressive.Tests.Expressions.Binary.Relational
             var expression = new LessThanOrEqualExpression(
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1.001),
                 Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(false, expression.Evaluate(null));
         }

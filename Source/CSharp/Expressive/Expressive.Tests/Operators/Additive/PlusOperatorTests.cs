@@ -55,7 +55,7 @@ namespace Expressive.Tests.Operators.Additive
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null),
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
                 },
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.IsInstanceOfType(expression, typeof(PlusExpression));
         }
@@ -72,7 +72,7 @@ namespace Expressive.Tests.Operators.Additive
                     null,
                     Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
                 },
-                ExpressiveOptions.None);
+                new Context(ExpressiveOptions.None));
 
             Assert.IsInstanceOfType(expression, typeof(PlusExpression));
         }

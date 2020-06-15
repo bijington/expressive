@@ -13,14 +13,14 @@ namespace Expressive.Operators.Additive
 
         public override string[] Tags => new[] { "-", "\u2212" };
 
-        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, ExpressiveOptions options)
+        public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context)
         {
             if (IsUnary(previousToken))
             {
                 return new MinusExpression(expressions[0] ?? expressions[1]);
             }
 
-            return new SubtractExpression(expressions[0], expressions[1], options);
+            return new SubtractExpression(expressions[0], expressions[1], context);
         }
 
         public override bool CanGetCaptiveTokens(Token previousToken, Token token, Queue<Token> remainingTokens)

@@ -10,14 +10,14 @@ namespace Expressive.Functions.Conversion
 
         public override string Name => "Date";
 
-        public override object Evaluate(IExpression[] parameters, ExpressiveOptions options)
+        public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
             var objectToConvert = parameters[0].Evaluate(this.Variables);
             
             // No point converting if there is nothing to convert.
-            if (objectToConvert == null) return null;
+            if (objectToConvert is null) { return null; }
 
             // Safely check for a format parameter.
             if (parameters.Length > 1 &&
@@ -27,11 +27,11 @@ namespace Expressive.Functions.Conversion
 
                 if (format is string formatString)
                 {
-                    return DateTime.ParseExact(dateString, formatString, CultureInfo.CurrentCulture);
+                    return DateTime.ParseExact(dateString, formatString, context.CurrentCulture);
                 }
             }
 
-            return Convert.ToDateTime(objectToConvert);
+            return Convert.ToDateTime(objectToConvert, context.CurrentCulture);
         }
 
         #endregion

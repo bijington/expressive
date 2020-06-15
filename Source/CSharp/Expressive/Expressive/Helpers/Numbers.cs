@@ -17,7 +17,7 @@ namespace Expressive.Helpers
 
         internal static object Add(object a, object b)
         {
-            if (a == null || b == null)
+            if (a is null || b is null)
             {
                 return null;
             }
@@ -259,7 +259,7 @@ namespace Expressive.Helpers
 
         internal static object Divide(object a, object b)
         {
-            if (a == null || b == null)
+            if (a is null || b is null)
             {
                 return null;
             }
@@ -473,7 +473,7 @@ namespace Expressive.Helpers
 
         internal static object Multiply(object a, object b)
         {
-            if (a == null || b == null)
+            if (a is null || b is null)
             {
                 return null;
             }
@@ -687,7 +687,7 @@ namespace Expressive.Helpers
 
         internal static object Subtract(object a, object b)
         {
-            if (a == null || b == null)
+            if (a is null || b is null)
             {
                 return null;
             }
@@ -918,7 +918,7 @@ namespace Expressive.Helpers
 
         internal static object Modulus(object a, object b)
         {
-            if (a == null || b == null)
+            if (a is null || b is null)
             {
                 return null;
             }
@@ -1135,7 +1135,7 @@ namespace Expressive.Helpers
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
-            if (a == null || b == null)
+            if (a is null || b is null)
             {
                 return null;
             }
@@ -1176,17 +1176,17 @@ namespace Expressive.Helpers
             a = ConvertIfString(a);
             b = ConvertIfString(b);
 
-            if (a == null && b == null)
+            if (a is null && b is null)
             {
                 return null;
             }
 
-            if (a == null)
+            if (a is null)
             {
                 return b;
             }
 
-            if (b == null)
+            if (b is null)
             {
                 return a;
             }

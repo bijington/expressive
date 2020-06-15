@@ -42,6 +42,8 @@ namespace Expressive
 
         internal CultureInfo CurrentCulture { get; }
 
+        internal CultureInfo DecimalCurrentCulture { get; }
+
         internal char DecimalSeparator { get; }
 
         internal IEnumerable<string> FunctionNames => this.registeredFunctions.Keys.OrderByDescending(k => k.Length);
@@ -64,10 +66,11 @@ namespace Expressive
         {
             Options = options;
 
+            this.CurrentCulture = CultureInfo.CurrentCulture;
             // For now we will ignore any specific cultures but keeping it in a single place to simplify changing later if required.
-            this.CurrentCulture = CultureInfo.InvariantCulture;
+            this.DecimalCurrentCulture = CultureInfo.InvariantCulture;
 
-            DecimalSeparator = Convert.ToChar(this.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+            DecimalSeparator = Convert.ToChar(this.DecimalCurrentCulture.NumberFormat.NumberDecimalSeparator, this.DecimalCurrentCulture);
             this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(StringComparer);
             this.registeredOperators = new Dictionary<string, IOperator>(StringComparer);
 
@@ -196,7 +199,7 @@ namespace Expressive
             {
                 function.Variables = a;
 
-                return function.Evaluate(p, Options);
+                return function.Evaluate(p, this);
             });
         }
 

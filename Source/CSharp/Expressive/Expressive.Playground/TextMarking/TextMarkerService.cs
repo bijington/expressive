@@ -23,7 +23,7 @@ namespace Expressive.Playground.TextMarking
 
         public TextMarkerService(TextDocument document)
         {
-            if (document == null)
+            if (document is null)
                 throw new ArgumentNullException("document");
             _document = document;
             _markers = new TextSegmentCollection<TextMarker>(document);
@@ -35,7 +35,7 @@ namespace Expressive.Playground.TextMarking
 
         public ITextMarker Create(int startOffset, int length)
         {
-            if (_markers == null)
+            if (_markers is null)
                 throw new InvalidOperationException("Cannot create a marker when not attached to a document");
 
             int textLength = _document.TextLength;
@@ -52,7 +52,7 @@ namespace Expressive.Playground.TextMarking
 
         public IEnumerable<ITextMarker> GetMarkersAtOffset(int offset)
         {
-            if (_markers == null)
+            if (_markers is null)
                 return Enumerable.Empty<ITextMarker>();
             else
                 return _markers.FindSegmentsContaining(offset);
@@ -65,7 +65,7 @@ namespace Expressive.Playground.TextMarking
 
         public void RemoveAll(Predicate<ITextMarker> predicate)
         {
-            if (predicate == null)
+            if (predicate is null)
                 throw new ArgumentNullException("predicate");
             if (_markers != null)
             {
@@ -79,7 +79,7 @@ namespace Expressive.Playground.TextMarking
 
         public void Remove(ITextMarker marker)
         {
-            if (marker == null)
+            if (marker is null)
                 throw new ArgumentNullException("marker");
             TextMarker m = marker as TextMarker;
             if (_markers != null && _markers.Remove(m))
@@ -110,7 +110,7 @@ namespace Expressive.Playground.TextMarking
 
         protected override void ColorizeLine(DocumentLine line)
         {
-            if (_markers == null)
+            if (_markers is null)
                 return;
             int lineStart = line.Offset;
             int lineEnd = lineStart + line.Length;
@@ -155,11 +155,11 @@ namespace Expressive.Playground.TextMarking
 
         public void Draw(TextView textView, DrawingContext drawingContext)
         {
-            if (textView == null)
+            if (textView is null)
                 throw new ArgumentNullException("textView");
-            if (drawingContext == null)
+            if (drawingContext is null)
                 throw new ArgumentNullException("drawingContext");
-            if (_markers == null || !textView.VisualLinesValid)
+            if (_markers is null || !textView.VisualLinesValid)
                 return;
             var visualLines = textView.VisualLines;
             if (visualLines.Count == 0)
