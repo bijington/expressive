@@ -4,18 +4,23 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- main
 
 pool:
   vmImage: 'vs2017-win2016'
 
 steps:
-- task: NuGetCommand@2
+# - task: NuGetCommand@2
+#   displayName: "NuGet Restore"
+#   inputs:
+#     command: 'restore'
+#     restoreSolution: '**/*.sln'
+#     feedsToUse: 'select'
+- task: DotNetCoreCLI@2
   displayName: "NuGet Restore"
   inputs:
     command: 'restore'
-    restoreSolution: '**/*.sln'
-    feedsToUse: 'select'
+    projects: '**/*.csproj'
 
 # - task: PowerShell@2
 #   displayName: "NET Standard Build"
