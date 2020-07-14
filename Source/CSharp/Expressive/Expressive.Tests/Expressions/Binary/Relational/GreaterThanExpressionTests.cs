@@ -24,6 +24,8 @@ namespace Expressive.Tests.Expressions.Binary.Relational
         [TestCase(1.001, 1, true)]
         [TestCase(1, 1.001, false)]
         [TestCase(1.001, 1.001, false)]
+        [TestCase(1, 1.00, false)]
+        [TestCase(1.00, 1, false)]
         public static void TestEvaluate(object lhs, object rhs, object expectedValue)
         {
             var expression = new GreaterThanExpression(
