@@ -18,8 +18,10 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      run: dotnet restore **/*.csproj
+      run: dotnet restore ~\Source\CSharp\Expressive\Expressive\Expressive.csproj
+    - name: Install dependencies (test)
+      run: dotnet restore ~\Source\CSharp\Expressive\Expressive.Tests\Expressive.Tests.csproj
     - name: Build
-      run: dotnet build --configuration Release --no-restore **/*.csproj
+      run: dotnet build --configuration Release --no-restore ~\Source\CSharp\Expressive\Expressive\Expressive.csproj
     - name: Test
-      run: dotnet test --no-restore --verbosity normal **/*.Tests.csproj
+      run: dotnet test --no-restore --verbosity normal ~\Source\CSharp\Expressive\Expressive.Tests\Expressive.Tests.csproj
