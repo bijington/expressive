@@ -1,101 +1,39 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Binary.Relational;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Expressions.Binary.Relational
 {
-    [TestClass]
-    public class LessThanExpressionTests
+    public static class LessThanExpressionTests
     {
-        [TestMethod]
-        public void TestBothNull()
+        [TestCase(null, null, false)]
+        [TestCase(5, 5, false)]
+        [TestCase(5, 2, false)]
+        [TestCase(2, 5, true)]
+        [TestCase(null, "abc", true)]
+        [TestCase("abc", null, false)]
+        [TestCase("abc", "abc", false)]
+        [TestCase(null, false, true)]
+        [TestCase(false, null, false)]
+        [TestCase(true, false, false)]
+        [TestCase(true, true, false)]
+        [TestCase(false, false, false)]
+        [TestCase(false, true, true)]
+        [TestCase(1.001, 1, false)]
+        [TestCase(1, 1.001, true)]
+        [TestCase(1.001, 1.001, false)]
+        [TestCase(1, 1.00, false)]
+        [TestCase(1.00, 1, false)]
+        public static void TestEvaluate(object lhs, object rhs, object expectedValue)
         {
             var expression = new LessThanExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == lhs),
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == rhs),
                 new Context(ExpressiveOptions.None));
 
-            Assert.AreEqual(null, expression.Evaluate(null));
+            Assert.That(expression.Evaluate(null), Is.EqualTo(expectedValue));
         }
-
-        [TestMethod]
-        public void TestEqual()
-        {
-            var expression = new LessThanExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
-                new Context(ExpressiveOptions.None));
-
-            Assert.AreEqual(false, expression.Evaluate(null));
-        }
-
-        [TestMethod]
-        public void TestGreaterThan()
-        {
-            var expression = new LessThanExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
-                new Context(ExpressiveOptions.None));
-
-            Assert.AreEqual(false, expression.Evaluate(null));
-        }
-
-        [TestMethod]
-        public void TestLeftNull()
-        {
-            var expression = new LessThanExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)"abc"),
-                new Context(ExpressiveOptions.None));
-
-            Assert.AreEqual(null, expression.Evaluate(null));
-        }
-
-        [TestMethod]
-        public void TestLessThan()
-        {
-            var expression = new LessThanExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)5),
-                new Context(ExpressiveOptions.None));
-
-            Assert.AreEqual(true, expression.Evaluate(null));
-        }
-
-        [TestMethod]
-        public void TestRightNull()
-        {
-            var expression = new LessThanExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null),
-                new Context(ExpressiveOptions.None));
-
-            Assert.AreEqual(null, expression.Evaluate(null));
-        }
-
-        [TestMethod]
-        public void TestIntFloatTrue()
-        {
-            var expression = new LessThanExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1.001),
-                new Context(ExpressiveOptions.None));
-
-            Assert.AreEqual(true, expression.Evaluate(null));
-        }
-
-        [TestMethod]
-        public void TestIntFloatFalse()
-        {
-            var expression = new LessThanExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1.001),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
-                new Context(ExpressiveOptions.None));
-
-            Assert.AreEqual(false, expression.Evaluate(null));
-        }
-
     }
 }

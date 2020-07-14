@@ -163,27 +163,6 @@ namespace Expressive.Tests
             // Dates can be parsed to string.
             Assert.AreEqual(true, new Expression("[date1] == '2016-01-01'").Evaluate(new Dictionary<string, object> { ["date1"] = new DateTime(2016, 01, 01) }));
             Assert.AreEqual(true, new Expression("[date1] == '01/01/2016 00:00:00'").Evaluate(new Dictionary<string, object> { ["date1"] = new DateTime(2016, 01, 01) }));
-
-            // Null safety
-            Assert.AreEqual(true, new Expression("[number1] == null").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(false, new Expression("[number1] == null").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
-            Assert.AreEqual(false, new Expression("[number1] != null").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(true, new Expression("[number1] != null").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
-            Assert.AreEqual(true, new Expression("[number1] <> 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(null, new Expression("[number1] >= 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(null, new Expression("[number1] > 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(null, new Expression("[number1] <= 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(null, new Expression("[number1] < 2").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-
-            Assert.AreEqual(true, new Expression("null == [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(false, new Expression("null == [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
-            Assert.AreEqual(false, new Expression("null != [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(true, new Expression("null != [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = 2 }));
-            Assert.AreEqual(true, new Expression("2 <> [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(null, new Expression("2 >= [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(null, new Expression("2 > [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(null, new Expression("2 <= [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
-            Assert.AreEqual(null, new Expression("2 < [number1]").Evaluate(new Dictionary<string, object> { ["number1"] = null }));
         }
 
         [TestMethod]
