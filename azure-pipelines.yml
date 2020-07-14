@@ -10,6 +10,24 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.0.0'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.1.0'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.0'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.0.0'
+
 # - task: NuGetCommand@2
 #   displayName: "NuGet Restore"
 #   inputs:
@@ -30,7 +48,7 @@ steps:
 #       dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
 
 - task: MSBuild@1
-  displayName: "NET 4.0 Build"
+  displayName: "Build"
   inputs:
     solution: '**\Expressive.csproj'
     configuration: 'Release'
