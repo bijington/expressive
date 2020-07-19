@@ -20,24 +20,11 @@ steps:
     packageType: 'sdk'
     version: '3.1.x'
 
-# - task: NuGetCommand@2
-#   displayName: "NuGet Restore"
-#   inputs:
-#     command: 'restore'
-#     restoreSolution: '**/*.sln'
-#     feedsToUse: 'select'
 - task: DotNetCoreCLI@2
   displayName: "NuGet Restore"
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
-
-# - task: PowerShell@2
-#   displayName: "NET Standard Build"
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       dotnet build .\Source\CSharp\Expressive\Expressive.Standard\Expressive.Standard.csproj -c release
 
 - task: MSBuild@1
   displayName: "Build"
