@@ -50,13 +50,9 @@ namespace Expressive
 
         internal IEnumerable<string> OperatorNames => this.registeredOperators.Keys.OrderByDescending(k => k.Length);
 
-        internal StringComparer StringComparer => Options.HasFlag(ExpressiveOptions.IgnoreCase)
-            ? StringComparer.OrdinalIgnoreCase
-            : StringComparer.Ordinal;
+        internal StringComparer StringComparer { get; }
 
-        internal StringComparison StringComparison => Options.HasFlag(ExpressiveOptions.IgnoreCase)
-            ? StringComparison.OrdinalIgnoreCase
-            : StringComparison.Ordinal;
+        internal StringComparison StringComparison { get; }
 
         #endregion
 
@@ -65,6 +61,13 @@ namespace Expressive
         internal Context(ExpressiveOptions options)
         {
             Options = options;
+
+            this.StringComparer = Options.HasFlag(ExpressiveOptions.IgnoreCase)
+                ? StringComparer.OrdinalIgnoreCase
+                : StringComparer.Ordinal;
+            this.StringComparison = Options.HasFlag(ExpressiveOptions.IgnoreCase)
+                ? StringComparison.OrdinalIgnoreCase
+                : StringComparison.Ordinal;
 
             this.CurrentCulture = CultureInfo.CurrentCulture;
             // For now we will ignore any specific cultures but keeping it in a single place to simplify changing later if required.
