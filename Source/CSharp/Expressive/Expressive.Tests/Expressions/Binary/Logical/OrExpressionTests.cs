@@ -52,5 +52,20 @@ namespace Expressive.Tests.Expressions.Binary.Logical
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }
+
+        [TestMethod]
+        public void TestShortCircuit()
+        {
+            var rightHandMock = new Mock<IExpression>();
+
+            var expression = new OrExpression(
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
+                rightHandMock.Object,
+                new Context(ExpressiveOptions.None));
+
+            expression.Evaluate(null);
+
+            rightHandMock.Verify(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()), Times.Never);
+        }
     }
 }
