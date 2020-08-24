@@ -15,10 +15,9 @@ namespace Expressive.Expressions.Binary.Logical
 
         #region BinaryExpressionBase Members
 
-        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
-        {
-            return this.Evaluate(lhsResult, rightHandSide, variables, (l, r) => Convert.ToBoolean(l) && Convert.ToBoolean(r));
-        }
+        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables) => 
+            Convert.ToBoolean(CheckAndEvaluateSubExpression(lhsResult, variables)) &&
+            Convert.ToBoolean(CheckAndEvaluateSubExpression(rightHandSide.Evaluate(variables), variables));
 
         #endregion
     }

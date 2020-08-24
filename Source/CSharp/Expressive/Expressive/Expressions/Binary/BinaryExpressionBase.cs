@@ -49,7 +49,7 @@ namespace Expressive.Expressions.Binary
 
         #endregion
 
-        private static object CheckAndEvaluateSubExpression(object result, IDictionary<string, object> variables)
+        protected static object CheckAndEvaluateSubExpression(object result, IDictionary<string, object> variables)
         {
             if (result is Expression lhsExpression)
             {
