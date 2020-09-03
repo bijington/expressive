@@ -13,6 +13,10 @@ var result = expression.Evaluate();
 
 For further detail of usage please see the ([Usage wiki page](https://github.com/bijington/expressive/wiki/Usage))
 
+## Playground
+
+A full playground can be found at: https://bijington.github.io/expressive-playground/ (Currently under development so be gentle :))
+
 ## Releases
 
 Expressive is available via:
