@@ -13,15 +13,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
+    - name: Setup .NET 2.1.X Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 2.1.x
+    - name: Setup .NET 3.1.X Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
     - name: Install dependencies
-      run: dotnet restore ~\Source\Expressive\Expressive.csproj
-    - name: Install dependencies (test)
-      run: dotnet restore ~\Source\Expressive.Tests\Expressive.Tests.csproj
+      run: dotnet restore '**\*.csproj'
     - name: Build
-      run: dotnet build --configuration Release --no-restore ~\Source\Expressive\Expressive.csproj
+      run: dotnet build --configuration Release --no-restore '**\Expressive.csproj'
     - name: Test
-      run: dotnet test --no-restore --verbosity normal ~\Source\Expressive.Tests\Expressive.Tests.csproj
+      run: dotnet test --no-restore --verbosity normal '**\Expressive.Tests.csproj'
