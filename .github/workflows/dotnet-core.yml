@@ -26,4 +26,4 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore .\Source\Expressive\Expressive.csproj
     - name: Test
-      run: dotnet test --verbosity normal .\Source\Expressive\Expressive.Tests.csproj
+      run: dotnet test --verbosity normal .\Source\Expressive.Tests\Expressive.Tests.csproj
