@@ -22,7 +22,7 @@ jobs:
     - name: where are we?
       run: ls
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore .\Source\Expressive\Expressive.csproj
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
