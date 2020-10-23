@@ -1,0 +1,30 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET 2.1.X Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.1.x
+    - name: Setup .NET 3.1.X Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: where are we?
+      run: ls
+    - name: Install dependencies
+      run: dotnet restore .\Source\Expressive\Expressive.csproj
+    - name: Build
+      run: dotnet build --configuration Release --no-restore .\Source\Expressive\Expressive.csproj
+    - name: Test
+      run: dotnet test --verbosity normal .\Source\Expressive.Tests\Expressive.Tests.csproj
