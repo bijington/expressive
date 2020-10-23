@@ -44,9 +44,6 @@ namespace Expressive.Tokenisation
             var character = expression[index];
             var isEscape = false;
 
-            // TODO: aim to remove this.
-            var escapableCharacters = new List<char> { '\\', '"', '\'', 't', 'n', 'r' };
-
             while (index < expression.Length && !foundEndingCharacter)
             {
                 if (index != startIndex &&
@@ -56,13 +53,13 @@ namespace Expressive.Tokenisation
                     foundEndingCharacter = true;
                 }
 
-                if (isEscape && escapableCharacters.Contains(character))
-                {
-                    isEscape = false;
-                }
-                else if (character == '\\' && !isEscape)
+                if (character == '\\' && !isEscape)
                 {
                     isEscape = true;
+                }
+                else
+                {
+                    isEscape = false;
                 }
 
                 index++;
