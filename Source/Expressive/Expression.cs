@@ -36,7 +36,7 @@ namespace Expressive
         #region Fields
 
         private IExpression compiledExpression;
-        private readonly ExpressiveOptions options;
+        private readonly Context context;
         private readonly string originalExpression;
         private readonly ExpressionParser parser;
         private string[] referencedVariables;
@@ -63,16 +63,24 @@ namespace Expressive
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Expression"/> class with the specified options.
+        /// Initializes a new instance of the <see cref="Expression"/> class with the specified <paramref name="options"/>.
         /// </summary>
         /// <param name="expression">The expression to be evaluated.</param>
-        /// <param name="options">The options to use when evaluating.</param>
-        public Expression(string expression, ExpressiveOptions options = ExpressiveOptions.None)
+        /// <param name="options">The <see cref="ExpressiveOptions"/> to use when evaluating.</param>
+        public Expression(string expression, ExpressiveOptions options = ExpressiveOptions.None) : this(expression, new Context(options))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Expression"/> class with the specified <paramref name="context"/>.
+        /// </summary>
+        /// <param name="expression">The expression to be evaluated.</param>
+        /// <param name="context">The <see cref="Context"/> to use when evaluating.</param>
+        public Expression(string expression, Context context)
         {
             this.originalExpression = expression;
-            this.options = options;
-
-            this.parser = new ExpressionParser(this.options);
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.parser = new ExpressionParser(this.context);
         }
 
         #endregion
@@ -91,10 +99,9 @@ namespace Expressive
             {
                 this.CompileExpression();
 
-                if (variables != null &&
-                    this.options.HasFlag(ExpressiveOptions.IgnoreCase))
+                if (variables != null)
                 {
-                    variables = new Dictionary<string, object>(variables, StringComparer.OrdinalIgnoreCase);
+                    variables = new Dictionary<string, object>(variables, this.context.StringComparer);
                 }
 
                 return this.compiledExpression?.Evaluate(variables);
@@ -201,15 +208,16 @@ namespace Expressive
         private void CompileExpression()
         {
             // Cache the expression to save us having to recompile.
-            if (this.compiledExpression is null ||
-                this.options.HasFlag(ExpressiveOptions.NoCache))
+            if (!(this.compiledExpression is null) && !this.context.Options.HasFlag(ExpressiveOptions.NoCache))
             {
-                var variables = new List<string>();
-
-                this.compiledExpression = this.parser.CompileExpression(this.originalExpression, variables);
-
-                this.referencedVariables = variables.ToArray();
+                return;
             }
+
+            var variables = new List<string>();
+
+            this.compiledExpression = this.parser.CompileExpression(this.originalExpression, variables);
+
+            this.referencedVariables = variables.ToArray();
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿namespace Expressive.Operators
 {
-    enum OperatorPrecedence
+    public enum OperatorPrecedence
     {
         Minimum = 0,
         Or = 1,
@@ -23,8 +23,6 @@
         Modulus = 18,
         Divide = 19,
         NullCoalescing = 20,
-        Conditional = 20,
-        //BitwiseNot = 20, // TODO: Is this needed?
         UnaryPlus = 21,
         UnaryMinus = 22,
         ParenthesisOpen = 23,

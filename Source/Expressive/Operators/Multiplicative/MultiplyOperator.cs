@@ -1,4 +1,5 @@
-﻿using Expressive.Expressions;
+﻿using System.Collections.Generic;
+using Expressive.Expressions;
 using Expressive.Expressions.Binary.Multiplicative;
 
 namespace Expressive.Operators.Multiplicative
@@ -7,7 +8,7 @@ namespace Expressive.Operators.Multiplicative
     {
         #region OperatorBase Members
 
-        public override string[] Tags => new[] { "*", "\u00d7" };
+        public override IEnumerable<string> Tags => new[] { "*", "\u00d7" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context)
         {

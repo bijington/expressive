@@ -21,9 +21,9 @@ namespace Expressive
 
         #region Constructors
 
-        internal ExpressionParser(ExpressiveOptions options)
+        internal ExpressionParser(Context context)
         {
-            this.context = new Context(options);
+            this.context = context;
             this.tokeniser = new Tokeniser(
                 this.context,
                 new List<ITokenExtractor>
