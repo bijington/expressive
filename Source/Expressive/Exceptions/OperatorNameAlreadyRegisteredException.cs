@@ -1,5 +1,6 @@
 ﻿using System;
-using Expressive.Functions;
+using Expressive.Operators;
+
 #if !NETSTANDARD1_4
 using System.Runtime.Serialization;
 using System.Security.Permissions;
@@ -8,26 +9,26 @@ using System.Security.Permissions;
 namespace Expressive.Exceptions
 {
     /// <summary>
-    /// Represents an error that is thrown when registering an <see cref="IFunction"/> and the name is already used.
+    /// Represents an error that is thrown when registering an <see cref="IOperator"/> and the name is already used.
     /// </summary>
 #if !NETSTANDARD1_4
     [Serializable]
 #endif
-    public sealed class FunctionNameAlreadyRegisteredException : Exception
+    public sealed class OperatorNameAlreadyRegisteredException : Exception
     {
         /// <summary>
-        /// Gets the name of the function already used.
+        /// Gets the tag of the operator already used.
         /// </summary>
-        public string Name { get; }
+        public string Tag { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FunctionNameAlreadyRegisteredException"/> class.
+        /// Initializes a new instance of the <see cref="OperatorNameAlreadyRegisteredException"/> class.
         /// </summary>
-        /// <param name="name">The name of the function.</param>
-        internal FunctionNameAlreadyRegisteredException(string name)
-            : base($"A function has already been registered '{name}'")
+        /// <param name="tag">The tag of the operator.</param>
+        internal OperatorNameAlreadyRegisteredException(string tag)
+            : base($"An operator has already been registered '{tag}'")
         {
-            this.Name = name;
+            this.Tag = tag;
         }
 
 #if !NETSTANDARD1_4
@@ -41,7 +42,7 @@ namespace Expressive.Exceptions
         {
             base.GetObjectData(info, context);
 
-            info.AddValue("Name", Name);
+            info.AddValue("Tag", Tag);
         }
 #endif
     }

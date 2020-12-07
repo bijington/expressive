@@ -23,6 +23,9 @@ using Expressive.Operators.Relational;
 
 namespace Expressive
 {
+    /// <summary>
+    /// Represents context related details about compiling and evaluating an <see cref="IExpression"/>.
+    /// </summary>
     public class Context
     {
         internal const char DateSeparator = '#';
@@ -62,13 +65,27 @@ namespace Expressive
 
         #region Constructors
 
-        internal Context(ExpressiveOptions options)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Context"/> class with the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options">The <see cref="ExpressiveOptions"/> to use when evaluating.</param>
+        public Context(ExpressiveOptions options) : this(options, CultureInfo.CurrentCulture, CultureInfo.InvariantCulture)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Context"/> class with the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options">The <see cref="ExpressiveOptions"/> to use when evaluating.</param>
+        /// <param name="mainCurrentCulture">The <see cref="CultureInfo"/> for use in general parsing/conversions.</param>
+        /// <param name="decimalCurrentCulture">The <see cref="CultureInfo"/> for use in decimal parsing/conversions.</param>
+        public Context(ExpressiveOptions options, CultureInfo mainCurrentCulture, CultureInfo decimalCurrentCulture)
         {
             Options = options;
 
-            this.CurrentCulture = CultureInfo.CurrentCulture;
+            this.CurrentCulture = mainCurrentCulture ?? throw new ArgumentNullException(nameof(mainCurrentCulture));
             // For now we will ignore any specific cultures but keeping it in a single place to simplify changing later if required.
-            this.DecimalCurrentCulture = CultureInfo.InvariantCulture;
+            this.DecimalCurrentCulture = decimalCurrentCulture ?? throw new ArgumentNullException(nameof(decimalCurrentCulture));
 
             DecimalSeparator = Convert.ToChar(this.DecimalCurrentCulture.NumberFormat.NumberDecimalSeparator, this.DecimalCurrentCulture);
             this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(StringComparer);
@@ -182,26 +199,102 @@ namespace Expressive
 
         #endregion
 
-        #region Internal Methods
+        #region Public Methods
 
-        internal void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
+        /// <summary>
+        /// Registers the supplied <paramref name="function"/> for use within compiling and evaluating an <see cref="Expression"/>.
+        /// </summary>
+        /// <param name="functionName">The name of the function to register.</param>
+        /// <param name="function">A <see cref="Func{T}"/> to perform the function evaluation.</param>
+        /// <param name="force">Whether to forcefully override any existing function.</param>
+        public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function, bool force = false)
         {
-            this.CheckForExistingFunctionName(functionName);
+            this.CheckForExistingFunctionName(functionName, force);
 
-            this.registeredFunctions.Add(functionName, function);
+            this.registeredFunctions[functionName] = function;
         }
 
-        internal void RegisterFunction(IFunction function)
+        /// <summary>
+        /// Registers the supplied <paramref name="function"/> for use within compiling and evaluating an <see cref="Expression"/>.
+        /// </summary>
+        /// <param name="function">The <see cref="IFunction"/> to perform the function evaluation.</param>
+        /// <param name="force">Whether to forcefully override any existing function.</param>
+        public void RegisterFunction(IFunction function, bool force = false)
         {
-            this.CheckForExistingFunctionName(function.Name);
-
-            this.registeredFunctions.Add(function.Name, (p, a) =>
+            if (function is null)
             {
-                function.Variables = a;
+                throw new ArgumentNullException(nameof(function));
+            }
 
-                return function.Evaluate(p, this);
-            });
+            this.RegisterFunction(
+                function.Name,
+                (p, a) =>
+                {
+                    function.Variables = a;
+
+                    return function.Evaluate(p, this);
+                },
+                force);
         }
+
+        /// <summary>
+        /// Registers the supplied <paramref name="op"/> for use within compiling and evaluating an <see cref="Expression"/>.
+        /// </summary>
+        /// <param name="op">The <see cref="IOperator"/> implementation to register.</param>
+        /// <param name="force">Whether to forcefully override any existing <see cref="IOperator"/>.</param>
+        /// <remarks>
+        /// Please if you are calling this with your own <see cref="IOperator"/> implementations do seriously consider raising an issue to add it in to the general framework:
+        /// https://github.com/bijington/expressive
+        /// </remarks>
+        public void RegisterOperator(IOperator op, bool force = false)
+        {
+            if (op is null)
+            {
+                throw new ArgumentNullException(nameof(op));
+            }
+
+            foreach (var tag in op.Tags)
+            {
+                if (!force && this.registeredOperators.ContainsKey(tag))
+                {
+                    throw new OperatorNameAlreadyRegisteredException(tag);
+                }
+
+                this.registeredOperators[tag] = op;
+            }
+        }
+
+        /// <summary>
+        /// Removes the function from the available set of functions when evaluating. 
+        /// </summary>
+        /// <param name="functionName">The name of the function to remove.</param>
+        public void UnregisterFunction(string functionName)
+        {
+            if (!this.registeredFunctions.ContainsKey(functionName))
+            {
+                // TODO: do we throw?
+            }
+
+            this.registeredFunctions.Remove(functionName);
+        }
+
+        /// <summary>
+        /// Removes the operator from the available set of operators when evaluating. 
+        /// </summary>
+        /// <param name="tag">The tag of the operator to remove.</param>
+        public void UnregisterOperator(string tag)
+        {
+            if (!this.registeredOperators.ContainsKey(tag))
+            {
+                // TODO: do we throw?
+            }
+
+            this.registeredOperators.Remove(tag);
+        }
+
+        #endregion
+
+        #region Internal Methods
 
         internal bool TryGetFunction(string functionName, out Func<IExpression[], IDictionary<string, object>, object> value)
         {
@@ -217,19 +310,11 @@ namespace Expressive
 
         #region Private Methods
 
-        private void CheckForExistingFunctionName(string functionName)
+        private void CheckForExistingFunctionName(string functionName, bool force)
         {
-            if (this.registeredFunctions.ContainsKey(functionName))
+            if (!force && this.registeredFunctions.ContainsKey(functionName))
             {
                 throw new FunctionNameAlreadyRegisteredException(functionName);
-            }
-        }
-
-        private void RegisterOperator(IOperator op)
-        {
-            foreach (var tag in op.Tags)
-            {
-                this.registeredOperators.Add(tag, op);
             }
         }
 

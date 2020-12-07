@@ -21,6 +21,7 @@
 using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
+using Expressive.Operators;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -36,7 +37,7 @@ namespace Expressive
         #region Fields
 
         private IExpression compiledExpression;
-        private readonly ExpressiveOptions options;
+        private readonly Context context;
         private readonly string originalExpression;
         private readonly ExpressionParser parser;
         private string[] referencedVariables;
@@ -63,16 +64,24 @@ namespace Expressive
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Expression"/> class with the specified options.
+        /// Initializes a new instance of the <see cref="Expression"/> class with the specified <paramref name="options"/>.
         /// </summary>
         /// <param name="expression">The expression to be evaluated.</param>
-        /// <param name="options">The options to use when evaluating.</param>
-        public Expression(string expression, ExpressiveOptions options = ExpressiveOptions.None)
+        /// <param name="options">The <see cref="ExpressiveOptions"/> to use when evaluating.</param>
+        public Expression(string expression, ExpressiveOptions options = ExpressiveOptions.None) : this(expression, new Context(options))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Expression"/> class with the specified <paramref name="context"/>.
+        /// </summary>
+        /// <param name="expression">The expression to be evaluated.</param>
+        /// <param name="context">The <see cref="Context"/> to use when evaluating.</param>
+        public Expression(string expression, Context context)
         {
             this.originalExpression = expression;
-            this.options = options;
-
-            this.parser = new ExpressionParser(this.options);
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.parser = new ExpressionParser(this.context);
         }
 
         #endregion
@@ -91,10 +100,9 @@ namespace Expressive
             {
                 this.CompileExpression();
 
-                if (variables != null &&
-                    this.options.HasFlag(ExpressiveOptions.IgnoreCase))
+                if (variables != null)
                 {
-                    variables = new Dictionary<string, object>(variables, StringComparer.OrdinalIgnoreCase);
+                    variables = new Dictionary<string, object>(variables, this.context.StringComparer);
                 }
 
                 return this.compiledExpression?.Evaluate(variables);
@@ -179,20 +187,42 @@ namespace Expressive
         /// <param name="functionName">The name of the function (NOTE this is also the tag that will be used to extract the function from an expression).</param>
         /// <param name="function">The method of evaluating the function.</param>
         /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
-        public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
-        {
-            this.parser.RegisterFunction(functionName, function);
-        }
+        public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function) => 
+            this.context.RegisterFunction(functionName, function);
 
         /// <summary>
         /// Registers a custom function inheriting from <see cref="IFunction"/> for use in evaluating an expression.
         /// </summary>
         /// <param name="function">The <see cref="IFunction"/> implementation.</param>
         /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
-        public void RegisterFunction(IFunction function)
-        {
-            this.parser.RegisterFunction(function);
-        }
+        public void RegisterFunction(IFunction function) => 
+            this.context.RegisterFunction(function);
+
+        /// <summary>
+        /// Registers the supplied <paramref name="op"/> for use within compiling and evaluating an <see cref="Expression"/>.
+        /// </summary>
+        /// <param name="op">The <see cref="IOperator"/> implementation to register.</param>
+        /// <param name="force">Whether to forcefully override any existing <see cref="IOperator"/>.</param>
+        /// <remarks>
+        /// Please if you are calling this with your own <see cref="IOperator"/> implementations do seriously consider raising an issue to add it in to the general framework:
+        /// https://github.com/bijington/expressive
+        /// </remarks>
+        public void RegisterOperator(IOperator op, bool force = false) => 
+            this.context.RegisterOperator(op, force);
+
+        /// <summary>
+        /// Removes the function from the available set of functions when evaluating. 
+        /// </summary>
+        /// <param name="functionName">The name of the function to remove.</param>
+        public void UnregisterFunction(string functionName) => 
+            this.context.UnregisterFunction(functionName);
+
+        /// <summary>
+        /// Removes the operator from the available set of operators when evaluating. 
+        /// </summary>
+        /// <param name="tag">The tag of the operator to remove.</param>
+        public void UnregisterOperator(string tag) =>
+            this.context.UnregisterOperator(tag);
 
         #endregion
 
@@ -201,15 +231,16 @@ namespace Expressive
         private void CompileExpression()
         {
             // Cache the expression to save us having to recompile.
-            if (this.compiledExpression is null ||
-                this.options.HasFlag(ExpressiveOptions.NoCache))
+            if (!(this.compiledExpression is null) && !this.context.Options.HasFlag(ExpressiveOptions.NoCache))
             {
-                var variables = new List<string>();
-
-                this.compiledExpression = this.parser.CompileExpression(this.originalExpression, variables);
-
-                this.referencedVariables = variables.ToArray();
+                return;
             }
+
+            var variables = new List<string>();
+
+            this.compiledExpression = this.parser.CompileExpression(this.originalExpression, variables);
+
+            this.referencedVariables = variables.ToArray();
         }
 
         #endregion

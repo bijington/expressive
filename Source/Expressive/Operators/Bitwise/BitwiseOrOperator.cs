@@ -1,4 +1,5 @@
-﻿using Expressive.Expressions;
+﻿using System.Collections.Generic;
+using Expressive.Expressions;
 using Expressive.Expressions.Binary.Bitwise;
 
 namespace Expressive.Operators.Bitwise
@@ -7,7 +8,7 @@ namespace Expressive.Operators.Bitwise
     {
         #region OperatorBase Members
 
-        public override string[] Tags => new[] { "|" };
+        public override IEnumerable<string> Tags => new[] { "|" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context)
         {

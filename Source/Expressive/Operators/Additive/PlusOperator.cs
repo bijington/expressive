@@ -11,7 +11,7 @@ namespace Expressive.Operators.Additive
     {
         #region IOperator Members
 
-        public override string[] Tags => new[] { "+" };
+        public override IEnumerable<string> Tags => new[] { "+" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context)
         {

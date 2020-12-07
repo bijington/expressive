@@ -24,13 +24,13 @@ namespace Expressive.Tests.Operators
         [TestMethod]
         public void TestTags()
         {
-            var op = this.Operator;
+            var operatorTags = this.Operator.Tags.ToArray();
 
-            Assert.AreEqual(this.ExpectedTags.Length, op.Tags.Length);
+            Assert.AreEqual(this.ExpectedTags.Length, operatorTags.Length);
 
             for (var i = 0; i < this.ExpectedTags.Length; i++)
             {
-                Assert.AreEqual(this.ExpectedTags[i], op.Tags[i]);
+                Assert.AreEqual(this.ExpectedTags[i], operatorTags[i]);
             }
         }
 

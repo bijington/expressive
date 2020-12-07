@@ -1,4 +1,5 @@
-﻿using Expressive.Expressions;
+﻿using System.Collections.Generic;
+using Expressive.Expressions;
 using Expressive.Expressions.Binary.Relational;
 
 namespace Expressive.Operators.Relational
@@ -7,7 +8,7 @@ namespace Expressive.Operators.Relational
     {
         #region OperatorBase Members
 
-        public override string[] Tags => new[] { "<=" };
+        public override IEnumerable<string> Tags => new[] { "<=" };
 
         public override IExpression BuildExpression(Token previousToken, IExpression[] expressions, Context context)
         {
