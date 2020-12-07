@@ -69,13 +69,23 @@ namespace Expressive
         /// Initializes a new instance of the <see cref="Context"/> class with the specified <paramref name="options"/>.
         /// </summary>
         /// <param name="options">The <see cref="ExpressiveOptions"/> to use when evaluating.</param>
-        public Context(ExpressiveOptions options)
+        public Context(ExpressiveOptions options) : this(options, CultureInfo.CurrentCulture, CultureInfo.InvariantCulture)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Context"/> class with the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options">The <see cref="ExpressiveOptions"/> to use when evaluating.</param>
+        /// <param name="mainCurrentCulture">The <see cref="CultureInfo"/> for use in general parsing/conversions.</param>
+        /// <param name="decimalCurrentCulture">The <see cref="CultureInfo"/> for use in decimal parsing/conversions.</param>
+        public Context(ExpressiveOptions options, CultureInfo mainCurrentCulture, CultureInfo decimalCurrentCulture)
         {
             Options = options;
 
-            this.CurrentCulture = CultureInfo.CurrentCulture;
+            this.CurrentCulture = mainCurrentCulture ?? throw new ArgumentNullException(nameof(mainCurrentCulture));
             // For now we will ignore any specific cultures but keeping it in a single place to simplify changing later if required.
-            this.DecimalCurrentCulture = CultureInfo.InvariantCulture;
+            this.DecimalCurrentCulture = decimalCurrentCulture ?? throw new ArgumentNullException(nameof(decimalCurrentCulture));
 
             DecimalSeparator = Convert.ToChar(this.DecimalCurrentCulture.NumberFormat.NumberDecimalSeparator, this.DecimalCurrentCulture);
             this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(StringComparer);

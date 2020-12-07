@@ -1,6 +1,5 @@
 using Expressive.Exceptions;
 using Expressive.Expressions;
-using Expressive.Functions;
 using Expressive.Operators;
 using System;
 using System.Collections.Generic;
@@ -75,16 +74,6 @@ namespace Expressive
             }
 
             return this.CompileExpression(new Queue<Token>(tokens), OperatorPrecedence.Minimum, variables, false);
-        }
-
-        internal void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
-        {
-            this.context.RegisterFunction(functionName, function);
-        }
-
-        internal void RegisterFunction(IFunction function)
-        {
-            this.context.RegisterFunction(function);
         }
 
         #endregion

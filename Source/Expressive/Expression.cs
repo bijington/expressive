@@ -21,6 +21,7 @@
 using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
+using Expressive.Operators;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -186,20 +187,42 @@ namespace Expressive
         /// <param name="functionName">The name of the function (NOTE this is also the tag that will be used to extract the function from an expression).</param>
         /// <param name="function">The method of evaluating the function.</param>
         /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
-        public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function)
-        {
-            this.parser.RegisterFunction(functionName, function);
-        }
+        public void RegisterFunction(string functionName, Func<IExpression[], IDictionary<string, object>, object> function) => 
+            this.context.RegisterFunction(functionName, function);
 
         /// <summary>
         /// Registers a custom function inheriting from <see cref="IFunction"/> for use in evaluating an expression.
         /// </summary>
         /// <param name="function">The <see cref="IFunction"/> implementation.</param>
         /// <exception cref="Exceptions.FunctionNameAlreadyRegisteredException">Thrown when the name supplied has already been registered.</exception>
-        public void RegisterFunction(IFunction function)
-        {
-            this.parser.RegisterFunction(function);
-        }
+        public void RegisterFunction(IFunction function) => 
+            this.context.RegisterFunction(function);
+
+        /// <summary>
+        /// Registers the supplied <paramref name="op"/> for use within compiling and evaluating an <see cref="Expression"/>.
+        /// </summary>
+        /// <param name="op">The <see cref="IOperator"/> implementation to register.</param>
+        /// <param name="force">Whether to forcefully override any existing <see cref="IOperator"/>.</param>
+        /// <remarks>
+        /// Please if you are calling this with your own <see cref="IOperator"/> implementations do seriously consider raising an issue to add it in to the general framework:
+        /// https://github.com/bijington/expressive
+        /// </remarks>
+        public void RegisterOperator(IOperator op, bool force = false) => 
+            this.context.RegisterOperator(op, force);
+
+        /// <summary>
+        /// Removes the function from the available set of functions when evaluating. 
+        /// </summary>
+        /// <param name="functionName">The name of the function to remove.</param>
+        public void UnregisterFunction(string functionName) => 
+            this.context.UnregisterFunction(functionName);
+
+        /// <summary>
+        /// Removes the operator from the available set of operators when evaluating. 
+        /// </summary>
+        /// <param name="tag">The tag of the operator to remove.</param>
+        public void UnregisterOperator(string tag) =>
+            this.context.UnregisterOperator(tag);
 
         #endregion
 
