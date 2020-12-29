@@ -1,5 +1,22 @@
-﻿dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+﻿param($WorkingDirectory, [Switch]$DontShowReport)
 
-.\packages\ReportGenerator.3.1.2\tools\ReportGenerator.exe -reports:".\Expressive.Tests\coverage.netcoreapp3.0.opencover.xml" -targetdir:".\GeneratedReports\Output"
+Set-StrictMode -Version Latest
 
-Start-Process .\GeneratedReports\Output\index.htm
+if ($null -eq $WorkingDirectory) {
+    $WorkingDirectory = $PSScriptRoot
+}
+
+# Currently requires manually installing the item below
+dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.8.2
+
+# Compile the source
+dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+
+# Generate the coverage report
+reportgenerator -reports:"$WorkingDirectory\**\coverage.netcoreapp3.1.opencover.xml" -targetdir:"$WorkingDirectory\coverage" -reporttypes:html
+
+if ($DontShowReport) {
+    return
+}
+
+Start-Process "$WorkingDirectory\coverage\index.htm"
