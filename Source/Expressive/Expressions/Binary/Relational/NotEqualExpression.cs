@@ -34,7 +34,7 @@ namespace Expressive.Expressions.Binary.Relational
                 return true;
             }
 
-            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, this.context) != 0;
+            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult, this.Context) != 0;
         }
 
         #endregion

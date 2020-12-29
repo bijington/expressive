@@ -6,22 +6,29 @@ using System.Linq;
 
 namespace Expressive.Expressions.Binary
 {
+    /// <summary>
+    /// Base class implementation of <see cref="IExpression"/>.
+    /// </summary>
     public abstract class BinaryExpressionBase : IExpression
     {
         #region Fields
 
         private readonly IExpression leftHandSide;
-        protected readonly Context context;
         private readonly IExpression rightHandSide;
 
         #endregion
+
+        /// <summary>
+        /// Gets the underlying <see cref="Context"/>.
+        /// </summary>
+        protected Context Context { get; }
 
         #region Constructors
 
         protected BinaryExpressionBase(IExpression lhs, IExpression rhs, Context context)
         {
             this.leftHandSide = lhs;
-            this.context = context;
+            this.Context = context;
             this.rightHandSide = rhs;
         }
 
