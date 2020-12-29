@@ -15,8 +15,9 @@ namespace Expressive.Expressions.Binary.Additive
 
         #region BinaryExpressionBase Members
 
+        /// <inheritdoc />
         protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables) =>
-            this.Evaluate(lhsResult, rightHandSide, variables, Numbers.Subtract);
+            EvaluateAggregates(lhsResult, rightHandSide, variables, Numbers.Subtract);
 
         #endregion
     }

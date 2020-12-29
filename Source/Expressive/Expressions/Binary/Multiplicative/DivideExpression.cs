@@ -16,13 +16,12 @@ namespace Expressive.Expressions.Binary.Multiplicative
 
         #region BinaryExpressionBase Members
 
-        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
-        {
-            return this.Evaluate(lhsResult, rightHandSide, variables, (l, r) => 
+        /// <inheritdoc />
+        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables) =>
+            EvaluateAggregates(lhsResult, rightHandSide, variables, (l, r) => 
                 l is null || r is null || IsReal(l) || IsReal(r)
                     ? Numbers.Divide(l, r)
                     : Numbers.Divide(Convert.ToDouble(l), r));
-        }
 
         #endregion
 

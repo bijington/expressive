@@ -15,10 +15,9 @@ namespace Expressive.Expressions.Binary.Multiplicative
 
         #region BinaryExpressionBase Members
 
-        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
-        {
-            return this.Evaluate(lhsResult, rightHandSide, variables, Numbers.Multiply);
-        }
+        /// <inheritdoc />
+        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables) =>
+            EvaluateAggregates(lhsResult, rightHandSide, variables, Numbers.Multiply);
 
         #endregion
     }

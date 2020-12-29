@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Expressive.Expressions.Binary
 {
-    internal abstract class BinaryExpressionBase : IExpression
+    public abstract class BinaryExpressionBase : IExpression
     {
         #region Fields
 
@@ -18,7 +18,7 @@ namespace Expressive.Expressions.Binary
 
         #region Constructors
 
-        internal BinaryExpressionBase(IExpression lhs, IExpression rhs, Context context)
+        protected BinaryExpressionBase(IExpression lhs, IExpression rhs, Context context)
         {
             this.leftHandSide = lhs;
             this.context = context;
@@ -29,6 +29,7 @@ namespace Expressive.Expressions.Binary
 
         #region IExpression Members
 
+        /// <inheritdoc />
         public object Evaluate(IDictionary<string, object> variables)
         {
             if (this.leftHandSide is null)
@@ -49,25 +50,44 @@ namespace Expressive.Expressions.Binary
 
         #endregion
 
-        protected static object CheckAndEvaluateSubExpression(object result, IDictionary<string, object> variables)
-        {
-            if (result is Expression lhsExpression)
-            {
-                return lhsExpression.Evaluate(variables);
-            }
-
-            return result;
-        }
-        
+        /// <summary>
+        /// The core evaluation logic for the overriding expression implementation.
+        /// </summary>
+        /// <param name="lhsResult">The already evaluated result for the left hand side of the expression.</param>
+        /// <param name="rightHandSide">
+        /// The <see cref="IExpression"/> right hand side of the expression.
+        /// <remarks>
+        /// This is left up to the implementor to evaluate to allow for short-circuiting.
+        /// </remarks>
+        /// </param>
+        /// <param name="variables">The list of variables for use in evaluating.</param>
+        /// <returns>The result of the evaluation.</returns>
         protected abstract object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables);
 
-        protected object Evaluate(object lhsResult, IExpression rhs, IDictionary<string, object> variables, Func<object, object, object> resultSelector)
+        /// <summary>
+        /// Evaluates the supplied <paramref name="lhsResult"/> and <paramref name="rhs"/> and checks for any possible aggregate value results.
+        /// </summary>
+        /// <param name="lhsResult">The left hand side result.</param>
+        /// <param name="rhs">The <see cref="IExpression"/> right hand side of the expression.</param>
+        /// <param name="variables">The list of variables for use in evaluating.</param>
+        /// <param name="resultSelector">How to return the result(s). <remarks>NOTE this will be called once per aggregate value if they exist.</remarks></param>
+        /// <returns>The result of the evaluation.</returns>
+        public static object EvaluateAggregates(object lhsResult, IExpression rhs, IDictionary<string, object> variables, Func<object, object, object> resultSelector)
         {
+            if (rhs is null)
+            {
+                throw new ArgumentNullException(nameof(rhs));
+            }
+
+            if (resultSelector is null)
+            {
+                throw new ArgumentNullException(nameof(resultSelector));
+            }
+
             IList<object> lhsParticipants = new List<object>();
             IList<object> rhsParticipants = new List<object>();
 
-            lhsResult = CheckAndEvaluateSubExpression(lhsResult, variables);
-            var rhsResult = CheckAndEvaluateSubExpression(rhs.Evaluate(variables), variables);
+            var rhsResult = rhs.Evaluate(variables);
 
             if (!(lhsResult is ICollection) && !(rhsResult is ICollection))
             {
