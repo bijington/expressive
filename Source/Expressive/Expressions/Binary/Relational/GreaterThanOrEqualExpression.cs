@@ -16,7 +16,7 @@ namespace Expressive.Expressions.Binary.Relational
         #region BinaryExpressionBase Members
 
         protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables) => 
-            Comparison.CompareUsingMostPreciseType(lhsResult, rightHandSide.Evaluate(variables), this.context) >= 0;
+            Comparison.CompareUsingMostPreciseType(lhsResult, rightHandSide.Evaluate(variables), this.Context) >= 0;
 
         #endregion
     }

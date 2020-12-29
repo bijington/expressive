@@ -15,8 +15,9 @@ namespace Expressive.Expressions.Binary.Bitwise
 
         #region BinaryExpressionBase Members
 
+        /// <inheritdoc />
         protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables) =>
-            this.Evaluate(lhsResult, rightHandSide, variables, (l, r) => Convert.ToUInt16(l) >> Convert.ToUInt16(r));
+            EvaluateAggregates(lhsResult, rightHandSide, variables, (l, r) => Convert.ToUInt16(l) >> Convert.ToUInt16(r));
 
         #endregion
     }

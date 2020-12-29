@@ -14,10 +14,9 @@ namespace Expressive.Expressions.Binary.Conditional
 
         #region BinaryExpressionBase Members
 
-        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
-        {
-            return this.Evaluate(lhsResult, rightHandSide, variables, (l, r) => l ?? r);
-        }
+        /// <inheritdoc />
+        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables) =>
+            EvaluateAggregates(lhsResult, rightHandSide, variables, (l, r) => l ?? r);
 
         #endregion
     }

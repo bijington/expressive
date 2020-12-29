@@ -15,6 +15,7 @@ namespace Expressive.Expressions.Binary.Additive
 
         #region BinaryExpressionBase Members
 
+        /// <inheritdoc />
         protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
         {
             if (lhsResult is string stringValue)
@@ -22,7 +23,7 @@ namespace Expressive.Expressions.Binary.Additive
                 return stringValue + rightHandSide.Evaluate(variables);
             }
 
-            return this.Evaluate(lhsResult, rightHandSide, variables, Numbers.Add);
+            return EvaluateAggregates(lhsResult, rightHandSide, variables, Numbers.Add);
         }
 
         #endregion
