@@ -27,7 +27,7 @@ namespace Expressive.Functions.String
                 return false;
             }
             
-            return text?.StartsWith(value, context.StringComparison) == true;
+            return text?.StartsWith(value, context.EqualityStringComparison) == true;
         }
 
         #endregion

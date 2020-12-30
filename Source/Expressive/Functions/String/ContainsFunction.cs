@@ -27,7 +27,7 @@ namespace Expressive.Functions.String
                 return false;
             }
 
-            return text?.IndexOf(value, context.StringComparison) >= 0;
+            return text?.IndexOf(value, context.EqualityStringComparison) >= 0;
         }
 
         #endregion

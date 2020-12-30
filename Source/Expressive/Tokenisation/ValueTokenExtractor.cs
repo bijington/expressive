@@ -19,7 +19,7 @@ namespace Expressive.Tokenisation
 
             var initialToken = this.value.First();
 
-            if (string.Equals(character.ToString(), initialToken.ToString(), context.StringComparison) &&
+            if (string.Equals(character.ToString(), initialToken.ToString(), context.ParsingStringComparison) &&
                 CanExtractValue(expression, expressionLength, currentIndex, this.value, context))
             {
                 return new Token(this.value, currentIndex);
@@ -30,7 +30,7 @@ namespace Expressive.Tokenisation
 
         private static bool CanExtractValue(string expression, int expressionLength, int index, string expectedValue, Context context)
         {
-            return string.Equals(expectedValue, ExtractValue(expression, expressionLength, index, expectedValue, context), context.StringComparison);
+            return string.Equals(expectedValue, ExtractValue(expression, expressionLength, index, expectedValue, context), context.ParsingStringComparison);
         }
 
         private static string ExtractValue(string expression, int expressionLength, int index, string expectedValue, Context context)
@@ -46,10 +46,10 @@ namespace Expressive.Tokenisation
                 {
                     // If the next character is not a continuation of the word then we are valid.
                     isValidValue = !char.IsLetterOrDigit(expression[index + valueLength]) ||
-                        string.Equals(expectedValue, Context.ParameterSeparator.ToString(), context.StringComparison); // TODO: perhaps the parameter separator handling should be done inside a specific extractor...
+                        string.Equals(expectedValue, Context.ParameterSeparator.ToString(), context.ParsingStringComparison); // TODO: perhaps the parameter separator handling should be done inside a specific extractor...
                 }
 
-                if (string.Equals(valueString, expectedValue, context.StringComparison) &&
+                if (string.Equals(valueString, expectedValue, context.ParsingStringComparison) &&
                     isValidValue)
                 {
                     result = valueString;

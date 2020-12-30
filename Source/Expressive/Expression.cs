@@ -102,7 +102,7 @@ namespace Expressive
 
                 if (variables != null)
                 {
-                    variables = new Dictionary<string, object>(variables, this.context.StringComparer);
+                    variables = new Dictionary<string, object>(variables, this.context.ParsingStringComparer);
                 }
 
                 return this.compiledExpression?.Evaluate(variables);
