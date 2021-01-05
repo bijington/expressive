@@ -174,6 +174,9 @@ namespace Expressive
             this.RegisterFunction(new SumFunction());
             this.RegisterFunction(new TanFunction());
             this.RegisterFunction(new TruncateFunction());
+            // Mathematical Constants
+            this.RegisterFunction(new EFunction());
+            this.RegisterFunction(new PIFunction());
             // Logical
             this.RegisterFunction(new IfFunction());
             this.RegisterFunction(new InFunction());

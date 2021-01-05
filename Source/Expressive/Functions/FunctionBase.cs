@@ -31,7 +31,11 @@ namespace Expressive.Functions
         /// <returns>True if the correct number are present, false otherwise.</returns>
         protected bool ValidateParameterCount(IExpression[] parameters, int expectedCount, int minimumCount)
         {
-            if (expectedCount != -1 && (parameters is null || !parameters.Any() || parameters.Length != expectedCount))
+            if (expectedCount == 0 && (parameters.Any() || parameters.Length != expectedCount))
+            {
+                throw new ParameterCountMismatchException($"{this.Name}() does not take any arguments");
+            }
+            if (expectedCount != -1 && expectedCount != 0 && (parameters is null || !parameters.Any() || parameters.Length != expectedCount))
             {
                 throw new ParameterCountMismatchException($"{this.Name}() takes only {expectedCount} argument(s)");
             }
