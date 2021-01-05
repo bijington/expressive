@@ -197,7 +197,7 @@ namespace Expressive.Tests
         public void AbsShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1, new Expression("Abs(-1)").Evaluate());
-            Assert.AreEqual(12, new Expression("abs(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12, new Expression("abs(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "Acos() takes only 1 argument(s)")]
@@ -211,24 +211,24 @@ namespace Expressive.Tests
         public void AsinShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Asin(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("asin(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12, new Expression("asin(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "Atan() takes only 1 argument(s)")]
         public void AtanShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Atan(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("atan(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12, new Expression("atan(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "Average() expects at least 1 argument(s)")]
         public void AverageShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3d, new Expression("Average(1,2,4,5)").Evaluate());
-            Assert.AreEqual(1d, new Expression("average(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(1d, new Expression("average(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(12.5, new Expression("Average(10, 20, 5, 15)").Evaluate());
 
-            new Expression("average()", ExpressiveOptions.IgnoreCase).Evaluate();
+            new Expression("average()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
         }
 
         [TestMethod]
@@ -241,7 +241,7 @@ namespace Expressive.Tests
         public void CeilingShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(2M, new Expression("Ceiling(1.5)").Evaluate());
-            Assert.AreEqual(12, new Expression("ceiling(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12, new Expression("ceiling(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "Cos() takes only 1 argument(s)")]
@@ -255,7 +255,7 @@ namespace Expressive.Tests
         public void CountShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(1, new Expression("Count(0)").Evaluate());
-            Assert.AreEqual(4, new Expression("count(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(4, new Expression("count(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("Count()").Evaluate();
         }
@@ -271,7 +271,7 @@ namespace Expressive.Tests
         public void ExpShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("Exp(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("exp(1,2,4,5)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12, new Expression("exp(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
         }
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "Floor() takes only 1 argument(s)")]
@@ -300,9 +300,9 @@ namespace Expressive.Tests
         public void InShouldHandleAtLeastTwoArguments()
         {
             Assert.AreEqual(false, new Expression("In('abc','def','ghi','jkl')").Evaluate());
-            Assert.AreEqual(1, new Expression("in(0)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(1, new Expression("in(0)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
-            new Expression("In()", ExpressiveOptions.IgnoreCase).Evaluate();
+            new Expression("In()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
         }
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "Length() takes only 1 argument(s)")]
@@ -310,7 +310,7 @@ namespace Expressive.Tests
         {
             Assert.AreEqual(5, new Expression("Length('abcde')").Evaluate());
 
-            new Expression("Length()", ExpressiveOptions.IgnoreCase).Evaluate();
+            new Expression("Length()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
         }
 
         [TestMethod]
@@ -357,10 +357,10 @@ namespace Expressive.Tests
         public void MeanShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3d, new Expression("Mean(1,2,4,5)").Evaluate());
-            Assert.AreEqual(1d, new Expression("mean(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(1d, new Expression("mean(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(12.5, new Expression("Mean(10, 20, 5, 15)").Evaluate());
 
-            new Expression("mean()", ExpressiveOptions.IgnoreCase).Evaluate();
+            new Expression("mean()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
         }
 
         [TestMethod]
@@ -373,10 +373,10 @@ namespace Expressive.Tests
         public void MedianShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3.0M, new Expression("Median(1,2,4,5)").Evaluate());
-            Assert.AreEqual(1.0M, new Expression("median(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(1.0M, new Expression("median(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(12.5M, new Expression("Median(10, 20, 5, 15)").Evaluate());
 
-            new Expression("median()", ExpressiveOptions.IgnoreCase).Evaluate();
+            new Expression("median()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
         }
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "Min() expects at least 1 argument(s)")]
@@ -402,10 +402,10 @@ namespace Expressive.Tests
         public void ModeShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(2, new Expression("Mode(1,2,4,5,2)").Evaluate());
-            Assert.AreEqual(1, new Expression("mode(1)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(1, new Expression("mode(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(10, new Expression("Mode(10, 20, 5, 15)").Evaluate());
 
-            new Expression("mode()", ExpressiveOptions.IgnoreCase).Evaluate();
+            new Expression("mode()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
         }
 
         [TestMethod, ExpectedException(typeof(ExpressiveException), "PadLeft() takes only 3 argument(s)")]
@@ -479,8 +479,8 @@ namespace Expressive.Tests
         public void SumShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(12, new Expression("Sum(1,2,4,5)").Evaluate());
-            Assert.AreEqual(1, new Expression("sum(1)", ExpressiveOptions.IgnoreCase).Evaluate());
-            Assert.AreEqual(72, new Expression("sum(1,2,4,5,10,20,30)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(1, new Expression("sum(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
+            Assert.AreEqual(72, new Expression("sum(1,2,4,5,10,20,30)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("Sum()").Evaluate();
         }
@@ -555,7 +555,7 @@ namespace Expressive.Tests
         public void AddDaysShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(new DateTime(2016, 01, 03), new Expression("AddDays(#2016-01-01#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2016, 01, 03), new Expression("addDays(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(new DateTime(2016, 01, 03), new Expression("addDays(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("AddDays()").Evaluate();
         }
@@ -564,7 +564,7 @@ namespace Expressive.Tests
         public void AddHoursShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(new DateTime(2016, 01, 01, 02, 00, 00), new Expression("AddHours(#2016-01-01 00:00:00#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2016, 01, 01, 02, 00, 00), new Expression("addhours(#2016-01-01 00:00:00#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(new DateTime(2016, 01, 01, 02, 00, 00), new Expression("addhours(#2016-01-01 00:00:00#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("AddHours()").Evaluate();
         }
@@ -573,7 +573,7 @@ namespace Expressive.Tests
         public void AddMinutesShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(new DateTime(2016, 01, 01, 00, 02, 00), new Expression("AddMinutes(#2016-01-01 00:00:00#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2016, 01, 01, 00, 02, 00), new Expression("addminutes(#2016-01-01 00:00:00#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(new DateTime(2016, 01, 01, 00, 02, 00), new Expression("addminutes(#2016-01-01 00:00:00#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("AddMinutes()").Evaluate();
         }
@@ -582,7 +582,7 @@ namespace Expressive.Tests
         public void AddMonthsShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(new DateTime(2016, 03, 01), new Expression("AddMonths(#2016-01-01#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2016, 03, 01), new Expression("addmonths(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(new DateTime(2016, 03, 01), new Expression("addmonths(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("AddMonths()").Evaluate();
         }
@@ -591,7 +591,7 @@ namespace Expressive.Tests
         public void AddYearsShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(new DateTime(2018, 01, 01), new Expression("AddYears(#2016-01-01#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2018, 01, 01), new Expression("addyears(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(new DateTime(2018, 01, 01), new Expression("addyears(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("AddYears()").Evaluate();
         }
@@ -600,7 +600,7 @@ namespace Expressive.Tests
         public void DayOfShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1, new Expression("DayOf(#2016-01-01#)").Evaluate());
-            Assert.AreEqual(12, new Expression("dayof(#2016-01-12#)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12, new Expression("dayof(#2016-01-12#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("DayOf()").Evaluate();
         }
@@ -609,7 +609,7 @@ namespace Expressive.Tests
         public void DaysBetweenShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual((new DateTime(2016, 01, 12) - new DateTime(2016, 01, 01)).TotalDays, new Expression("DaysBetween(#2016-01-01#, #2016-01-12#)").Evaluate());
-            Assert.AreEqual((new DateTime(2016, 12, 01) - new DateTime(2016, 01, 01)).TotalDays, new Expression("daysbetween(#2016-01-01#, #2016-12-01#)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual((new DateTime(2016, 12, 01) - new DateTime(2016, 01, 01)).TotalDays, new Expression("daysbetween(#2016-01-01#, #2016-12-01#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("DaysBetween()").Evaluate();
         }
@@ -618,7 +618,7 @@ namespace Expressive.Tests
         public void HourOfShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(2, new Expression("HourOf(#2016-01-01 02:00:00#)").Evaluate());
-            Assert.AreEqual(2, new Expression("hourof(#2016-01-12 02:00:00#)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(2, new Expression("hourof(#2016-01-12 02:00:00#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("HourOf()").Evaluate();
         }
@@ -627,7 +627,7 @@ namespace Expressive.Tests
         public void HoursBetweenShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual((new DateTime(2016, 01, 01, 23, 00, 00) - new DateTime(2016, 01, 01)).TotalHours, new Expression("HoursBetween(#2016-01-01#, #2016-01-01 23:00:00#)").Evaluate());
-            Assert.AreEqual((new DateTime(2016, 12, 01, 23, 00, 00) - new DateTime(2016, 01, 01)).TotalHours, new Expression("hoursbetween(#2016-01-01#, #2016-12-01 23:00:00#)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual((new DateTime(2016, 12, 01, 23, 00, 00) - new DateTime(2016, 01, 01)).TotalHours, new Expression("hoursbetween(#2016-01-01#, #2016-12-01 23:00:00#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("HoursBetween()").Evaluate();
         }
@@ -636,7 +636,7 @@ namespace Expressive.Tests
         public void MinuteOfShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(55, new Expression("MinuteOf(#2016-01-01 02:55:00#)").Evaluate());
-            Assert.AreEqual(12, new Expression("minuteof(#2016-01-12 02:12:00#)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(12, new Expression("minuteof(#2016-01-12 02:12:00#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("MinuteOf()").Evaluate();
         }
@@ -645,7 +645,7 @@ namespace Expressive.Tests
         public void MinutesBetweenShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual((new DateTime(2016, 01, 01, 23, 12, 00) - new DateTime(2016, 01, 01)).TotalMinutes, new Expression("MinutesBetween(#2016-01-01#, #2016-01-01 23:12:00#)").Evaluate());
-            Assert.AreEqual((new DateTime(2016, 12, 01, 23, 32, 00) - new DateTime(2016, 01, 01)).TotalMinutes, new Expression("minutesbetween(#2016-01-01#, #2016-12-01 23:32:00#)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual((new DateTime(2016, 12, 01, 23, 32, 00) - new DateTime(2016, 01, 01)).TotalMinutes, new Expression("minutesbetween(#2016-01-01#, #2016-12-01 23:32:00#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("MinutesBetween()").Evaluate();
         }
@@ -654,7 +654,7 @@ namespace Expressive.Tests
         public void MonthOfShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(01, new Expression("MonthOf(#2016-01-01#)").Evaluate());
-            Assert.AreEqual(06, new Expression("monthof(#2016-06-12#)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(06, new Expression("monthof(#2016-06-12#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("MonthOf()").Evaluate();
         }
@@ -663,7 +663,7 @@ namespace Expressive.Tests
         public void YearOfShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(2016, new Expression("YearOf(#2016-01-01#)").Evaluate());
-            Assert.AreEqual(2016, new Expression("yearof(#2016-01-12#)", ExpressiveOptions.IgnoreCase).Evaluate());
+            Assert.AreEqual(2016, new Expression("yearof(#2016-01-12#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
             new Expression("YearOf()").Evaluate();
         }
@@ -916,8 +916,8 @@ namespace Expressive.Tests
         [TestMethod, ExpectedException(typeof(ExpressiveException), "The variable 'a' has not been supplied.")]
         public void ShouldHandleCaseSensitivity()
         {
-            new Expression("([a] + [b]) * (4 - 2)", ExpressiveOptions.IgnoreCase).Evaluate(new Dictionary<string, object> { { "A", 2 }, { "b", 3 } });
-            new Expression("IF(true, true, false)", ExpressiveOptions.IgnoreCase).Evaluate();
+            new Expression("([a] + [b]) * (4 - 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(new Dictionary<string, object> { { "A", 2 }, { "b", 3 } });
+            new Expression("IF(true, true, false)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
 
             try
             {
@@ -1099,7 +1099,7 @@ namespace Expressive.Tests
                 ["plate.datecontrol"] = null,
             };
 
-            Assert.AreEqual("Date Needed", new Expression("if([plate.datecontrol] = NULL, 'Date Needed', 'Date Entered')", ExpressiveOptions.IgnoreCase).Evaluate(arguments));
+            Assert.AreEqual("Date Needed", new Expression("if([plate.datecontrol] = NULL, 'Date Needed', 'Date Entered')", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(arguments));
         }
 
         [TestMethod]
@@ -1111,7 +1111,7 @@ namespace Expressive.Tests
                 ["DischargeStatus2_Value"] = "00",
             };
 
-            Assert.AreEqual(true, new Expression("[DischargeStatus1_Value] > 00 AND[DischargeStatus2_Value] = 00", ExpressiveOptions.IgnoreCase).Evaluate(arguments));
+            Assert.AreEqual(true, new Expression("[DischargeStatus1_Value] > 00 AND[DischargeStatus2_Value] = 00", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(arguments));
         }
 
         [TestMethod]

@@ -135,7 +135,9 @@ namespace Expressive.Tests
         [Test]
         public static void TestStringComparerIgnoreCase()
         {
+#pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
             var context = new Context(ExpressiveOptions.IgnoreCase);
+#pragma warning restore 618
 
             Assert.That(context.ParsingStringComparer, Is.EqualTo(StringComparer.OrdinalIgnoreCase));
         }
@@ -157,7 +159,9 @@ namespace Expressive.Tests
         }
 
         [TestCase(ExpressiveOptions.None, StringComparison.Ordinal, StringComparison.Ordinal)]
+#pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
         [TestCase(ExpressiveOptions.IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.OrdinalIgnoreCase)]
+#pragma warning restore 618
         [TestCase(ExpressiveOptions.IgnoreCaseForEquality, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal)]
         [TestCase(ExpressiveOptions.IgnoreCaseForParsing, StringComparison.Ordinal, StringComparison.OrdinalIgnoreCase)]
         public static void TestStringComparisonIgnoreCase(

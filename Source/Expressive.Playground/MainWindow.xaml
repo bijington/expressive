@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         Title="Expressive Playground"
         WindowState="Maximized"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        d:DataContext="{d:DesignInstance local:MainWindow}">
     <Window.InputBindings>
         <KeyBinding Key="E" Modifiers="Control" Command="{Binding EvaluateCommand}"/>
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
@@ -38,8 +39,15 @@
                 <!-- Hacky for now but the tick doesn't seem to be displaying in the MenuItem -->
                 <MenuItem>
                     <MenuItem.Header>
-                        <CheckBox IsChecked="{Binding IgnoreCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  Content="Ignore case"
+                        <CheckBox IsChecked="{Binding IgnoreCaseForEquality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Content="Ignore case for equality"
+                                  Foreground="White"/>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <CheckBox IsChecked="{Binding IgnoreCaseForParsing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  Content="Ignore case for parsing"
                                   Foreground="White"/>
                     </MenuItem.Header>
                 </MenuItem>

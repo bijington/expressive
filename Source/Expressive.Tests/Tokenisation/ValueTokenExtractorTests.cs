@@ -1,20 +1,18 @@
-﻿using System;
-using Expressive.Tokenisation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Expressive.Tokenisation;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Tokenisation
 {
-    [TestClass]
-    public class ValueTokenExtractorTests
+    public static class ValueTokenExtractorTests
     {
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void TestConstructingWithNull()
+        [Test]
+        public static void TestConstructingWithNull()
         {
-            _ = new ValueTokenExtractor(null);
+            Assert.That(() => new ValueTokenExtractor(null), Throws.ArgumentNullException);
         }
 
-        [TestMethod]
-        public void TestWithMatchingValue()
+        [Test]
+        public static void TestWithMatchingValue()
         {
             var extractor = new ValueTokenExtractor("match");
 
@@ -24,19 +22,22 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("match", token.CurrentToken);
         }
 
-        [TestMethod]
-        public void TestWithMatchingValueIgnoringCase()
+        [TestCase(ExpressiveOptions.IgnoreCaseForParsing)]
+#pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
+        [TestCase(ExpressiveOptions.IgnoreCase)]
+#pragma warning restore 618
+        public static void TestWithMatchingValueIgnoringCase(ExpressiveOptions option)
         {
             var extractor = new ValueTokenExtractor("match");
 
-            var token = extractor.ExtractToken("MaTcH", 0, new Context(ExpressiveOptions.IgnoreCase));
+            var token = extractor.ExtractToken("MaTcH", 0, new Context(option));
 
             Assert.IsNotNull(token);
             Assert.AreEqual("match", token.CurrentToken);
         }
 
-        [TestMethod]
-        public void TestWithMatchingValueInALargerExpression()
+        [Test]
+        public static void TestWithMatchingValueInALargerExpression()
         {
             var extractor = new ValueTokenExtractor("match");
 
@@ -46,18 +47,19 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("match", token.CurrentToken);
         }
 
-        [TestMethod]
-        public void TestWithNoMatchingValueByCase()
+        [TestCase(ExpressiveOptions.IgnoreCaseForEquality)]
+        [TestCase(ExpressiveOptions.None)]
+        public static void TestWithNoMatchingValueByCase(ExpressiveOptions option)
         {
             var extractor = new ValueTokenExtractor("Match");
 
-            var token = extractor.ExtractToken("match", 0, new Context(ExpressiveOptions.None));
+            var token = extractor.ExtractToken("match", 0, new Context(option));
 
             Assert.IsNull(token);
         }
 
-        [TestMethod]
-        public void TestWithNoMatchingValueByLongerToken()
+        [Test]
+        public static void TestWithNoMatchingValueByLongerToken()
         {
             var extractor = new ValueTokenExtractor("match");
 
@@ -66,8 +68,8 @@ namespace Expressive.Tests.Tokenisation
             Assert.IsNull(token);
         }
 
-        [TestMethod]
-        public void TestWithNoMatchingValueByShorterExpression()
+        [Test]
+        public static void TestWithNoMatchingValueByShorterExpression()
         {
             var extractor = new ValueTokenExtractor("match");
 
