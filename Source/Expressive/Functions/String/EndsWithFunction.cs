@@ -26,7 +26,7 @@ namespace Expressive.Functions.String
                 return false;
             }
             
-            return text?.EndsWith(value, context.StringComparison) == true;
+            return text?.EndsWith(value, context.EqualityStringComparison) == true;
         }
 
         #endregion

@@ -218,7 +218,7 @@ namespace Expressive
                     var variableName = currentToken.CurrentToken.Replace("[", "").Replace("]", "");
                     leftHandSide = new VariableExpression(variableName);
 
-                    if (!variables.Contains(variableName, this.context.StringComparer))
+                    if (!variables.Contains(variableName, this.context.ParsingStringComparer))
                     {
                         variables.Add(variableName);
                     }

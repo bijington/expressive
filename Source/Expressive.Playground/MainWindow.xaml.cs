@@ -3,8 +3,6 @@ using Expressive.Playground.TextMarking;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Rendering;
-using ICSharpCode.AvalonEdit.Snippets;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -14,7 +12,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -55,9 +52,13 @@ namespace Expressive.Playground
             {
                 var options = ExpressiveOptions.None;
 
-                if (this.IgnoreCase)
+                if (this.IgnoreCaseForEquality)
                 {
-                    options |= ExpressiveOptions.IgnoreCase;
+                    options |= ExpressiveOptions.IgnoreCaseForEquality;
+                }
+                if (this.IgnoreCaseForParsing)
+                {
+                    options |= ExpressiveOptions.IgnoreCaseForParsing;
                 }
                 if (this.NoCache)
                 {
@@ -74,21 +75,23 @@ namespace Expressive.Playground
 
         #region Options
 
-        public bool IgnoreCase
+        public bool IgnoreCaseForEquality
         {
-            get { return (bool)GetValue(IgnoreCaseProperty); }
-            set { SetValue(IgnoreCaseProperty, value); }
+            get { return (bool)GetValue(IgnoreCaseForEqualityProperty); }
+            set { SetValue(IgnoreCaseForEqualityProperty, value); }
         }
 
-        public static readonly DependencyProperty IgnoreCaseProperty =
-            DependencyProperty.Register("IgnoreCase", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.IgnoreCasePropertyChanged));
+        public static readonly DependencyProperty IgnoreCaseForEqualityProperty =
+            DependencyProperty.Register("IgnoreCaseForEquality", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.ExpressiveOptionChanged));
 
-        private static void IgnoreCasePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        public bool IgnoreCaseForParsing
         {
-            var typedSender = (MainWindow)sender;
-
-            typedSender.TriggerEvaluation();
+            get { return (bool)GetValue(IgnoreCaseForParsingProperty); }
+            set { SetValue(IgnoreCaseForParsingProperty, value); }
         }
+
+        public static readonly DependencyProperty IgnoreCaseForParsingProperty =
+            DependencyProperty.Register("IgnoreCaseForParsing", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.ExpressiveOptionChanged));
 
         public bool NoCache
         {
@@ -97,14 +100,7 @@ namespace Expressive.Playground
         }
 
         public static readonly DependencyProperty NoCacheProperty =
-            DependencyProperty.Register("NoCache", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.NoCachePropertyChanged));
-
-        private static void NoCachePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            var typedSender = (MainWindow)sender;
-
-            typedSender.TriggerEvaluation();
-        }
+            DependencyProperty.Register("NoCache", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.ExpressiveOptionChanged));
 
         public bool RoundAwayFromZero
         {
@@ -113,9 +109,9 @@ namespace Expressive.Playground
         }
 
         public static readonly DependencyProperty RoundAwayFromZeroProperty =
-            DependencyProperty.Register("RoundAwayFromZero", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.RoundAwayFromZeroPropertyChanged));
+            DependencyProperty.Register("RoundAwayFromZero", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, MainWindow.ExpressiveOptionChanged));
 
-        private static void RoundAwayFromZeroPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private static void ExpressiveOptionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var typedSender = (MainWindow)sender;
 

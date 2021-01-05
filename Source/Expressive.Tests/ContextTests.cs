@@ -129,31 +129,50 @@ namespace Expressive.Tests
         {
             var context = new Context(ExpressiveOptions.None);
 
-            Assert.That(StringComparer.Ordinal, Is.EqualTo(context.StringComparer));
+            Assert.That(context.ParsingStringComparer, Is.EqualTo(StringComparer.Ordinal));
         }
 
         [Test]
         public static void TestStringComparerIgnoreCase()
         {
+#pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
             var context = new Context(ExpressiveOptions.IgnoreCase);
+#pragma warning restore 618
 
-            Assert.That(StringComparer.OrdinalIgnoreCase, Is.EqualTo(context.StringComparer));
+            Assert.That(context.ParsingStringComparer, Is.EqualTo(StringComparer.OrdinalIgnoreCase));
         }
 
         [Test]
-        public static void TestStringComparison()
+        public static void TestStringComparerIgnoreCaseForEquality()
         {
-            var context = new Context(ExpressiveOptions.None);
+            var context = new Context(ExpressiveOptions.IgnoreCaseForEquality);
 
-            Assert.That(StringComparison.Ordinal, Is.EqualTo(context.StringComparison));
+            Assert.That(context.ParsingStringComparer, Is.EqualTo(StringComparer.Ordinal));
         }
 
         [Test]
-        public static void TestStringComparisonIgnoreCase()
+        public static void TestStringComparerIgnoreCaseForParsing()
         {
-            var context = new Context(ExpressiveOptions.IgnoreCase);
+            var context = new Context(ExpressiveOptions.IgnoreCaseForParsing);
 
-            Assert.That(StringComparison.OrdinalIgnoreCase, Is.EqualTo(context.StringComparison));
+            Assert.That(context.ParsingStringComparer, Is.EqualTo(StringComparer.OrdinalIgnoreCase));
+        }
+
+        [TestCase(ExpressiveOptions.None, StringComparison.Ordinal, StringComparison.Ordinal)]
+#pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
+        [TestCase(ExpressiveOptions.IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.OrdinalIgnoreCase)]
+#pragma warning restore 618
+        [TestCase(ExpressiveOptions.IgnoreCaseForEquality, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal)]
+        [TestCase(ExpressiveOptions.IgnoreCaseForParsing, StringComparison.Ordinal, StringComparison.OrdinalIgnoreCase)]
+        public static void TestStringComparisonIgnoreCase(
+            ExpressiveOptions expressiveOptions,
+            StringComparison expectedEqualityStringComparison,
+            StringComparison expectedParsingStringComparison)
+        {
+            var context = new Context(expressiveOptions);
+
+            Assert.That(context.EqualityStringComparison, Is.EqualTo(expectedEqualityStringComparison));
+            Assert.That(context.ParsingStringComparison, Is.EqualTo(expectedParsingStringComparison));
         }
 
         [Test]

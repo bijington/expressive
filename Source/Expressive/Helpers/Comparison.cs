@@ -24,7 +24,7 @@ namespace Expressive.Helpers
                 return string.Compare(
                     (string)Convert.ChangeType(a, mostPreciseType, context.CurrentCulture),
                     (string)Convert.ChangeType(b, mostPreciseType, context.CurrentCulture),
-                    context.StringComparison);
+                    context.EqualityStringComparison);
             }
 
             return Comparison.Compare(a, b, mostPreciseType, context);
@@ -124,7 +124,7 @@ namespace Expressive.Helpers
                 return string.Compare(
                     (string)Convert.ChangeType(lhs, typeof(string), context.CurrentCulture),
                     (string)Convert.ChangeType(rhs, typeof(string), context.CurrentCulture),
-                    context.StringComparison);
+                    context.EqualityStringComparison);
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)

@@ -25,7 +25,7 @@ namespace Expressive.Tokenisation
             {
                 var lookAhead = expression.Substring(currentIndex, Math.Min(possibleName.Length, expressionLength - currentIndex));
 
-                if (!string.Equals(lookAhead, possibleName, context.StringComparison))
+                if (!string.Equals(lookAhead, possibleName, context.ParsingStringComparison))
                 {
                     continue;
                 }

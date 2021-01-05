@@ -53,11 +53,25 @@ namespace Expressive
 
         internal IEnumerable<string> OperatorNames => this.registeredOperators.Keys.OrderByDescending(k => k.Length);
 
-        internal StringComparer StringComparer => Options.HasFlag(ExpressiveOptions.IgnoreCase)
+        private bool IsCaseInsensitiveEqualityEnabled => 
+#pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
+            Options.HasFlag(ExpressiveOptions.IgnoreCase) || Options.HasFlag(ExpressiveOptions.IgnoreCaseForEquality);
+#pragma warning restore 618
+
+        internal StringComparison EqualityStringComparison => IsCaseInsensitiveEqualityEnabled
+            ? StringComparison.OrdinalIgnoreCase
+            : StringComparison.Ordinal;
+
+        private bool IsCaseInsensitiveParsingEnabled =>
+#pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
+            Options.HasFlag(ExpressiveOptions.IgnoreCase) || Options.HasFlag(ExpressiveOptions.IgnoreCaseForParsing);
+#pragma warning restore 618
+
+        internal StringComparer ParsingStringComparer => IsCaseInsensitiveParsingEnabled
             ? StringComparer.OrdinalIgnoreCase
             : StringComparer.Ordinal;
 
-        internal StringComparison StringComparison => Options.HasFlag(ExpressiveOptions.IgnoreCase)
+        internal StringComparison ParsingStringComparison => IsCaseInsensitiveParsingEnabled
             ? StringComparison.OrdinalIgnoreCase
             : StringComparison.Ordinal;
 
@@ -88,8 +102,8 @@ namespace Expressive
             this.DecimalCurrentCulture = decimalCurrentCulture ?? throw new ArgumentNullException(nameof(decimalCurrentCulture));
 
             DecimalSeparator = Convert.ToChar(this.DecimalCurrentCulture.NumberFormat.NumberDecimalSeparator, this.DecimalCurrentCulture);
-            this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(StringComparer);
-            this.registeredOperators = new Dictionary<string, IOperator>(StringComparer);
+            this.registeredFunctions = new Dictionary<string, Func<IExpression[], IDictionary<string, object>, object>>(this.ParsingStringComparer);
+            this.registeredOperators = new Dictionary<string, IOperator>(this.ParsingStringComparer);
 
             #region Operators
             // TODO: Do we allow for turning off operators?
