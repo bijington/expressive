@@ -1,9 +1,13 @@
 ﻿using Expressive.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
+using NUnit.Framework;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Expressive.Tests
 {
@@ -1132,6 +1136,83 @@ namespace Expressive.Tests
             var expression = new Expression("1 + 2.0 + 3 * 4.0");
 
             Assert.AreEqual(15, expression.Evaluate<int>());
+        }
+
+        [Test]
+        public void ShouldEvaluateJJJ()
+        {
+            var expression = new Expression("1+[a]", ExpressiveOptions.IgnoreCaseForParsing);
+
+            var variableProvider = new DynamicVariableProvider(expression.ReferencedVariables, name =>
+            {
+                if (name == "a")
+                {
+                    return 2;
+                }
+
+                return null;
+            });
+
+            Assert.AreEqual(3, expression.Evaluate<int>(variableProvider));
+        }
+
+        public class DynamicVariableProvider : IDictionary<string, object>
+        {
+            private readonly HashSet<string> variableNames;
+            private readonly Func<string, object> valueProvider;
+
+            public DynamicVariableProvider(IEnumerable<string> variableNames, Func<string, object> valueProvider)
+            {
+                this.variableNames = new HashSet<string>(variableNames);// TODO: comparer
+                this.valueProvider = valueProvider;
+            }
+
+            public IEnumerator<KeyValuePair<string, object>> GetEnumerator() => 
+                this.variableNames.Select(name => new KeyValuePair<string, object>(name, this.valueProvider.Invoke(name)))
+                    .GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+
+            public void Add(KeyValuePair<string, object> item) => ThrowNotSupported();
+
+            public void Clear() => ThrowNotSupported();
+
+            public bool Contains(KeyValuePair<string, object> item) => ThrowNotSupported();
+
+            public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex) => ThrowNotSupported();
+
+            public bool Remove(KeyValuePair<string, object> item) => ThrowNotSupported();
+
+            public int Count => this.variableNames.Count;
+            public bool IsReadOnly => true;
+
+            public void Add(string key, object value) => ThrowNotSupported();
+
+            public bool ContainsKey(string key) => this.variableNames.Contains(key);
+
+            public bool Remove(string key) => ThrowNotSupported();
+
+            public bool TryGetValue(string key, out object value)
+            {
+                var containsKey = ContainsKey(key);
+
+                value = containsKey
+                    ? this.valueProvider.Invoke(key)
+                    : null;
+
+                return containsKey;
+            }
+
+            public object this[string key]
+            {
+                get => this.valueProvider.Invoke(key);
+                set => ThrowNotSupported();
+            }
+
+            public ICollection<string> Keys => this.variableNames;
+            public ICollection<object> Values { get; }
+
+            private static bool ThrowNotSupported() => throw new NotSupportedException("This implementation is readonly.");
         }
 
         [TestMethod]
