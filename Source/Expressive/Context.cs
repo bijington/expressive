@@ -62,7 +62,7 @@ namespace Expressive
             ? StringComparison.OrdinalIgnoreCase
             : StringComparison.Ordinal;
 
-        private bool IsCaseInsensitiveParsingEnabled =>
+        internal bool IsCaseInsensitiveParsingEnabled =>
 #pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
             Options.HasFlag(ExpressiveOptions.IgnoreCase) || Options.HasFlag(ExpressiveOptions.IgnoreCaseForParsing);
 #pragma warning restore 618
