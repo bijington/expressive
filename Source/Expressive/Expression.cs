@@ -135,6 +135,43 @@ namespace Expressive
             }
         }
 
+        public object Evaluate(IVariableProvider variableProvider)
+        {
+            try
+            {
+                this.CompileExpression();
+
+                IDictionary<string, object> variables = null;
+
+                if (variableProvider != null)
+                {
+                    variables = new VariableProviderDictionary(variableProvider);
+                }
+
+                return this.compiledExpression?.Evaluate(variables);
+            }
+            catch (Exception ex)
+            {
+                throw new ExpressiveException(ex);
+            }
+        }
+
+        public T Evaluate<T>(IVariableProvider variableProvider)
+        {
+            try
+            {
+                return (T)this.Evaluate(variableProvider);
+            }
+            catch (ExpressiveException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ExpressiveException(ex);
+            }
+        }
+
         /// <summary>
         /// Evaluates the expression using the supplied variables asynchronously and returns the result via the callback.
         /// </summary>
