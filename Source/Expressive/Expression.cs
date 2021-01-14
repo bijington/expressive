@@ -100,7 +100,8 @@ namespace Expressive
             {
                 this.CompileExpression();
 
-                if (variables != null)
+                if (variables != null &&
+                    this.context.IsCaseInsensitiveParsingEnabled)
                 {
                     variables = new Dictionary<string, object>(variables, this.context.ParsingStringComparer);
                 }
