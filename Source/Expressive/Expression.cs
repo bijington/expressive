@@ -89,24 +89,18 @@ namespace Expressive
         #region Public Methods
 
         /// <summary>
-        /// Evaluates the expression using the supplied variables and returns the result.
+        /// Evaluates the expression using the supplied <paramref name="variables"/> and returns the result.
         /// </summary>
         /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
         /// <param name="variables">The variables to be used in the evaluation.</param>
-        /// <returns>The result of the expression.</returns>
+        /// <returns>The result of the evaluation.</returns>
         public object Evaluate(IDictionary<string, object> variables = null)
         {
             try
             {
                 this.CompileExpression();
 
-                if (variables != null &&
-                    this.context.IsCaseInsensitiveParsingEnabled)
-                {
-                    variables = new Dictionary<string, object>(variables, this.context.ParsingStringComparer);
-                }
-
-                return this.compiledExpression?.Evaluate(variables);
+                return this.compiledExpression?.Evaluate(ApplyStringComparerSettings(variables, this.context.ParsingStringComparer));
             }
             catch (Exception ex)
             {
@@ -115,11 +109,11 @@ namespace Expressive
         }
 
         /// <summary>
-        /// Evaluates the expression using the supplied variables and returns the result.
+        /// Evaluates the expression using the supplied <paramref name="variables"/> and returns the result.
         /// </summary>
         /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
         /// <param name="variables">The variables to be used in the evaluation.</param>
-        /// <returns>The result of the expression.</returns>
+        /// <returns>The result of the evaluation.</returns>
         public T Evaluate<T>(IDictionary<string, object> variables = null)
         {
             try
@@ -136,29 +130,37 @@ namespace Expressive
             }
         }
 
+        /// <summary>
+        /// Evaluates the expression using the supplied <paramref name="variableProvider"/> and returns the result.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="variableProvider"/> is null.</exception>
+        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
+        /// <param name="variableProvider">The <see cref="IVariableProvider"/> implementation to provide variable values during evaluation.</param>
+        /// <returns>The result of the evaluation.</returns>
         public object Evaluate(IVariableProvider variableProvider)
         {
-            try
+            if (variableProvider is null)
             {
-                this.CompileExpression();
-
-                IDictionary<string, object> variables = null;
-
-                if (variableProvider != null)
-                {
-                    variables = new VariableProviderDictionary(variableProvider);
-                }
-
-                return this.compiledExpression?.Evaluate(variables);
+                throw new ArgumentNullException(nameof(variableProvider));
             }
-            catch (Exception ex)
-            {
-                throw new ExpressiveException(ex);
-            }
+
+            return this.Evaluate(new VariableProviderDictionary(variableProvider));
         }
 
+        /// <summary>
+        /// Evaluates the expression using the supplied <paramref name="variableProvider"/> and returns the result.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="variableProvider"/> is null.</exception>
+        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
+        /// <param name="variableProvider">The <see cref="IVariableProvider"/> implementation to provide variable values during evaluation.</param>
+        /// <returns>The result of the evaluation.</returns>
         public T Evaluate<T>(IVariableProvider variableProvider)
         {
+            if (variableProvider is null)
+            {
+                throw new ArgumentNullException(nameof(variableProvider));
+            }
+
             try
             {
                 return (T)this.Evaluate(variableProvider);
@@ -279,6 +281,21 @@ namespace Expressive
             this.compiledExpression = this.parser.CompileExpression(this.originalExpression, variables);
 
             this.referencedVariables = variables.ToArray();
+        }
+
+        private static IDictionary<string, object> ApplyStringComparerSettings(IDictionary<string, object> variables, StringComparer desiredStringComparer)
+        {
+            switch (variables)
+            {
+                case null:
+                    return null;
+                case Dictionary<string, object> dictionary when dictionary.Comparer.Equals(desiredStringComparer):
+                    return dictionary;
+                case VariableProviderDictionary _:
+                    return variables;
+                default:
+                    return new Dictionary<string, object>(variables, desiredStringComparer);
+            }
         }
 
         #endregion
