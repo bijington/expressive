@@ -283,7 +283,7 @@ namespace Expressive
             this.referencedVariables = variables.ToArray();
         }
 
-        private static IDictionary<string, object> ApplyStringComparerSettings(IDictionary<string, object> variables, StringComparer desiredStringComparer)
+        private static IDictionary<string, object> ApplyStringComparerSettings(IDictionary<string, object> variables, IEqualityComparer<string> desiredStringComparer)
         {
             switch (variables)
             {
