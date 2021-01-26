@@ -1,10 +1,14 @@
-﻿using Expressive.Exceptions;
+﻿using System;
+using Expressive.Exceptions;
 using Expressive.Expressions;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Expressive.Functions
 {
+    /// <summary>
+    /// Base class implementation for providing a function that can be registered and evaluated.
+    /// </summary>
     public abstract class FunctionBase : IFunction
     {
         #region IFunction Members
@@ -28,24 +32,27 @@ namespace Expressive.Functions
         /// <param name="parameters">The parameters.</param>
         /// <param name="expectedCount">The expected number of parameters, use -1 for an unknown number.</param>
         /// <param name="minimumCount">The minimum number of parameters.</param>
-        /// <returns>True if the correct number are present, false otherwise.</returns>
-        protected bool ValidateParameterCount(IExpression[] parameters, int expectedCount, int minimumCount)
+        protected void ValidateParameterCount(IExpression[] parameters, int expectedCount, int minimumCount)
         {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
             if (expectedCount == 0 && (parameters.Any() || parameters.Length != expectedCount))
             {
                 throw new ParameterCountMismatchException($"{this.Name}() does not take any arguments");
             }
-            if (expectedCount != -1 && expectedCount != 0 && (parameters is null || !parameters.Any() || parameters.Length != expectedCount))
+
+            if (expectedCount > 0 && (!parameters.Any() || parameters.Length != expectedCount))
             {
                 throw new ParameterCountMismatchException($"{this.Name}() takes only {expectedCount} argument(s)");
             }
 
-            if (minimumCount > 0 && (parameters is null || !parameters.Any() || parameters.Length < minimumCount))
+            if (minimumCount > 0 && (!parameters.Any() || parameters.Length < minimumCount))
             {
                 throw new ParameterCountMismatchException($"{this.Name}() expects at least {minimumCount} argument(s)");
             }
-
-            return true;
         }
     }
 }

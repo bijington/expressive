@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Expressive.Tests.Functions.Date
 {
     [TestClass]
-    public class DayOfFunctionTests : FunctionBaseTests
+    public class DayOfFunctionTests : FunctionBaseTestBase
     {
         [TestMethod]
         public void TestName()

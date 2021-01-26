@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Expressive.Tests.Functions.Conversion
 {
     [TestClass]
-    public class DoubleFunctionTests : FunctionBaseTests
+    public class DoubleFunctionTests : FunctionBaseTestBase
     {
         [TestMethod]
         public void TestName()

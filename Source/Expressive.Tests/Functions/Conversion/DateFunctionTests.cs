@@ -10,7 +10,7 @@ using Moq;
 namespace Expressive.Tests.Functions.Conversion
 {
     [TestClass]
-    public class DateFunctionTests : FunctionBaseTests
+    public class DateFunctionTests : FunctionBaseTestBase
     {
         [TestMethod]
         public void TestName()

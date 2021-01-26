@@ -1150,7 +1150,9 @@ namespace Expressive.Tests
         [TestCaseSource(nameof(DictionaryEnumerationSource))]
         public static void ShouldNotEnumerateDictionaryWithAppropriateComparer(DictionaryEnumerationTestData sourceData)
         {
+#pragma warning disable CA1062 // Validate arguments of public methods - this really isn't going to be null
             var context = new Context(sourceData.Options);
+#pragma warning restore CA1062 // Validate arguments of public methods
             var expression = new Expression("1+2", context);
             var dictionary = new MockDictionary(sourceData.Comparer);
 
@@ -1236,20 +1238,6 @@ namespace Expressive.Tests
             }
 
             public new int Count => throw new InvalidOperationException();
-        }
-
-        public class DictionaryEnumerationTestData
-        {
-            public ExpressiveOptions Options { get; }
-            public IEqualityComparer<string> Comparer { get; }
-            public bool ExpectedEnumeration { get; }
-
-            public DictionaryEnumerationTestData(ExpressiveOptions options, IEqualityComparer<string> comparer, bool expectedEnumeration)
-            {
-                this.Options = options;
-                this.Comparer = comparer;
-                this.ExpectedEnumeration = expectedEnumeration;
-            }
         }
     }
 }

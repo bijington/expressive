@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Expressive.Tests.Functions.Relational
 {
     [TestClass]
-    public class MaxFunctionTests : FunctionBaseTests
+    public class MaxFunctionTests : FunctionBaseTestBase
     {
         [TestMethod]
         public void TestName()
