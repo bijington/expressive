@@ -95,7 +95,9 @@ namespace Expressive.Tests
 
             Assert.That(context.FunctionNames, Does.Contain(functionName));
             context.TryGetFunction(functionName, out var ifFunction);
+#pragma warning disable CA1825
             ifFunction.Invoke(new IExpression[0], new Dictionary<string, object>());
+#pragma warning restore CA1825
             Assert.That(customIfCount, Is.EqualTo(1));
         }
 

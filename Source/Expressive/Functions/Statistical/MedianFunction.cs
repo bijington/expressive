@@ -16,16 +16,13 @@ namespace Expressive.Functions.Statistical
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
-            object result = 0;
-            
             IList<decimal> decimalValues = new List<decimal>();
 
             foreach (var p in parameters)
             {
                 var value = p.Evaluate(this.Variables);
-                var enumerable = value as IEnumerable;
-                
-                if (enumerable != null)
+
+                if (value is IEnumerable enumerable)
                 {
                     foreach (var item in enumerable)
                     {
@@ -43,10 +40,10 @@ namespace Expressive.Functions.Statistical
 
         #endregion
 
-        decimal Median(decimal[] xs)
+        private static decimal Median(IEnumerable<decimal> xs)
         {
             var ys = xs.OrderBy(x => x).ToList();
-            double mid = (ys.Count - 1) / 2.0;
+            var mid = (ys.Count - 1) / 2.0;
             return (ys[(int)(mid)] + ys[(int)(mid + 0.5)]) / 2;
         }
     }

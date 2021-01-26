@@ -10,6 +10,7 @@
     <AssemblyOriginatorKeyFile>..\ExpressiveStrongName.snk</AssemblyOriginatorKeyFile>
 
     <DelaySign>false</DelaySign>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>

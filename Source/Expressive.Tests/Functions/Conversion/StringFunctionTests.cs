@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Expressive.Tests.Functions.Conversion
 {
     [TestClass]
-    public class StringFunctionTests : FunctionBaseTests
+    public class StringFunctionTests : FunctionBaseTestBase
     {
         [TestMethod]
         public void TestName()

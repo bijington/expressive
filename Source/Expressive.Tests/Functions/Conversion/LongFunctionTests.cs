@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Expressive.Tests.Functions.Conversion
 {
     [TestClass]
-    public class LongFunctionTests : FunctionBaseTests
+    public class LongFunctionTests : FunctionBaseTestBase
     {
         [TestMethod]
         public void TestName()

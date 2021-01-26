@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Expressive.Tests.Functions.Relational
 {
     [TestClass]
-    public class MinFunctionTests : FunctionBaseTests
+    public class MinFunctionTests : FunctionBaseTestBase
     {
         [TestMethod]
         public void TestName()

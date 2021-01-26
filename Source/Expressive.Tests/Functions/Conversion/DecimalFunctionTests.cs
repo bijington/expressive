@@ -10,7 +10,7 @@ using Moq;
 namespace Expressive.Tests.Functions.Conversion
 {
     [TestClass]
-    public class DecimalFunctionTests : FunctionBaseTests
+    public class DecimalFunctionTests : FunctionBaseTestBase
     {
         [TestMethod]
         public void TestName()

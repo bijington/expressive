@@ -1,42 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using Expressive.Exceptions;
 using Expressive.Expressions;
 using Expressive.Functions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace Expressive.Tests.Functions
 {
-    public abstract class FunctionBaseTests
+    public static class FunctionBaseTests
     {
-        protected abstract IFunction ActualFunction { get; }
+        [Test]
+        public static void TestValidateParameterCountWithNull() =>
+            Assert.That(
+                () => new MockFunction().Validate(null, 0, 0),
+                Throws.ArgumentNullException);
 
-        protected void AssertException(Type exceptionType, string exceptionMessage, params object[] values)
+        [TestCase(0, 0, 0, false, TestName = "{m} - No parameters expected and none passed in.")]
+        [TestCase(1, 0, 0, true, TestName = "{m} - No parameters expected but some passed in.")]
+        [TestCase(0, 1, 0, true, TestName = "{m} - One parameter expected but none passed in.")]
+        [TestCase(1, 1, 0, false, TestName = "{m} - One parameter expected and one passed in.")]
+        [TestCase(2, 1, 0, true, TestName = "{m} - One parameter expected and two passed in.")]
+        [TestCase(0, -1, 1, true, TestName = "{m} - One minimum expected but none passed in.")]
+        [TestCase(1, -1, 1, false, TestName = "{m} - One minimum expected and one passed in.")]
+        [TestCase(2, -1, 1, false, TestName = "{m} - One minimum expected and two passed in.")]
+        public static void TestValidateParameterCount(int parameterCount, int expectedParameterCount, int expectedMinimumCount, bool shouldThrow)
         {
-            try
-            {
-                this.ActualFunction.Evaluate(
-                    values?.Select(v => Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == v)).ToArray(),
-                    new Context(ExpressiveOptions.None));
-            }
-#pragma warning disable CA1031 // Do not catch general exception types - We will eventually switch to NUnit that should remove the need for this.
-            catch (Exception e)
-#pragma warning restore CA1031 // Do not catch general exception types
-            {
-                Assert.IsInstanceOfType(e, exceptionType);
-                Assert.AreEqual(exceptionMessage, e.Message);
-                return;
-            }
+            var parameters = Enumerable.Repeat(Mock.Of<IExpression>(), parameterCount).ToArray();
 
-            throw new InvalidOperationException($"An exception of type: {exceptionType} was expected but no exception was thrown");
+            Assert.That(
+                () => new MockFunction().Validate(parameters, expectedParameterCount, expectedMinimumCount),
+                shouldThrow ? (Constraint)Throws.InstanceOf<ParameterCountMismatchException>() : Throws.Nothing);
         }
 
-        protected object Evaluate(params object[] values)
+        private class MockFunction : FunctionBase
         {
-            return this.ActualFunction.Evaluate(
-                values?.Select(v => Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == v)).ToArray(),
-                new Context(ExpressiveOptions.None));
+            public override string Name => "Mock";
+
+            public override object Evaluate(IExpression[] parameters, Context context) => throw new NotImplementedException();
+
+            public void Validate(IExpression[] parameters, int expectedCount, int minimumCount) =>
+                this.ValidateParameterCount(parameters, expectedCount, minimumCount);
         }
     }
 }

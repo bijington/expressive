@@ -25,6 +25,12 @@ namespace Expressive.Expressions.Binary
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="BinaryExpressionBase"/>.
+        /// </summary>
+        /// <param name="lhs">The left hand <see cref="IExpression"/>.</param>
+        /// <param name="rhs">The right hand <see cref="IExpression"/>.</param>
+        /// <param name="context">The <see cref="Context"/> used during the evaluation.</param>
         protected BinaryExpressionBase(IExpression lhs, IExpression rhs, Context context)
         {
             this.leftHandSide = lhs;
