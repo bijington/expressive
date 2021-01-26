@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Code coverage
 /Source/coverage
+/Source/Expressive/Expressive.xml
