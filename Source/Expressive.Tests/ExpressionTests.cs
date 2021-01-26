@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using NUnit.Framework;
+using NUnit.Framework.Constraints;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Expressive.Tests
 {
@@ -1134,6 +1137,50 @@ namespace Expressive.Tests
             Assert.AreEqual(15, expression.Evaluate<int>());
         }
 
+        [Test]
+        public void ShouldEvaluateWithVariableProvider()
+        {
+            var context = new Context(ExpressiveOptions.IgnoreCaseForParsing);
+            var expression = new Expression("1+[a]", context);
+            var variableProvider = new MockProvider();
+
+            Assert.AreEqual(3, expression.Evaluate(variableProvider));
+        }
+
+        [TestCaseSource(nameof(DictionaryEnumerationSource))]
+        public static void ShouldNotEnumerateDictionaryWithAppropriateComparer(DictionaryEnumerationTestData sourceData)
+        {
+            var context = new Context(sourceData.Options);
+            var expression = new Expression("1+2", context);
+            var dictionary = new MockDictionary(sourceData.Comparer);
+
+            NUnit.Framework.Assert.That(
+                () => expression.Evaluate(dictionary),
+                sourceData.ExpectedEnumeration ? (Constraint)Throws.InstanceOf<ExpressiveException>() : Throws.Nothing);
+        }
+
+        private static IEnumerable<DictionaryEnumerationTestData> DictionaryEnumerationSource
+        {
+            get
+            {
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.IgnoreCaseForParsing, EqualityComparer<string>.Default, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.IgnoreCaseForParsing, StringComparer.CurrentCulture, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.IgnoreCaseForParsing, StringComparer.CurrentCultureIgnoreCase, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.IgnoreCaseForParsing, StringComparer.InvariantCulture, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.IgnoreCaseForParsing, StringComparer.InvariantCultureIgnoreCase, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.IgnoreCaseForParsing, StringComparer.Ordinal, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.IgnoreCaseForParsing, StringComparer.OrdinalIgnoreCase, false);
+
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.None, EqualityComparer<string>.Default, false);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.None, StringComparer.CurrentCulture, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.None, StringComparer.CurrentCultureIgnoreCase, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.None, StringComparer.InvariantCulture, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.None, StringComparer.InvariantCultureIgnoreCase, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.None, StringComparer.Ordinal, true);
+                yield return new DictionaryEnumerationTestData(ExpressiveOptions.None, StringComparer.OrdinalIgnoreCase, true);
+            }
+        }
+
         [TestMethod]
         public void ShouldRethrowOnInvalidEvaluateT()
         {
@@ -1169,6 +1216,39 @@ namespace Expressive.Tests
             finally
             {
                 Thread.CurrentThread.CurrentCulture = currentCulture;
+            }
+        }
+
+        private class MockProvider : IVariableProvider
+        {
+            public bool TryGetValue(string variableName, out object value)
+            {
+                value = variableName == "a" ? (object)2 : null;
+                return variableName == "a";
+            }
+        }
+
+        private class MockDictionary : Dictionary<string, object>, IDictionary<string, object>
+        {
+            public MockDictionary(IEqualityComparer<string> comparer) : base(comparer)
+            {
+
+            }
+
+            public new int Count => throw new InvalidOperationException();
+        }
+
+        public class DictionaryEnumerationTestData
+        {
+            public ExpressiveOptions Options { get; }
+            public IEqualityComparer<string> Comparer { get; }
+            public bool ExpectedEnumeration { get; }
+
+            public DictionaryEnumerationTestData(ExpressiveOptions options, IEqualityComparer<string> comparer, bool expectedEnumeration)
+            {
+                this.Options = options;
+                this.Comparer = comparer;
+                this.ExpectedEnumeration = expectedEnumeration;
             }
         }
     }

@@ -1,47 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using Expressive.Expressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NUnit.Framework;
+using Assert = NUnit.Framework.Assert;
 
 namespace Expressive.Tests.Expressions
 {
-    [TestClass]
-    public class VariableExpressionTests
+    public static class VariableExpressionTests
     {
-        [TestMethod]
-        public void TestWithExpressionVariableSupplied()
+        [Test]
+        public static void TestWithExpressionVariableSupplied()
         {
             var expression = new VariableExpression("pi");
 
             var variable = Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)Math.PI);
 
-            Assert.AreEqual(Math.PI, expression.Evaluate(new Dictionary<string, object>
-            {
-                ["pi"] = variable
-            }));
+            Assert.That(
+                expression.Evaluate(new Dictionary<string, object> { ["pi"] = variable }),
+                Is.EqualTo(Math.PI));
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentException), "The variable 'pie' has not been supplied.")]
-        public void TestWithoutVariableSupplied()
+        [Test]
+        public static void TestWithNullVariableSupplied()
         {
             var expression = new VariableExpression("pie");
 
-            Assert.AreEqual(Math.PI, expression.Evaluate(new Dictionary<string, object>
-            {
-                ["pi"] = Math.PI
-            }));
+            Assert.That(
+                () => expression.Evaluate(null),
+                Throws.ArgumentException);
         }
 
-        [TestMethod]
-        public void TestWithVariableSupplied()
+        [Test]
+        public static void TestWithoutVariableSupplied()
+        {
+            var expression = new VariableExpression("pie");
+
+            Assert.That(
+                () => expression.Evaluate(new Dictionary<string, object>()),
+                Throws.ArgumentException);
+        }
+
+        [Test]
+        public static void TestWithVariableSupplied()
         {
             var expression = new VariableExpression("pi");
 
-            Assert.AreEqual(Math.PI, expression.Evaluate(new Dictionary<string, object>
-            {
-                ["pi"] = Math.PI
-            }));
+            Assert.That(
+                expression.Evaluate(new Dictionary<string, object> { ["pi"] = Math.PI }),
+                Is.EqualTo(Math.PI));
         }
     }
 }

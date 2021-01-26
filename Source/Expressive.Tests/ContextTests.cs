@@ -129,7 +129,7 @@ namespace Expressive.Tests
         {
             var context = new Context(ExpressiveOptions.None);
 
-            Assert.That(context.ParsingStringComparer, Is.EqualTo(StringComparer.Ordinal));
+            Assert.That(context.ParsingStringComparer, Is.EqualTo(EqualityComparer<string>.Default));
         }
 
         [Test]
@@ -147,7 +147,7 @@ namespace Expressive.Tests
         {
             var context = new Context(ExpressiveOptions.IgnoreCaseForEquality);
 
-            Assert.That(context.ParsingStringComparer, Is.EqualTo(StringComparer.Ordinal));
+            Assert.That(context.ParsingStringComparer, Is.EqualTo(EqualityComparer<string>.Default));
         }
 
         [Test]

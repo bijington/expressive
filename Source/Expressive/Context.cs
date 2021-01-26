@@ -67,9 +67,9 @@ namespace Expressive
             Options.HasFlag(ExpressiveOptions.IgnoreCase) || Options.HasFlag(ExpressiveOptions.IgnoreCaseForParsing);
 #pragma warning restore 618
 
-        internal StringComparer ParsingStringComparer => IsCaseInsensitiveParsingEnabled
+        internal IEqualityComparer<string> ParsingStringComparer => IsCaseInsensitiveParsingEnabled
             ? StringComparer.OrdinalIgnoreCase
-            : StringComparer.Ordinal;
+            : (IEqualityComparer<string>)EqualityComparer<string>.Default;
 
         internal StringComparison ParsingStringComparison => IsCaseInsensitiveParsingEnabled
             ? StringComparison.OrdinalIgnoreCase
