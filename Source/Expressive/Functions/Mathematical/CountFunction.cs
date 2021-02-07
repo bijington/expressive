@@ -1,5 +1,4 @@
 ﻿using Expressive.Expressions;
-using System;
 using System.Collections;
 
 namespace Expressive.Functions.Mathematical
@@ -8,29 +7,24 @@ namespace Expressive.Functions.Mathematical
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Count"; } }
+        /// <inheritdoc />
+        public override string Name => "Count";
 
+        /// <inheritdoc />
         public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
-            int count = 0;
+            var count = 0;
 
             foreach (var value in parameters)
             {
-                int increment = 1;
-                object evaluatedValue = value.Evaluate(Variables);
-                IEnumerable enumerable = evaluatedValue as IEnumerable;
+                var increment = 1;
+                var evaluatedValue = value.Evaluate(Variables);
 
-                if (enumerable != null)
+                if (evaluatedValue is ICollection collection)
                 {
-                    int enumerableCount = 0;
-                    foreach (var item in enumerable)
-                    {
-                        enumerableCount++;
-                    }
-                    
-                    increment = enumerableCount;
+                    increment = collection.Count;
                 }
 
                 count += increment;
