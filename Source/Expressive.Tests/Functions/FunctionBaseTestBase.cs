@@ -35,7 +35,7 @@ namespace Expressive.Tests.Functions
         protected object Evaluate(params object[] values)
         {
             return this.ActualFunction.Evaluate(
-                values?.Select(v => Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == v)).ToArray(),
+                values.Select(v => Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == v)).ToArray(),
                 new Context(ExpressiveOptions.None));
         }
     }
