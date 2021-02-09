@@ -19,5 +19,16 @@ namespace Expressive.Tests.Expressions.Binary.Bitwise
 
             Assert.AreEqual(0x0001, expression.Evaluate(null));
         }
+
+        [TestMethod]
+        public void TestEvaluate2()
+        {
+            var expression = new BitwiseAndExpression(
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)long.MaxValue),
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)long.MaxValue),
+                new Context(ExpressiveOptions.None));
+
+            Assert.AreEqual(long.MaxValue, expression.Evaluate(null));
+        }
     }
 }

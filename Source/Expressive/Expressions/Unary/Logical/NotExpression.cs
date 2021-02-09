@@ -13,7 +13,7 @@ namespace Expressive.Expressions.Unary.Logical
 
         #endregion
 
-        #region BinaryExpressionBase Members
+        #region UnaryExpressionBase Members
 
         public override object Evaluate(IDictionary<string, object> variables)
         {
