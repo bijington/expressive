@@ -43,7 +43,7 @@ namespace Expressive.Expressions.Unary.Bitwise
                     return ~ulongValue;
 
                 case ushort ushortValue:
-                    return ~ushortValue;
+                    return (ushort)~ushortValue;
 
                 default:
                     return ~Convert.ToInt64(value);
