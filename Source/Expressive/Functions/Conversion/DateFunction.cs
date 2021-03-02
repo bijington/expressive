@@ -1,19 +1,25 @@
 ﻿using Expressive.Expressions;
 using System;
-using System.Globalization;
 
 namespace Expressive.Functions.Conversion
 {
-    // begin-snippet: DateFunction
-    //Converts and returns the parameter as a DateTime.
+    /*
+    begin-snippet: DateFunction
 
-    //Date(value)
+    Converts and returns the parameter as a DateTime.
 
-    //or
+    ```
+    Date(value)
+    ```
 
-    //Date(value, format)
-    // end-snippet
+    or
 
+    ```
+    Date(value, format)
+    ```
+
+    end-snippet
+    */
     internal sealed class DateFunction : FunctionBase
     {
         #region FunctionBase Members
@@ -25,7 +31,7 @@ namespace Expressive.Functions.Conversion
             this.ValidateParameterCount(parameters, -1, 1);
 
             var objectToConvert = parameters[0].Evaluate(this.Variables);
-            
+
             // No point converting if there is nothing to convert.
             if (objectToConvert is null) { return null; }
 
