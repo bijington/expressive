@@ -3,6 +3,17 @@ using System;
 
 namespace Expressive.Functions.Conversion
 {
+    /*
+    begin-snippet: Function
+
+    Converts and returns the parameter as a Decimal.
+
+    ```
+    Decimal(value)
+    ```
+
+    end-snippet
+    */
     internal sealed class DecimalFunction : FunctionBase
     {
         #region FunctionBase Members
