@@ -1,5 +1,7 @@
 ﻿using Expressive.Expressions;
 using Expressive.Helpers;
+using System.Collections;
+using System.Linq;
 
 namespace Expressive.Functions.Logical
 {
@@ -20,9 +22,19 @@ namespace Expressive.Functions.Logical
             // Goes through any values, and stop whe one is found
             for (var i = 1; i < parameters.Length; i++)
             {
-                if (Comparison.CompareUsingMostPreciseType(parameter, parameters[i].Evaluate(Variables), context) == 0)
+                var value = parameters[i].Evaluate(Variables);
+
+                if (value is ICollection values)
                 {
-                    found = true;
+                    if (values.Cast<object>().Any(innerValue => Comparison.CompareUsingMostPreciseType(parameter, innerValue, context) == 0))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    found = Comparison.CompareUsingMostPreciseType(parameter, value, context) == 0;
                     break;
                 }
             }
