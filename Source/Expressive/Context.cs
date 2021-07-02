@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -211,6 +212,8 @@ namespace Expressive
             this.RegisterFunction(new RegexFunction());
             this.RegisterFunction(new StartsWithFunction());
             this.RegisterFunction(new SubstringFunction());
+            this.RegisterFunction(new ConcatFunction());
+            this.RegisterFunction(new IndexOfFunction());
             #endregion
         }
 
