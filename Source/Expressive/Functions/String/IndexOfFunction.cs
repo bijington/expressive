@@ -46,19 +46,19 @@ namespace Expressive.Functions.String
                 if (parameters.Length > 2)
                 {
                     int start = Convert.ToInt32(parameters[2].Evaluate(Variables));
-                    return text.IndexOf(match, start);
+                    return text.IndexOf(match, start, context.EqualityStringComparison);
                 }
                 else
                 {
-                    return text.IndexOf(match);
+                    return text.IndexOf(match, context.EqualityStringComparison);
                 }
             }
-            else if (value is IEnumerable)
+            else if (value is IEnumerable col)
             {
                 //Array (or collection) comparison
                 
                 var index = 0;
-                var col = (value as IEnumerable);
+                
                 value = parameters[1].Evaluate(Variables);
 
                 foreach (var p in col)
@@ -71,7 +71,18 @@ namespace Expressive.Functions.String
 
                     if(null != innerValue)
                     {
-                        if(value.Equals(innerValue))
+                        if(innerValue is string innerStr)
+                        {
+                            if (value is string valueStr)
+                            {
+                                if (innerStr.Equals(valueStr, context.EqualityStringComparison))
+                                {
+                                    return index;
+                                }
+                            }
+                            //else they are not the same as one is a string
+                        }
+                        else if(value.Equals(innerValue))
                         {
                             return index;
                         }

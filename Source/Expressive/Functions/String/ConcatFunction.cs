@@ -37,9 +37,9 @@ namespace Expressive.Functions.String
             {
                 object value;
 
-                if (p is IExpression)
+                if (p is IExpression expression)
                 {
-                    value = (p as IExpression).Evaluate(Variables);
+                    value = expression.Evaluate(Variables);
                 }
                 else
                 {
@@ -54,9 +54,9 @@ namespace Expressive.Functions.String
                 {
                     sb.Append(value);
                 }
-                else if(value is Array || value is IEnumerable)
+                else if(value is IEnumerable enumerate)
                 {
-                    Evaluate(sb, value as IEnumerable, context);
+                    Evaluate(sb, enumerate, context);
                 }
                 else
                 {
