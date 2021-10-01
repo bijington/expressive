@@ -35,7 +35,11 @@ namespace Expressive.Functions.Logical
                 else
                 {
                     found = Comparison.CompareUsingMostPreciseType(parameter, value, context) == 0;
-                    break;
+                    
+                    if (found)
+                    {
+                        break;
+                    }
                 }
             }
 
