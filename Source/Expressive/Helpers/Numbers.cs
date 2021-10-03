@@ -2,8 +2,10 @@
 
 namespace Expressive.Helpers
 {
-    //  Shout out to https://ncalc.codeplex.com/ for the bulk of this implementation.
-    internal static class Numbers
+    /// <summary>
+    /// Helper class for performing number operations.
+    /// </summary>
+    public static class Numbers
     {
         private static object ConvertIfString(object s)
         {
@@ -15,7 +17,13 @@ namespace Expressive.Helpers
             return s;
         }
 
-        internal static object Add(object a, object b)
+        /// <summary>
+        /// Adds the specified <paramref name="a"/> value to the specified <paramref name="b"/>.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The result of <paramref name="a"/> + <paramref name="b"/></returns>
+        public static object Add(object a, object b)
         {
             if (a is null || b is null)
             {
@@ -257,7 +265,13 @@ namespace Expressive.Helpers
             return null;
         }
 
-        internal static object Divide(object a, object b)
+        /// <summary>
+        /// Divides the specified <paramref name="a"/> value by the specified <paramref name="b"/> value.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The result of <paramref name="a"/> / <paramref name="b"/>.</returns>
+        public static object Divide(object a, object b)
         {
             if (a is null || b is null)
             {
@@ -471,7 +485,13 @@ namespace Expressive.Helpers
             return null;
         }
 
-        internal static object Multiply(object a, object b)
+        /// <summary>
+        /// Multiplies the specified <paramref name="a"/> value by the specified <paramref name="b"/> value.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The result of <paramref name="a"/> * <paramref name="b"/>.</returns>
+        public static object Multiply(object a, object b)
         {
             if (a is null || b is null)
             {
@@ -685,7 +705,13 @@ namespace Expressive.Helpers
             return null;
         }
 
-        internal static object Subtract(object a, object b)
+        /// <summary>
+        /// Subtracts the specified <paramref name="b"/> value from the specified <paramref name="a"/>.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The result of <paramref name="a"/> - <paramref name="b"/></returns>
+        public static object Subtract(object a, object b)
         {
             if (a is null || b is null)
             {
@@ -916,7 +942,13 @@ namespace Expressive.Helpers
             return null;
         }
 
-        internal static object Modulus(object a, object b)
+        /// <summary>
+        /// Determines the remainder from the specified <paramref name="a"/> value and the specified <paramref name="b"/>.
+        /// </summary>
+        /// <param name="a">The first value.</param>
+        /// <param name="b">The second value.</param>
+        /// <returns>The result of <paramref name="a"/> % <paramref name="b"/></returns>
+        public static object Modulus(object a, object b)
         {
             if (a is null || b is null)
             {
@@ -1125,98 +1157,6 @@ namespace Expressive.Helpers
                         case TypeCode.Decimal: return (Decimal)a % (Decimal)b;
                     }
                     break;
-            }
-
-            return null;
-        }
-
-        internal static object Max(object a, object b)
-        {
-            a = ConvertIfString(a);
-            b = ConvertIfString(b);
-
-            if (a is null || b is null)
-            {
-                return null;
-            }
-
-            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
-
-            switch (typeCodeA)
-            {
-                case TypeCode.Byte:
-                    return Math.Max((Byte)a, Convert.ToByte(b));
-                case TypeCode.SByte:
-                    return Math.Max((SByte)a, Convert.ToSByte(b));
-                case TypeCode.Int16:
-                    return Math.Max((Int16)a, Convert.ToInt16(b));
-                case TypeCode.UInt16:
-                    return Math.Max((UInt16)a, Convert.ToUInt16(b));
-                case TypeCode.Int32:
-                    return Math.Max((Int32)a, Convert.ToInt32(b));
-                case TypeCode.UInt32:
-                    return Math.Max((UInt32)a, Convert.ToUInt32(b));
-                case TypeCode.Int64:
-                    return Math.Max((Int64)a, Convert.ToInt64(b));
-                case TypeCode.UInt64:
-                    return Math.Max((UInt64)a, Convert.ToUInt64(b));
-                case TypeCode.Single:
-                    return Math.Max((Single)a, Convert.ToSingle(b));
-                case TypeCode.Double:
-                    return Math.Max((Double)a, Convert.ToDouble(b));
-                case TypeCode.Decimal:
-                    return Math.Max((Decimal)a, Convert.ToDecimal(b));
-            }
-
-            return null;
-        }
-
-        internal static object Min(object a, object b)
-        {
-            a = ConvertIfString(a);
-            b = ConvertIfString(b);
-
-            if (a is null && b is null)
-            {
-                return null;
-            }
-
-            if (a is null)
-            {
-                return b;
-            }
-
-            if (b is null)
-            {
-                return a;
-            }
-
-            TypeCode typeCodeA = TypeHelper.GetTypeCode(a);
-
-            switch (typeCodeA)
-            {
-                case TypeCode.Byte:
-                    return Math.Min((Byte)a, Convert.ToByte(b));
-                case TypeCode.SByte:
-                    return Math.Min((SByte)a, Convert.ToSByte(b));
-                case TypeCode.Int16:
-                    return Math.Min((Int16)a, Convert.ToInt16(b));
-                case TypeCode.UInt16:
-                    return Math.Min((UInt16)a, Convert.ToUInt16(b));
-                case TypeCode.Int32:
-                    return Math.Min((Int32)a, Convert.ToInt32(b));
-                case TypeCode.UInt32:
-                    return Math.Min((UInt32)a, Convert.ToUInt32(b));
-                case TypeCode.Int64:
-                    return Math.Min((Int64)a, Convert.ToInt64(b));
-                case TypeCode.UInt64:
-                    return Math.Min((UInt64)a, Convert.ToUInt64(b));
-                case TypeCode.Single:
-                    return Math.Min((Single)a, Convert.ToSingle(b));
-                case TypeCode.Double:
-                    return Math.Min((Double)a, Convert.ToDouble(b));
-                case TypeCode.Decimal:
-                    return Math.Min((Decimal)a, Convert.ToDecimal(b));
             }
 
             return null;
