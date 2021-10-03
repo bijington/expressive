@@ -3,9 +3,13 @@ using System.Collections.Generic;
 
 namespace Expressive.Helpers
 {
-    internal static class Comparison
+    /// <summary>
+    /// Helper methods for use when comparing types/values.
+    /// </summary>
+    public static class Comparison
     {
-        private static readonly Type[] CommonTypes = {
+        private static readonly Type[] CommonTypes =
+        {
             typeof(DateTime), // If it can be interpreted as a DateTime use that.
             typeof(decimal),  // Decimal is stored as 96 bits of value, plus a sign, plus an exponent
             typeof(double),   // Double is stored as a 64 bit floating point
@@ -15,19 +19,37 @@ namespace Expressive.Helpers
             typeof(string),   // If it's not anything else, it can be a string.
         };
 
-        internal static int CompareUsingMostPreciseType(object a, object b, Context context)
+        /// <summary>
+        /// Performs a comparison of two objects by trying to find the most suitable type and returns
+        /// a value indicating whether one object is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="lhs">The first object to compare.</param>
+        /// <param name="rhs">The second object to compare.</param>
+        /// <param name="context">Any additional <see cref="Context"/> that may effect the comparion 
+        /// (e.g. string case sensitivity, etc.).</param>
+        /// <returns>A signed integer that indicates the relative values of <paramref name="lhs"/>
+        /// and <paramref name="rhs"/>, as shown in the following table.Value Meaning Less than zero
+        /// <paramref name="lhs"/> is less than <paramref name="rhs"/>.Zero <paramref name="lhs"/> 
+        /// equals <paramref name="rhs"/>. Greater than zero <paramref name="lhs"/> is greater than
+        /// <paramref name="rhs"/>.</returns>
+        public static int CompareUsingMostPreciseType(object lhs, object rhs, Context context)
         {
-            var mostPreciseType = GetMostPreciseType(a?.GetType(), b?.GetType());
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            var mostPreciseType = GetMostPreciseType(lhs?.GetType(), rhs?.GetType());
 
             if (mostPreciseType == typeof(string))
             {
                 return string.Compare(
-                    (string)Convert.ChangeType(a, mostPreciseType, context.CurrentCulture),
-                    (string)Convert.ChangeType(b, mostPreciseType, context.CurrentCulture),
+                    (string)Convert.ChangeType(lhs, mostPreciseType, context.CurrentCulture),
+                    (string)Convert.ChangeType(rhs, mostPreciseType, context.CurrentCulture),
                     context.EqualityStringComparison);
             }
 
-            return Comparison.Compare(a, b, mostPreciseType, context);
+            return Comparison.Compare(lhs, rhs, mostPreciseType, context);
         }
 
         private static Type GetMostPreciseType(Type a, Type b)
@@ -36,6 +58,7 @@ namespace Expressive.Helpers
             {
                 return a; // If they're the same type, just return one of them.
             }
+
             foreach (var t in Comparison.CommonTypes)
             {
                 if (a == t || b == t)
