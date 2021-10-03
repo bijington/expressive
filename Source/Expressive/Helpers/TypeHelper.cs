@@ -2,78 +2,77 @@
 
 namespace Expressive.Helpers
 {
-    internal static class TypeHelper
+    /// <summary>
+    /// Helper class to determine <see cref="Type"/> information.
+    /// </summary>
+    public static class TypeHelper
     {
-        internal static TypeCode GetTypeCode(object value)
+        /// <summary>
+        /// Gets the underlying type code of the specified <paramref name="value"/>s <see cref="Type"/>.
+        /// </summary>
+        /// <param name="value">The value to find the underlying <see cref="TypeCode"/> for.</param>
+        /// <returns>The code of the underlying type, or <see cref="TypeCode.Empty"/> if type is null.</returns>
+        public static TypeCode GetTypeCode(object value)
         {
-            TypeCode typeCode = TypeCode.Object;
+            var typeCode = TypeCode.Object;
 
 #if NETSTANDARD1_4
             // TODO: Explore converting all numbers to decimal and simplifying all of this.
 
-            if (value is Boolean)
+            switch (value)
             {
-                typeCode = TypeCode.Boolean;
-            }
-            else if (value is Byte)
-            {
-                typeCode = TypeCode.Byte;
-            }
-            else if (value is Char)
-            {
-                typeCode = TypeCode.Char;
-            }
-            else if (value is DateTime)
-            {
-                typeCode = TypeCode.DateTime;
-            }
-            else if (value is Decimal)
-            {
-                typeCode = TypeCode.Decimal;
-            }
-            else if (value is Double)
-            {
-                typeCode = TypeCode.Double;
-            }
-            else if (value is Int64)
-            {
-                typeCode = TypeCode.Int64;
-            }
-            else if (value is Int32)
-            {
-                typeCode = TypeCode.Int32;
-            }
-            else if (value is Int16)
-            {
-                typeCode = TypeCode.Int16;
-            }
-            else if (value is SByte)
-            {
-                typeCode = TypeCode.SByte;
-            }
-            else if (value is Single)
-            {
-                typeCode = TypeCode.Single;
-            }
-            else if (value is String)
-            {
-                typeCode = TypeCode.String;
-            }
-            else if (value is UInt16)
-            {
-                typeCode = TypeCode.UInt16;
-            }
-            else if (value is UInt32)
-            {
-                typeCode = TypeCode.UInt32;
-            }
-            else if (value is UInt64)
-            {
-                typeCode = TypeCode.UInt64;
+                case bool _:
+                    typeCode = TypeCode.Boolean;
+                    break;
+                case byte _:
+                    typeCode = TypeCode.Byte;
+                    break;
+                case char _:
+                    typeCode = TypeCode.Char;
+                    break;
+                case DateTime _:
+                    typeCode = TypeCode.DateTime;
+                    break;
+                case decimal _:
+                    typeCode = TypeCode.Decimal;
+                    break;
+                case double _:
+                    typeCode = TypeCode.Double;
+                    break;
+                case long _:
+                    typeCode = TypeCode.Int64;
+                    break;
+                case int _:
+                    typeCode = TypeCode.Int32;
+                    break;
+                case short _:
+                    typeCode = TypeCode.Int16;
+                    break;
+                case sbyte _:
+                    typeCode = TypeCode.SByte;
+                    break;
+                case float _:
+                    typeCode = TypeCode.Single;
+                    break;
+                case string _:
+                    typeCode = TypeCode.String;
+                    break;
+                case ushort _:
+                    typeCode = TypeCode.UInt16;
+                    break;
+                case uint _:
+                    typeCode = TypeCode.UInt32;
+                    break;
+                case ulong _:
+                    typeCode = TypeCode.UInt64;
+                    break;
+                case null:
+                    typeCode = TypeCode.Empty;
+                    break;
             }
 
 #else
-            typeCode = Type.GetTypeCode(value.GetType());
+            typeCode = Type.GetTypeCode(value?.GetType());
 #endif
 
             return typeCode;
