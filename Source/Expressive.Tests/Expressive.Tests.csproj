@@ -13,9 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Functions\String\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\ExpressiveStrongName.snk" Link="ExpressiveStrongName.snk" />
   </ItemGroup>
 
@@ -41,9 +38,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Expressive\Expressive.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Functions\String\" />
   </ItemGroup>
 </Project>
