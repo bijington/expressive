@@ -10,7 +10,7 @@ namespace Expressive.Functions.Statistical
     {
         #region FunctionBase Members
 
-        public override string Name { get { return "Median"; } }
+        public override string Name => "Median";
 
         public override object Evaluate(IExpression[] parameters, Context context)
         {
@@ -26,12 +26,12 @@ namespace Expressive.Functions.Statistical
                 {
                     foreach (var item in enumerable)
                     {
-                        decimalValues.Add(Convert.ToDecimal(item));
+                        AddValue(item, decimalValues);
                     }
                 }
                 else
                 {
-                    decimalValues.Add(Convert.ToDecimal(value));
+                    AddValue(value, decimalValues);
                 }
             }
 
@@ -39,6 +39,16 @@ namespace Expressive.Functions.Statistical
         }
 
         #endregion
+
+        private static void AddValue(object value, IList<decimal> decimalValues)
+        {
+            if (value is null)
+            {
+                return;
+            }
+
+            decimalValues.Add(Convert.ToDecimal(value));
+        }
 
         private static decimal Median(IEnumerable<decimal> xs)
         {
