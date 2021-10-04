@@ -4,7 +4,7 @@ using System.Linq;
 using Expressive.Expressions;
 using Expressive.Functions;
 using Moq;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions
 {
@@ -24,8 +24,8 @@ namespace Expressive.Tests.Functions
             catch (Exception e)
 #pragma warning restore CA1031 // Do not catch general exception types
             {
-                Assert.IsInstanceOfType(e, exceptionType);
-                Assert.AreEqual(exceptionMessage, e.Message);
+                Assert.That(e, Is.InstanceOf(exceptionType));
+                Assert.That(exceptionMessage, Is.EqualTo(e.Message));
                 return;
             }
 
