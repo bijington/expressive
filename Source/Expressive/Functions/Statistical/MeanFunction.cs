@@ -2,41 +2,53 @@
 using Expressive.Helpers;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Expressive.Functions.Statistical
 {
     internal class MeanFunction : FunctionBase
     {
-        #region FunctionBase Members
-
-        public override string Name { get { return "Mean"; } }
+        public override string Name => "Mean";
 
         public override object Evaluate(IExpression[] parameters, Context context)
         {
             this.ValidateParameterCount(parameters, -1, 1);
 
-            int count = 0;
+            return Evaluate(parameters, Variables);
+        }
+
+        internal static object Evaluate(IExpression[] parameters, IDictionary<string, object> variables)
+        {
+            var count = 0;
             object result = 0;
 
             foreach (var value in parameters)
             {
-                int increment = 1;
-                object evaluatedValue = value.Evaluate(Variables);
-                IEnumerable enumerable = evaluatedValue as IEnumerable;
+                var increment = 1;
+                var evaluatedValue = value.Evaluate(variables);
 
-                if (enumerable != null)
+                if (evaluatedValue is IEnumerable enumerable)
                 {
-                    int enumerableCount = 0;
+                    var enumerableCount = 0;
                     object enumerableSum = 0;
 
                     foreach (var item in enumerable)
                     {
+                        if (item is null)
+                        {
+                            continue;
+                        }
+
                         enumerableCount++;
                         enumerableSum = Numbers.Add(enumerableSum, item);
                     }
 
                     increment = enumerableCount;
                     evaluatedValue = enumerableSum;
+                }
+                else if (evaluatedValue is null)
+                {
+                    continue;
                 }
 
                 result = Numbers.Add(result, evaluatedValue);
@@ -45,7 +57,5 @@ namespace Expressive.Functions.Statistical
 
             return Convert.ToDouble(result) / count;
         }
-
-        #endregion
     }
 }
