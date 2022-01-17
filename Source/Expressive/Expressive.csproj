@@ -25,6 +25,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Configurations>Release;Debug</Configurations>
+	<PackageReadmeFile>NuGet.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -38,6 +39,7 @@
       <PackagePath></PackagePath>
     </None>
     <None Include="..\ExpressiveStrongName.snk" Link="ExpressiveStrongName.snk" />
+	<None Include="..\..\Documentation\NuGet.md" Pack="true" PackagePath="NuGet.md"/>
   </ItemGroup>
 
   <ItemGroup>
