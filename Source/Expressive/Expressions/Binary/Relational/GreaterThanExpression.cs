@@ -15,8 +15,28 @@ namespace Expressive.Expressions.Binary.Relational
 
         #region BinaryExpressionBase Members
 
-        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables) => 
-            Comparison.CompareUsingMostPreciseType(lhsResult, rightHandSide.Evaluate(variables), this.Context) > 0;
+        protected override object EvaluateImpl(object lhsResult, IExpression rightHandSide, IDictionary<string, object> variables)
+        {
+            object rhsResult = null;
+
+            if (Context.Options.HasFlag(ExpressiveOptions.Strict))
+            {
+                if (lhsResult is null)
+                {
+                    return false;
+                }
+
+                rhsResult = rightHandSide.Evaluate(variables);
+
+                // If we got here then the lhsResult is not null.
+                if (rhsResult is null)
+                {
+                    return false;
+                }
+            }
+
+            return Comparison.CompareUsingMostPreciseType(lhsResult, rhsResult ?? rightHandSide.Evaluate(variables), this.Context) > 0;
+        }
 
         #endregion
     }
