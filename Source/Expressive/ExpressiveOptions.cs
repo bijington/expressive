@@ -47,7 +47,7 @@ namespace Expressive
         /// <summary>
         /// Specifies we're using strict mode for comparison
         /// `False` will be returned if value `null` is a side expression for most of cases
-        /// e.g.: null < 1 -> False; null > 1 -> False; null > "abc" -> False; null < "abc" -> False;
+        /// e.g.: (null < 1) => False; (null > 1) => False; (null > "abc") => False; (null < "abc") => False;
         /// </summary>
         Strict = 64,
 
