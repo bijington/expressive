@@ -51,9 +51,14 @@ namespace Expressive
         internal char DecimalSeparator { get; }
 
         /// <summary>
-        /// Gets the currently registered functions described by <see cref="IFunctionMetadata">
+        /// Gets the currently registered functions described by <see cref="IFunctionMetadata">.
         /// </summary>
         public IEnumerable<IFunctionMetadata> RegisteredFunctions => this.registeredFunctions.Values.OfType<IFunctionMetadata>();
+
+        /// <summary>
+        /// Gets the currently registered operators described by <see cref="IOperatorMetadata">.
+        /// </summary>
+        public IEnumerable<IOperatorMetadata> RegisteredOperators => this.registeredFunctions.Values.OfType<IOperatorMetadata>();
 
         internal IEnumerable<string> FunctionNames => this.registeredFunctions.Keys.OrderByDescending(k => k.Length);
 

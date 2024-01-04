@@ -6,13 +6,8 @@ namespace Expressive.Operators
     /// <summary>
     /// Definition for all Operators (i.e. +, -, etc.) that are available in Expressive.
     /// </summary>
-    public interface IOperator
+    public interface IOperator : IOperatorMetadata
     {
-        /// <summary>
-        /// Gets the list of tags that can be used to identify this IOperator.
-        /// </summary>
-        IEnumerable<string> Tags { get; }
-
         /// <summary>
         /// Builds the operator in to an <see cref="IExpression"/> ready for evaluation.
         /// </summary>
