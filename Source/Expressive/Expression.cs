@@ -60,12 +60,12 @@ namespace Expressive
         }
 
         /// <summary>
-        /// Gets the currently registered functions described by <see cref="IFunctionMetadata">.
+        /// Gets the currently registered functions described by <see cref="IFunctionMetadata"/>.
         /// </summary>
         public IEnumerable<IFunctionMetadata> RegisteredFunctions => this.context.RegisteredFunctions;
 
         /// <summary>
-        /// Gets the currently registered operators described by <see cref="IOperatorMetadata">.
+        /// Gets the currently registered operators described by <see cref="IOperatorMetadata"/>.
         /// </summary>
         public IEnumerable<IOperatorMetadata> RegisteredOperators => this.context.RegisteredOperators;
 

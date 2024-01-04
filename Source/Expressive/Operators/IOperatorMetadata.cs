@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Expressive.Operators
 {
     /// <summary>
-    /// Interface definition for an <see cref="IOperator">s metadata.
+    /// Interface definition for an <see cref="IOperator"/>s metadata.
     /// </summary>
     public interface IOperatorMetadata
     {
