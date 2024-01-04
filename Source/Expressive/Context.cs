@@ -50,6 +50,11 @@ namespace Expressive
 
         internal char DecimalSeparator { get; }
 
+        /// <summary>
+        /// Gets the currently registered functions described by <see cref="IFunctionMetadata">
+        /// </summary>
+        public IEnumerable<IFunctionMetadata> RegisteredFunctions => this.registeredFunctions.Values.OfType<IFunctionMetadata>();
+
         internal IEnumerable<string> FunctionNames => this.registeredFunctions.Keys.OrderByDescending(k => k.Length);
 
         internal IEnumerable<string> OperatorNames => this.registeredOperators.Keys.OrderByDescending(k => k.Length);

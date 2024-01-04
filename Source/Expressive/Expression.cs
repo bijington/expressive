@@ -59,6 +59,11 @@ namespace Expressive
             }
         }
 
+        /// <summary>
+        /// Gets the currently registered functions described by <see cref="IFunctionMetadata">
+        /// </summary>
+        public IEnumerable<IFunctionMetadata> RegisteredFunctions => this.context.RegisteredFunctions;
+
         #endregion
 
         #region Constructors
