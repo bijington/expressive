@@ -12,14 +12,18 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET 2.1.X Core
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET 6.X
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 2.1.x
-    - name: Setup .NET 3.1.X Core
-      uses: actions/setup-dotnet@v1
+        dotnet-version: 6.x
+    - name: Setup .NET 7.X
+      uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: 7.x
+    - name: Setup .NET 8.X
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 8.x
     - name: where are we?
       run: ls
     - name: Install dependencies
