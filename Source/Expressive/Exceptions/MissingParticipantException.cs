@@ -5,9 +5,6 @@ namespace Expressive.Exceptions
     /// <summary>
     /// Represents an error that is thrown when one side of an operation is missing inside an <see cref="Expression"/>.
     /// </summary>
-#if !NETSTANDARD1_4
-    [Serializable]
-#endif
     public sealed class MissingParticipantException : Exception
     {
         /// <summary>

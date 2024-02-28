@@ -199,11 +199,7 @@ namespace Expressive
                 throw new ArgumentNullException(nameof(callback));
             }
 
-#if NETSTANDARD1_4
             Task.Run(() =>
-#else
-            ThreadPool.QueueUserWorkItem((o) =>
-#endif
             {
                 var result = default(T);
                 string message = null;
