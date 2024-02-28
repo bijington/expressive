@@ -34,3 +34,8 @@ jobs:
         run: dotnet nuget push Expressive.${{ steps.get_version.outputs.version-without-v }}.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.NUGET_API_KEY }}
+
+      - name: Push symbols
+        run: dotnet nuget push Expressive.${{ steps.get_version.outputs.version-without-v }}.snupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.NUGET_API_KEY }}

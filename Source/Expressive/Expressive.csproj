@@ -14,7 +14,7 @@
     <Product>Expressive Parser</Product>
     <Description>A multi-platform expression parsing and evaluating framework.</Description>
     <Copyright>Copyright(c) 2024 Shaun Lawrence</Copyright>
-    <PackageTags>Expression Parser Evaluator Cross-Platform NET Standard Xamarin Xamarin.Forms</PackageTags>
+    <PackageTags>Expression Parser Evaluator Cross-Platform NET Standard Xamarin Xamarin.Forms MAUI</PackageTags>
     <PackageIcon>logo-64.png</PackageIcon>
     <PackageIconUrl />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
