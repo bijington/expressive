@@ -5,9 +5,6 @@ namespace Expressive.Exceptions
     /// <summary>
     /// Represents an error that is thrown when a function has an incorrect number of parameters.
     /// </summary>
-#if !NETSTANDARD1_4
-    [Serializable]
-#endif
     public sealed class ParameterCountMismatchException : Exception
     {
         /// <summary>

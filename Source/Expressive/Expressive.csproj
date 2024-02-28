@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.4;netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\ExpressiveStrongName.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/bijington/expressive</PackageProjectUrl>
     <Product>Expressive Parser</Product>
     <Description>A multi-platform expression parsing and evaluating framework.</Description>
-    <Copyright>Copyright(c) 2020 Shaun Lawrence</Copyright>
+    <Copyright>Copyright(c) 2024 Shaun Lawrence</Copyright>
     <PackageTags>Expression Parser Evaluator Cross-Platform NET Standard Xamarin Xamarin.Forms</PackageTags>
     <PackageIcon>logo-64.png</PackageIcon>
     <PackageIconUrl />

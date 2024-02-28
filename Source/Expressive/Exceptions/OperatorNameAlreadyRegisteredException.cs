@@ -1,19 +1,11 @@
 ﻿using System;
 using Expressive.Operators;
 
-#if !NETSTANDARD1_4
-using System.Runtime.Serialization;
-using System.Security.Permissions;
-#endif
-
 namespace Expressive.Exceptions
 {
     /// <summary>
     /// Represents an error that is thrown when registering an <see cref="IOperator"/> and the name is already used.
     /// </summary>
-#if !NETSTANDARD1_4
-    [Serializable]
-#endif
     public sealed class OperatorNameAlreadyRegisteredException : Exception
     {
         /// <summary>
@@ -30,20 +22,5 @@ namespace Expressive.Exceptions
         {
             this.Tag = tag;
         }
-
-#if !NETSTANDARD1_4
-        /// <summary>
-        /// Set the <see cref="SerializationInfo"/> with information about this exception.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information about the source or destination.</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            info.AddValue("Tag", Tag);
-        }
-#endif
     }
 }
