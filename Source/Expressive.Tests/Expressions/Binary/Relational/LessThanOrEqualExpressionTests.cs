@@ -26,6 +26,8 @@ namespace Expressive.Tests.Expressions.Binary.Relational
         [TestCase(1.001, 1.001, true)]
         [TestCase(1, 1.00, true)]
         [TestCase(1.00, 1, true)]
+        [TestCase(null, 1, true)]
+        [TestCase(1, null, false)]
         public static void TestEvaluate(object lhs, object rhs, object expectedValue)
         {
             var expression = new LessThanOrEqualExpression(
@@ -35,5 +37,21 @@ namespace Expressive.Tests.Expressions.Binary.Relational
 
             Assert.That(expression.Evaluate(null), Is.EqualTo(expectedValue));
         }
+
+        [TestCase(null, 1, false)]
+        [TestCase(1, null, false)]
+        [TestCase(null, null, true)]
+        [TestCase(null, "abc", false)]
+        [TestCase("abc", null, false)]
+        public static void TestEvaluateWithStrictMode(object lhs, object rhs, object expectedValue)
+        {
+            var expression = new LessThanOrEqualExpression(
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == lhs),
+                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == rhs),
+                new Context(ExpressiveOptions.Strict));
+
+            Assert.That(expression.Evaluate(null), Is.EqualTo(expectedValue));
+        }
+
     }
 }
