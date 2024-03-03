@@ -38,7 +38,7 @@ namespace Expressive
 
         private IExpression compiledExpression;
         private readonly Context context;
-        private readonly string originalExpression;
+        private string originalExpression;
         private readonly ExpressionParser parser;
         private string[] referencedVariables;
 
@@ -78,7 +78,7 @@ namespace Expressive
         /// </summary>
         /// <param name="expression">The expression to be evaluated.</param>
         /// <param name="options">The <see cref="ExpressiveOptions"/> to use when evaluating.</param>
-        public Expression(string expression, ExpressiveOptions options = ExpressiveOptions.None) : this(expression, new Context(options))
+        public Expression(string expression = "", ExpressiveOptions options = ExpressiveOptions.None) : this(expression, new Context(options))
         {
         }
 
@@ -119,6 +119,18 @@ namespace Expressive
         }
 
         /// <summary>
+        /// Evaluates the supplied <paramref name="expression"/> using the supplied <paramref name="variables"/> and returns the result.
+        /// </summary>
+        /// <param name="expression">The expression to be evaluated.</param>
+        /// <param name="variables">The variables to be used in the evaluation.</param>
+        /// <returns>The result of the evaluation.</returns>
+        public object Evaluate(string expression, IDictionary<string, object> variables = null)
+        {
+            this.originalExpression = expression;
+            return Evaluate(variables);
+        }
+
+        /// <summary>
         /// Evaluates the expression using the supplied <paramref name="variables"/> and returns the result.
         /// </summary>
         /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
@@ -141,6 +153,19 @@ namespace Expressive
         }
 
         /// <summary>
+        /// Evaluates the supplied <paramref name="expression"/> using the supplied <paramref name="variables"/> and returns the result.
+        /// </summary>
+        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
+        /// <param name="variables">The variables to be used in the evaluation.</param>
+        /// <param name="expression">The expression to be evaluated.</param>
+        /// <returns>The result of the evaluation.</returns>
+        public T Evaluate<T>(string expression, IDictionary<string, object> variables = null)
+        {
+            this.originalExpression = expression;
+            return Evaluate<T>(variables);
+        }
+
+        /// <summary>
         /// Evaluates the expression using the supplied <paramref name="variableProvider"/> and returns the result.
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="variableProvider"/> is null.</exception>
@@ -158,12 +183,26 @@ namespace Expressive
         }
 
         /// <summary>
+        /// Evaluates the supplied <paramref name="expression"/> using the supplied <paramref name="variableProvider"/> and returns the result.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="variableProvider"/> is null.</exception>
+        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
+        /// <param name="variableProvider">The <see cref="IVariableProvider"/> implementation to provide variable values during evaluation.</param>
+        /// <param name="expression">The expression to be evaluated.</param>
+        /// /// <returns>The result of the evaluation.</returns>
+        public object Evaluate(string expression, IVariableProvider variableProvider)
+        {
+            this.originalExpression = expression;
+            return Evaluate(variableProvider);
+        }
+
+        /// <summary>
         /// Evaluates the expression using the supplied <paramref name="variableProvider"/> and returns the result.
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="variableProvider"/> is null.</exception>
         /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
         /// <param name="variableProvider">The <see cref="IVariableProvider"/> implementation to provide variable values during evaluation.</param>
-        /// <returns>The result of the evaluation.</returns>
+        /// /// <returns>The result of the evaluation.</returns>
         public T Evaluate<T>(IVariableProvider variableProvider)
         {
             if (variableProvider is null)
@@ -186,6 +225,20 @@ namespace Expressive
         }
 
         /// <summary>
+        /// Evaluates the supplied <paramref name="expression"/> using the supplied <paramref name="variableProvider"/> and returns the result.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="variableProvider"/> is null.</exception>
+        /// <exception cref="Exceptions.ExpressiveException">Thrown when there is a break in the evaluation process, check the InnerException for further information.</exception>
+        /// <param name="variableProvider">The <see cref="IVariableProvider"/> implementation to provide variable values during evaluation.</param>
+        /// <param name="expression">The expression to be evaluated.</param>
+        /// /// <returns>The result of the evaluation.</returns>
+        public T Evaluate<T>(string expression, IVariableProvider variableProvider)
+        {
+            this.originalExpression = expression;
+            return Evaluate<T>(variableProvider);
+        }
+
+        /// <summary>
         /// Evaluates the expression using the supplied variables asynchronously and returns the result via the callback.
         /// </summary>
         /// <exception cref="System.ArgumentNullException">Thrown if the callback is not supplied.</exception>
@@ -193,6 +246,19 @@ namespace Expressive
         /// <param name="variables">The variables to be used in the evaluation.</param>
         public void EvaluateAsync(Action<string, object> callback, IDictionary<string, object> variables = null)
         {
+            this.EvaluateAsync<object>(callback, variables);
+        }
+
+        /// <summary>
+        /// Evaluates the expression using the supplied variables asynchronously and returns the result via the callback.
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">Thrown if the callback is not supplied.</exception>
+        /// <param name="callback">Provides the result once the evaluation has completed.</param>
+        /// <param name="expression">The expression to be evaluated.</param>
+        /// <param name="variables">The variables to be used in the evaluation.</param>
+        public void EvaluateAsync(string expression, Action<string, object> callback, IDictionary<string, object> variables = null)
+        {
+            this.originalExpression = expression;
             this.EvaluateAsync<object>(callback, variables);
         }
 
