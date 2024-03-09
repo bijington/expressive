@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Binary.Additive;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Binary.Additive
 {
-    [TestClass]
+    [TestFixture]
     public class AddExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             var expression = new AddExpression(
@@ -20,7 +20,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             Assert.AreEqual(3, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDifferentSizedArrays()
         {
             var expression = new AddExpression(
@@ -31,7 +31,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             Assert.IsNull(expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithEmptyLeftArray()
         {
 #pragma warning disable CA1825 // Avoid zero-length array allocations. - Array.Empty does not exist in net 4.5
@@ -50,7 +50,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             Assert.AreEqual(result[2], null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithOneSidedArray()
         {
             var expression = new AddExpression(
@@ -65,7 +65,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             Assert.AreEqual(result[2], 5);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithSameSizedArrays()
         {
             var expression = new AddExpression(
@@ -80,7 +80,7 @@ namespace Expressive.Tests.Expressions.Binary.Additive
             Assert.AreEqual(result[2], 6);
         }
 
-        [TestMethod]
+        [Test]
         public void TestStringAddition()
         {
             var expression = new AddExpression(

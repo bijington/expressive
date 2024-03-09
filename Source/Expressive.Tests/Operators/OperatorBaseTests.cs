@@ -1,6 +1,6 @@
 ﻿using Expressive.Expressions;
 using Expressive.Operators;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Expressive.Tests.Operators
 {
-    [TestClass]
+    [TestFixture]
     public abstract class OperatorBaseTests
     {
         internal abstract IOperator Operator { get; }
@@ -21,7 +21,7 @@ namespace Expressive.Tests.Operators
         protected abstract string[] ExpectedTags { get; }
 #pragma warning restore CA1819 // Properties should not return arrays
 
-        [TestMethod]
+        [Test]
         public void TestTags()
         {
             var operatorTags = this.Operator.Tags.ToArray();
@@ -34,7 +34,7 @@ namespace Expressive.Tests.Operators
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildExpression()
         {
             var op = this.Operator;
@@ -48,10 +48,10 @@ namespace Expressive.Tests.Operators
                 },
                 new Context(ExpressiveOptions.None));
 
-            Assert.IsInstanceOfType(expression, this.ExpectedExpressionType);
+            Assert.That(expression, Is.InstanceOf(this.ExpectedExpressionType));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCanGetCaptiveTokens()
         {
             var op = this.Operator;
@@ -59,7 +59,7 @@ namespace Expressive.Tests.Operators
             Assert.IsTrue(op.CanGetCaptiveTokens(new Token("1", 0), new Token("+", 1), new Queue<Token>()));
         }
 
-        [TestMethod]
+        [Test]
         public virtual void TestGetCaptiveTokens()
         {
             var op = this.Operator;
@@ -69,7 +69,7 @@ namespace Expressive.Tests.Operators
             Assert.AreEqual(token, op.GetCaptiveTokens(new Token("1", 0), token, new Queue<Token>()).Single());
         }
 
-        [TestMethod]
+        [Test]
         public virtual void TestGetInnerCaptiveTokens()
         {
             var op = this.Operator;
@@ -87,7 +87,7 @@ namespace Expressive.Tests.Operators
             Assert.AreEqual(0, op.GetInnerCaptiveTokens(tokens).Length);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPrecedence()
         {
             var op = this.Operator;

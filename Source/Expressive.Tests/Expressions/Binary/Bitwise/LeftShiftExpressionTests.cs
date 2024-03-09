@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Binary.Bitwise;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Binary.Bitwise
 {
-    [TestClass]
+    [TestFixture]
     public class LeftShiftExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             var expression = new LeftShiftExpression(

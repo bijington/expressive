@@ -1,20 +1,20 @@
 ﻿using System;
 using Expressive.Functions;
 using Expressive.Functions.String;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.String
 {
-    [TestClass]
+    [TestFixture]
     public class ConcatFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("Concat", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWith2Strings()
         {
             var left = "left";
@@ -23,7 +23,7 @@ namespace Expressive.Tests.Functions.String
             Assert.AreEqual(left+right, this.Evaluate(left, right));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWith3Strings()
         {
             var left = "left";
@@ -33,7 +33,7 @@ namespace Expressive.Tests.Functions.String
             Assert.AreEqual(left + middle + right, this.Evaluate(left, middle, right));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithNumbers()
         {
             var left = 10;
@@ -42,7 +42,7 @@ namespace Expressive.Tests.Functions.String
             Assert.AreEqual("101412.5", this.Evaluate(left, middle, right));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithMixed()
         {
             var left = "left";
@@ -51,7 +51,7 @@ namespace Expressive.Tests.Functions.String
             Assert.AreEqual("left14right", this.Evaluate(left, middle, right));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithNestedArrays()
         {
             var left = "left";
@@ -61,7 +61,7 @@ namespace Expressive.Tests.Functions.String
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestWithParametersAndNull()
         {
             

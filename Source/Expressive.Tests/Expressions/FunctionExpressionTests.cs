@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions
 {
-    [TestClass]
+    [TestFixture]
     public class FunctionExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             var expression = new FunctionExpression(

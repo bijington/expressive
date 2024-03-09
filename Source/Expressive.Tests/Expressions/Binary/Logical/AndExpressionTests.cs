@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Binary.Logical;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Binary.Logical
 {
-    [TestClass]
+    [TestFixture]
     public class AndExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestBothTrueEvaluate()
         {
             var expression = new AndExpression(
@@ -20,7 +20,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             Assert.AreEqual(true, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestLeftTrueEvaluate()
         {
             var expression = new AndExpression(
@@ -31,7 +31,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             Assert.AreEqual(false, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestNeitherTrueEvaluate()
         {
             var expression = new AndExpression(
@@ -42,7 +42,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             Assert.AreEqual(false, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestRightTrueEvaluate()
         {
             var expression = new AndExpression(
@@ -53,7 +53,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             Assert.AreEqual(false, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestShortCircuit()
         {
             var rightHandMock = new Mock<IExpression>();

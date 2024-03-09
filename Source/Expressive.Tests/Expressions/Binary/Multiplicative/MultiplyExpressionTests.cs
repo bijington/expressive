@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Binary.Multiplicative;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Binary.Multiplicative
 {
-    [TestClass]
+    [TestFixture]
     public class MultiplyExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             var expression = new MultiplyExpression(

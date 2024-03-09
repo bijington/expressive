@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Unary.Additive;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Unary.Additive
 {
-    [TestClass]
+    [TestFixture]
     public class MinusExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestNull()
         {
             var expression = new MinusExpression(Mock.Of<IExpression>(e =>
@@ -19,7 +19,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
             Assert.IsNull(expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestInteger()
         {
             var expression = new MinusExpression(Mock.Of<IExpression>(e =>
@@ -28,7 +28,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
             Assert.AreEqual(-12, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestDouble()
         {
             var expression = new MinusExpression(Mock.Of<IExpression>(e =>
@@ -37,7 +37,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
             Assert.AreEqual(-13.5d, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestDecimal()
         {
             var expression = new MinusExpression(Mock.Of<IExpression>(e =>
@@ -46,7 +46,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
             Assert.AreEqual(-12.4M, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestString()
         {
             var expression = new MinusExpression(Mock.Of<IExpression>(e =>
@@ -55,7 +55,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
             Assert.AreEqual(-12M, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestInvalid()
         {
             var expression = new MinusExpression(Mock.Of<IExpression>(e =>

@@ -3,14 +3,14 @@ using Expressive.Expressions.Binary.Additive;
 using Expressive.Expressions.Unary.Additive;
 using Expressive.Operators;
 using Expressive.Operators.Additive;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 using System;
 using System.Collections.Generic;
 
 namespace Expressive.Tests.Operators.Additive
 {
-    [TestClass]
+    [TestFixture]
     public class PlusOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members
@@ -23,7 +23,7 @@ namespace Expressive.Tests.Operators.Additive
 
         protected override string[] ExpectedTags => new[] { "+" };
 
-        [TestMethod]
+        [Test]
         public override void TestGetInnerCaptiveTokens()
         {
             var op = this.Operator;
@@ -43,7 +43,7 @@ namespace Expressive.Tests.Operators.Additive
 
         #endregion
 
-        [TestMethod]
+        [Test]
         public void TestBuildExpressionForUnaryWithLeftHandExpression()
         {
             var op = new PlusOperator();
@@ -57,10 +57,10 @@ namespace Expressive.Tests.Operators.Additive
                 },
                 new Context(ExpressiveOptions.None));
 
-            Assert.IsInstanceOfType(expression, typeof(PlusExpression));
+            Assert.That(expression, Is.InstanceOf(typeof(PlusExpression)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildExpressionForUnaryWithRightHandExpression()
         {
             var op = new PlusOperator();
@@ -74,10 +74,10 @@ namespace Expressive.Tests.Operators.Additive
                 },
                 new Context(ExpressiveOptions.None));
 
-            Assert.IsInstanceOfType(expression, typeof(PlusExpression));
+            Assert.That(expression, Is.InstanceOf(typeof(PlusExpression)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPrecedenceForUnary()
         {
             var op = new PlusOperator();
@@ -85,7 +85,7 @@ namespace Expressive.Tests.Operators.Additive
             Assert.AreEqual(OperatorPrecedence.UnaryPlus, op.GetPrecedence(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPrecedenceForBinary()
         {
             var op = new PlusOperator();

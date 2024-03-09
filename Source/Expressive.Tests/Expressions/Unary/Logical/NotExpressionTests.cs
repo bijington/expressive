@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Unary.Logical;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Unary.Logical
 {
-    [TestClass]
+    [TestFixture]
     public class NotExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestNull()
         {
             var expression = new NotExpression(Mock.Of<IExpression>(e =>
@@ -19,7 +19,7 @@ namespace Expressive.Tests.Expressions.Unary.Logical
             Assert.IsNull(expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestFalse()
         {
             var expression = new NotExpression(Mock.Of<IExpression>(e =>
@@ -28,7 +28,7 @@ namespace Expressive.Tests.Expressions.Unary.Logical
             Assert.IsTrue((bool)expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTrue()
         {
             var expression = new NotExpression(Mock.Of<IExpression>(e =>
@@ -37,7 +37,7 @@ namespace Expressive.Tests.Expressions.Unary.Logical
             Assert.IsFalse((bool)expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestInteger()
         {
             var expression = new NotExpression(Mock.Of<IExpression>(e =>
@@ -46,13 +46,13 @@ namespace Expressive.Tests.Expressions.Unary.Logical
             Assert.IsFalse((bool)expression.Evaluate(null));
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestInvalid()
         {
             var expression = new NotExpression(Mock.Of<IExpression>(e =>
                 e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)DateTime.Now));
 
-            Assert.IsFalse((bool)expression.Evaluate(null));
+            Assert.That(() => expression.Evaluate(null), Throws.InstanceOf<InvalidCastException>());
         }
     }
 }

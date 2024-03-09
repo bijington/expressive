@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Binary.Conditional;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Binary.Conditional
 {
-    [TestClass]
+    [TestFixture]
     public class NullCoalescingExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestNotNullEvaluate()
         {
             var expression = new NullCoalescingExpression(
@@ -20,7 +20,7 @@ namespace Expressive.Tests.Expressions.Binary.Conditional
             Assert.AreEqual("Non null", expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestNullEvaluate()
         {
             var expression = new NullCoalescingExpression(
