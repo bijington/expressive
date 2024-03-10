@@ -1,65 +1,65 @@
 ﻿using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Binary.Logical;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Binary.Logical
 {
-    [TestClass]
+    [TestFixture]
     public class AndExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestBothTrueEvaluate()
         {
             var expression = new AndExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) true),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) true),
+                MockExpression.ThatEvaluatesTo(true),
+                MockExpression.ThatEvaluatesTo(true),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestLeftTrueEvaluate()
         {
             var expression = new AndExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) true),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) false),
+                MockExpression.ThatEvaluatesTo(true),
+                MockExpression.ThatEvaluatesTo(false),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(false, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestNeitherTrueEvaluate()
         {
             var expression = new AndExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) false),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) false),
+                MockExpression.ThatEvaluatesTo(false),
+                MockExpression.ThatEvaluatesTo(false),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(false, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestRightTrueEvaluate()
         {
             var expression = new AndExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) false),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) true),
+                MockExpression.ThatEvaluatesTo(false),
+                MockExpression.ThatEvaluatesTo(true),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(false, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestShortCircuit()
         {
             var rightHandMock = new Mock<IExpression>();
 
             var expression = new AndExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
+                MockExpression.ThatEvaluatesTo(false),
                 rightHandMock.Object,
                 new Context(ExpressiveOptions.None));
 

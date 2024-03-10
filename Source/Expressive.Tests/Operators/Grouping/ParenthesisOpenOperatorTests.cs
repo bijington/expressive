@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using Expressive.Expressions;
 using Expressive.Operators;
 using Expressive.Operators.Grouping;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Operators.Grouping
 {
-    [TestClass]
+    [TestFixture]
     public class ParenthesisOpenOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members
@@ -23,7 +23,7 @@ namespace Expressive.Tests.Operators.Grouping
 
         protected override string[] ExpectedTags => new[] { "(" };
 
-        [TestMethod]
+        [Test]
         public override void TestGetCaptiveTokens()
         {
             var op = this.Operator;
@@ -59,7 +59,7 @@ namespace Expressive.Tests.Operators.Grouping
             }
         }
 
-        [TestMethod]
+        [Test]
         public override void TestGetInnerCaptiveTokens()
         {
             var op = this.Operator;
@@ -81,7 +81,7 @@ namespace Expressive.Tests.Operators.Grouping
 
         #endregion
 
-        [TestMethod]
+        [Test]
         public void TestComplexGetCaptiveTokens()
         {
             var op = this.Operator;

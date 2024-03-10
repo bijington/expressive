@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
 using Expressive.Tokenisation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Tokenisation
 {
-    [TestClass]
+    [TestFixture]
     public class TokeniserTests
     {
-        [TestMethod]
+        [Test]
         public void TestTokeniseFirstMatchWins()
         {
             var context = new Context(ExpressiveOptions.None);
@@ -40,7 +40,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("hello world", tokens.First().CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestTokeniseWithNull()
         {
             var tokeniser = new Tokeniser(new Context(ExpressiveOptions.None), Enumerable.Empty<ITokenExtractor>());
@@ -49,7 +49,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.IsNull(tokeniser.Tokenise(string.Empty));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTokeniseWithSimple()
         {
             var context = new Context(ExpressiveOptions.None);
@@ -67,7 +67,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("world", tokens.Last().CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestTokeniseWithUnrecognised()
         {
             var context = new Context(ExpressiveOptions.None);

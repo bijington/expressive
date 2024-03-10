@@ -4,20 +4,20 @@ using System.Threading;
 using Expressive.Exceptions;
 using Expressive.Functions;
 using Expressive.Functions.Conversion;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Conversion
 {
-    [TestClass]
+    [TestFixture]
     public class StringFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("String", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDateTime()
         {
             var dateTime = DateTime.Now;
@@ -25,7 +25,7 @@ namespace Expressive.Tests.Functions.Conversion
             Assert.AreEqual(dateTime.ToString(CultureInfo.CurrentCulture), this.Evaluate(dateTime));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDateTimeAndValidFormat()
         {
             var dateTime = new DateTime(2019, 01, 01, 11, 00, 00);
@@ -35,7 +35,7 @@ namespace Expressive.Tests.Functions.Conversion
             Assert.AreEqual(dateString, this.Evaluate(dateTime, format));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDateTimeAndNonStringFormat()
         {
             var currentCulture = Thread.CurrentThread.CurrentCulture;
@@ -55,49 +55,49 @@ namespace Expressive.Tests.Functions.Conversion
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDecimal()
         {
             Assert.AreEqual("12345", this.Evaluate(12345M));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDouble()
         {
             Assert.AreEqual("12345", this.Evaluate(12345d));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithFloat()
         {
             Assert.AreEqual("12345", this.Evaluate(12345f));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithInteger()
         {
             Assert.AreEqual("12345", this.Evaluate(12345));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithLong()
         {
             Assert.AreEqual("12345", this.Evaluate(12345L));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithNull()
         {
             Assert.IsNull(this.Evaluate(new object[] { null }));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithString()
         {
             Assert.AreEqual("12345", this.Evaluate("12345"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "String() expects at least 1 argument(s)");

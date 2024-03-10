@@ -1,13 +1,13 @@
 ﻿using System;
 using Expressive.Expressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Expressions
 {
-    [TestClass]
+    [TestFixture]
     public class ConstantValueExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestBooleanValue()
         {
             var constantValueExpression = new ConstantValueExpression(true);
@@ -15,7 +15,7 @@ namespace Expressive.Tests.Expressions
             Assert.AreEqual(true, constantValueExpression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestDateTimeValue()
         {
             var now = DateTime.Now;
@@ -25,7 +25,7 @@ namespace Expressive.Tests.Expressions
             Assert.AreEqual(now, constantValueExpression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestDecimalValue()
         {
             var constantValueExpression = new ConstantValueExpression(123M);
@@ -33,7 +33,7 @@ namespace Expressive.Tests.Expressions
             Assert.AreEqual(123M, constantValueExpression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestDoubleValue()
         {
             var constantValueExpression = new ConstantValueExpression(123d);
@@ -41,7 +41,7 @@ namespace Expressive.Tests.Expressions
             Assert.AreEqual(123d, constantValueExpression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestIntegerValue()
         {
             var constantValueExpression = new ConstantValueExpression(123);
@@ -49,7 +49,7 @@ namespace Expressive.Tests.Expressions
             Assert.AreEqual(123, constantValueExpression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestLongValue()
         {
             var constantValueExpression = new ConstantValueExpression(123L);
@@ -57,7 +57,7 @@ namespace Expressive.Tests.Expressions
             Assert.AreEqual(123L, constantValueExpression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestStringValue()
         {
             var constantValueExpression = new ConstantValueExpression("123");
@@ -65,7 +65,7 @@ namespace Expressive.Tests.Expressions
             Assert.AreEqual("123", constantValueExpression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestUnsupportedValue()
         {
             var unsupportedValue = new {Name = "Shaun", Age = 99};

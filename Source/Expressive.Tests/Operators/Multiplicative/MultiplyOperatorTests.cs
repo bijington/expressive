@@ -2,11 +2,11 @@
 using Expressive.Expressions.Binary.Multiplicative;
 using Expressive.Operators;
 using Expressive.Operators.Multiplicative;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Operators.Multiplicative
 {
-    [TestClass]
+    [TestFixture]
     public class MultiplyOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members

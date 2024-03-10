@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Expressive.Expressions;
-using Moq;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
@@ -14,7 +13,7 @@ namespace Expressive.Tests.Expressions
         {
             var expression = new VariableExpression("pi");
 
-            var variable = Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)Math.PI);
+            var variable = MockExpression.ThatEvaluatesTo(Math.PI);
 
             Assert.That(
                 expression.Evaluate(new Dictionary<string, object> { ["pi"] = variable }),

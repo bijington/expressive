@@ -2,32 +2,32 @@
 using Expressive.Exceptions;
 using Expressive.Functions;
 using Expressive.Functions.Date;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Date
 {
-    [TestClass]
+    [TestFixture]
     public class HourOfFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("HourOf", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithNull()
         {
             Assert.IsNull(this.Evaluate(new object[] { null }));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithDateTime()
         {
             Assert.AreEqual(12, this.Evaluate(new DateTime(2016, 02, 29, 12, 00, 00)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "HourOf() takes only 1 argument(s)");

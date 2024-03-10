@@ -2,11 +2,11 @@
 using Expressive.Expressions.Binary.Relational;
 using Expressive.Operators;
 using Expressive.Operators.Relational;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Operators.Relational
 {
-    [TestClass]
+    [TestFixture]
     public class EqualOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members

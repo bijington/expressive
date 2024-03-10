@@ -1,16 +1,13 @@
-﻿using Expressive.Expressions;
-using Expressive.Expressions.Binary.Additive;
+﻿using Expressive.Expressions.Binary.Additive;
 using Expressive.Expressions.Unary.Additive;
 using Expressive.Operators;
 using Expressive.Operators.Additive;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 
 namespace Expressive.Tests.Operators.Additive
 {
-    [TestClass]
+    [TestFixture]
     public class SubtractOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members
@@ -23,7 +20,7 @@ namespace Expressive.Tests.Operators.Additive
 
         protected override string[] ExpectedTags => new[] { "-", "\u2212" };
 
-        [TestMethod]
+        [Test]
         public override void TestGetInnerCaptiveTokens()
         {
             var op = this.Operator;
@@ -43,7 +40,7 @@ namespace Expressive.Tests.Operators.Additive
 
         #endregion
 
-        [TestMethod]
+        [Test]
         public void TestBuildExpressionForUnaryWithLeftHandExpression()
         {
             var op = new SubtractOperator();
@@ -52,15 +49,15 @@ namespace Expressive.Tests.Operators.Additive
                 new Token("+", 1),
                 new[]
                 {
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null),
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
+                    MockExpression.ThatEvaluatesTo(null),
+                    MockExpression.ThatEvaluatesTo(null)
                 },
                 new Context(ExpressiveOptions.None));
 
-            Assert.IsInstanceOfType(expression, typeof(MinusExpression));
+            Assert.That(expression, Is.InstanceOf(typeof(MinusExpression)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestBuildExpressionForUnaryWithRightHandExpression()
         {
             var op = new SubtractOperator();
@@ -70,14 +67,14 @@ namespace Expressive.Tests.Operators.Additive
                 new[]
                 {
                     null,
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
+                    MockExpression.ThatEvaluatesTo(null)
                 },
                 new Context(ExpressiveOptions.None));
 
-            Assert.IsInstanceOfType(expression, typeof(MinusExpression));
+            Assert.That(expression, Is.InstanceOf(typeof(MinusExpression)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPrecedenceForUnary()
         {
             var op = new SubtractOperator();
@@ -85,7 +82,7 @@ namespace Expressive.Tests.Operators.Additive
             Assert.AreEqual(OperatorPrecedence.UnaryMinus, op.GetPrecedence(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPrecedenceForBinary()
         {
             var op = new SubtractOperator();

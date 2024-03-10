@@ -1,65 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using Expressive.Expressions;
 using Expressive.Expressions.Unary.Additive;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Expressions.Unary.Additive
 {
-    [TestClass]
+    [TestFixture]
     public class PlusExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestNull()
         {
-            var expression = new PlusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null));
+            var expression = new PlusExpression(MockExpression.ThatEvaluatesTo(null));
 
             Assert.IsNull(expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestInteger()
         {
-            var expression = new PlusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) 12));
+            var expression = new PlusExpression(MockExpression.ThatEvaluatesTo(12));
 
             Assert.AreEqual(12, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestDouble()
         {
-            var expression = new PlusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) 13.5d));
+            var expression = new PlusExpression(MockExpression.ThatEvaluatesTo(13.5d));
 
             Assert.AreEqual(13.5d, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestDecimal()
         {
-            var expression = new PlusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) 12.4M));
+            var expression = new PlusExpression(MockExpression.ThatEvaluatesTo(12.4M));
 
             Assert.AreEqual(12.4M, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestString()
         {
-            var expression = new PlusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) "12"));
+            var expression = new PlusExpression(MockExpression.ThatEvaluatesTo("12"));
 
             Assert.AreEqual(12M, expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestInvalid()
         {
-            var expression = new PlusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) DateTime.Now));
+            var expression = new PlusExpression(MockExpression.ThatEvaluatesTo(DateTime.Now));
 
             Assert.IsNull(expression.Evaluate(null));
         }

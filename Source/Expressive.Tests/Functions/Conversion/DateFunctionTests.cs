@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using Expressive.Exceptions;
-using Expressive.Expressions;
 using Expressive.Functions;
 using Expressive.Functions.Conversion;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Conversion
 {
-    [TestClass]
+    [TestFixture]
     public class DateFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("Date", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDateTime()
         {
             object dateTimeNow = DateTime.Now;
@@ -27,49 +24,49 @@ namespace Expressive.Tests.Functions.Conversion
             Assert.AreEqual(dateTimeNow, this.Evaluate(dateTimeNow));
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestEvaluateWithDouble()
         {
-            this.Evaluate(12345d);
+            Assert.That(() => this.Evaluate(12345d), Throws.InstanceOf<InvalidCastException>());
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestEvaluateWithFloat()
         {
-            this.Evaluate(12345f);
+            Assert.That(() => this.Evaluate(12345f), Throws.InstanceOf<InvalidCastException>());
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestEvaluateWithInteger()
         {
-            this.Evaluate(12345);
+            Assert.That(() => this.Evaluate(12345), Throws.InstanceOf<InvalidCastException>());
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestEvaluateWithLong()
         {
-            this.Evaluate(12345L);
+            Assert.That(() => this.Evaluate(12345L), Throws.InstanceOf<InvalidCastException>());
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithNull()
         {
             Assert.IsNull(this.Evaluate(new object[] {null}));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithValidString()
         {
             Assert.AreEqual(new DateTime(2019, 01, 01), this.Evaluate("2019/01/01"));
         }
 
-        [TestMethod, ExpectedException(typeof(FormatException))]
+        [Test]
         public void TestEvaluateWithInvalidString()
         {
-            this.Evaluate("20cb/01/01");
+            Assert.That(() => this.Evaluate("20cb/01/01"), Throws.InstanceOf<FormatException>());
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithValidStringAndValidFormat()
         {
             const string dateString = "2019/01/01 11:00:00";
@@ -78,16 +75,16 @@ namespace Expressive.Tests.Functions.Conversion
             Assert.AreEqual(new DateTime(2019, 01, 01, 11, 00, 00), this.Evaluate(dateString, format));
         }
 
-        [TestMethod, ExpectedException(typeof(FormatException))]
+        [Test]
         public void TestEvaluateWithValidStringAndInvalidFormat()
         {
             const string dateString = "2019/01/01 11:00:00";
             const string format = "yyyy/MM/dd"; // Not entirely convinced that this should throw an error but DateTime.ParseExact does.
 
-            this.Evaluate(dateString, format);
+            Assert.That(() => this.Evaluate(dateString, format), Throws.InstanceOf<FormatException>());
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithValidStringAndNonStringFormat()
         {
             const string dateString = "2019/01/01 11:00:00";
@@ -97,7 +94,7 @@ namespace Expressive.Tests.Functions.Conversion
             Assert.AreEqual(new DateTime(2019, 01, 01, 11, 00, 00), this.Evaluate(dateString, format));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "Date() expects at least 1 argument(s)");

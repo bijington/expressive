@@ -6,32 +6,32 @@ using System.Threading.Tasks;
 using Expressive.Exceptions;
 using Expressive.Functions;
 using Expressive.Functions.Date;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Date
 {
-    [TestClass]
+    [TestFixture]
     public class YearOfFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("YearOf", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithNull()
         {
             Assert.IsNull(this.Evaluate(new object[] { null }));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithDateTime()
         {
             Assert.AreEqual(2016, this.Evaluate(new DateTime(2016, 02, 29)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "YearOf() takes only 1 argument(s)");

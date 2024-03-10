@@ -2,32 +2,32 @@
 using Expressive.Exceptions;
 using Expressive.Functions;
 using Expressive.Functions.Date;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Date
 {
-    [TestClass]
+    [TestFixture]
     public class MonthOfFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("MonthOf", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithNull()
         {
             Assert.IsNull(this.Evaluate(new object[] { null }));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithDateTime()
         {
             Assert.AreEqual(2, this.Evaluate(new DateTime(2016, 02, 29)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "MonthOf() takes only 1 argument(s)");

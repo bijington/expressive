@@ -1,139 +1,137 @@
 ﻿using Expressive.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Expressive.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ExpressionTests
     {
         #region Operators
 
         #region Plus Operator
 
-        [TestMethod]
+        [Test]
         public void SimpleIntegerAddition()
         {
             Expression expression = new Expression("1+3");
 
             object value = expression.Evaluate();
 
-            Assert.AreEqual(4, value);
+            Assert.That(value, Is.EqualTo(4));
         }
 
-        [TestMethod]
+        [Test]
         public void SimpleDecimalAddition()
         {
             Expression expression = new Expression("1.3+3.5");
 
             object value = expression.Evaluate();
 
-            Assert.AreEqual(4.8M, value);
+            Assert.That(value, Is.EqualTo(4.8M));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldAddDoubleAndDecimal()
         {
             var expression = new Expression("1.8 + Abs([var1])");
 
             object value = expression.Evaluate(new Dictionary<string, object> { { "var1", 9.2 } });
 
-            Assert.AreEqual(11M, value);
+            Assert.That(value, Is.EqualTo(11M));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldConcatenateStrings()
         {
             var expression = new Expression("'1.8' + 'suffix'");
 
             object value = expression.Evaluate();
 
-            Assert.AreEqual("1.8suffix", value);
+            Assert.That(value, Is.EqualTo("1.8suffix"));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldHandleUnaryPlus()
         {
             var expression = new Expression("1.8++0.2");
 
             object value = expression.Evaluate();
 
-            Assert.AreEqual(2.0M, value);
+            Assert.That(value, Is.EqualTo(2.0M));
 
-            Assert.AreEqual(-2, new Expression("+(1 * -2)").Evaluate());
+            Assert.That(new Expression("+(1 * -2)").Evaluate(), Is.EqualTo(-2));
         }
 
         #endregion
 
-        [TestMethod]
+        [Test]
         public void SimpleBodmas()
         {
             Expression expression = new Expression("1-3*2");
 
             object value = expression.Evaluate();
 
-            Assert.AreEqual(-5, value);
+            Assert.That(value, Is.EqualTo(-5));
         }
 
-        [TestMethod]
+        [Test]
         public void ScientificNotation()
         {
             var expression = new Expression("1.23e2");
 
-            Assert.AreEqual(123, expression.Evaluate());
+            Assert.That(expression.Evaluate(), Is.EqualTo(123));
         }
 
-        [TestMethod]
+        [Test]
         public void ScientificNotationWithLargeNumber()
         {
             var expression = new Expression("1.23e22");
 
-            Assert.AreEqual(12300000000000000000000M, expression.Evaluate());
+            Assert.That(expression.Evaluate(), Is.EqualTo(12300000000000000000000M));
         }
 
         #region Subtract Operator
 
-        [TestMethod]
+        [Test]
         public void SimpleIntegerSubtraction()
         {
             Expression expression = new Expression("3-1");
 
             object value = expression.Evaluate();
 
-            Assert.AreEqual(2, value);
+            Assert.That(value, Is.EqualTo(2));
         }
 
-        [TestMethod]
+        [Test]
         public void SimpleDecimalSubtraction()
         {
             Expression expression = new Expression("3.5-1.2");
 
             object value = expression.Evaluate();
 
-            Assert.AreEqual(2.3M, value);
+            Assert.That(value, Is.EqualTo(2.3M));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldHandleUnarySubtraction()
         {
             var expression = new Expression("1.8--0.2");
 
             object value = expression.Evaluate();
 
-            Assert.AreEqual(2.0M, value);
+            Assert.That(value, Is.EqualTo(2.0M));
 
-            Assert.AreEqual(2, new Expression("-(1 * -2)").Evaluate());
+            Assert.That(new Expression("-(1 * -2)").Evaluate(), Is.EqualTo(2));
         }
 
         #endregion
 
-        [TestMethod]
+        [Test]
         public void LogicTests()
         {
             Assert.AreEqual(true, new Expression("1 && 1").Evaluate());
@@ -148,7 +146,7 @@ namespace Expressive.Tests
 			Assert.AreEqual(true, new Expression("[child1] == false && [child2] == false").Evaluate(new Dictionary<string, object> { ["child1"] = new Expression("1 == 0"), ["child2"] = new Expression("1 == 0") }));
         }
 
-        [TestMethod]
+        [Test]
         public void RelationalTests()
         {
             Assert.AreEqual(true, new Expression("1 == 1").Evaluate());
@@ -168,7 +166,7 @@ namespace Expressive.Tests
             Assert.AreEqual(true, new Expression("[date1] == '01/01/2016 00:00:00'").Evaluate(new Dictionary<string, object> { ["date1"] = new DateTime(2016, 01, 01) }));
         }
 
-        [TestMethod]
+        [Test]
         public void NullCoalescingTests()
         {
             Assert.AreEqual(1, new Expression("null ?? 1").Evaluate());
@@ -179,7 +177,7 @@ namespace Expressive.Tests
 
         #endregion
 
-        [TestMethod]
+        [Test]
         public void AggregatesHandledInOperators()
         {
             Expression expression = new Expression("[array]+2");
@@ -196,222 +194,243 @@ namespace Expressive.Tests
 
         #region Functions
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Abs() takes only 1 argument(s)")]
+        [Test]
         public void AbsShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1, new Expression("Abs(-1)").Evaluate());
-            Assert.AreEqual(12, new Expression("abs(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
+            Assert.That(
+                () => new Expression("abs(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                 Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Acos() takes only 1 argument(s)")]
+        [Test]
         public void AcosShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Acos(1)").Evaluate());
-            Assert.AreEqual(12, new Expression("Acos(1,2,4,5)").Evaluate());
+            Assert.That(() => new Expression("Acos(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Asin() takes only 1 argument(s)")]
+        [Test]
         public void AsinShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Asin(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("asin(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
+            Assert.That(
+                () => new Expression("asin(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Atan() takes only 1 argument(s)")]
+        [Test]
         public void AtanShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Atan(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("atan(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
+            Assert.That(() => new Expression("Atan(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Average() expects at least 1 argument(s)")]
+        [Test]
         public void AverageShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3d, new Expression("Average(1,2,4,5)").Evaluate());
             Assert.AreEqual(1d, new Expression("average(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(12.5, new Expression("Average(10, 20, 5, 15)").Evaluate());
 
-            new Expression("average()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
+            Assert.That(
+                () => new Expression("average()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                 Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void AverageShouldHandleIEnumerable()
         {
             Assert.AreEqual(3d, new Expression("Average(1,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 5 } }));
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Ceiling() takes only 1 argument(s)")]
+        [Test]
         public void CeilingShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(2M, new Expression("Ceiling(1.5)").Evaluate());
-            Assert.AreEqual(12, new Expression("ceiling(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
+            Assert.That(
+                () => new Expression("ceiling(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                 Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Cos() takes only 1 argument(s)")]
+        [Test]
         public void CosShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("Cos(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("Cos(1,2,4,5)").Evaluate());
+            Assert.That(() => new Expression("Cos(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Count() expects at least 1 argument(s)")]
+        [Test]
         public void CountShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(1, new Expression("Count(0)").Evaluate());
             Assert.AreEqual(4, new Expression("count(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
-            new Expression("Count()").Evaluate();
+            Assert.That(() => new Expression("Count()").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void CountShouldHandleIEnumerable()
         {
             Assert.AreEqual(5, new Expression("Count([array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 0, 1, 2, 3, 4 } }));
             Assert.AreEqual(5, new Expression("Count([array])").Evaluate(new Dictionary<string, object> { ["array"] = new List<int> { 0, 1, 2, 3, 4 } }));
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Exp() takes only 1 argument(s)")]
+        [Test]
         public void ExpShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("Exp(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("exp(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
+            Assert.That(
+                () => new Expression("exp(1,2,4,5)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                 Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Floor() takes only 1 argument(s)")]
+        [Test]
         public void FloorShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("Floor(1.5)").Evaluate());
-            Assert.AreEqual(12, new Expression("Floor(1,2,4,5)").Evaluate());
+            Assert.That(() => new Expression("Floor(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "IEEERemainder() takes only 2 argument(s)")]
+        [Test]
         public void IEEERemainderShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(-1d, new Expression("IEEERemainder(3, 2)").Evaluate());
-            Assert.AreEqual(12, new Expression("IEEERemainder(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("IEEERemainder(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "If() takes only 3 argument(s)")]
+        [Test]
         public void IfShouldHandleOnlyThreeArguments()
         {
             Assert.AreEqual("Low risk", new Expression("If(1 > 8, 'High risk', 'Low risk')").Evaluate());
             Assert.AreEqual("Low risk", new Expression("If(1 > 8, 1 / 0, 'Low risk')").Evaluate());
-            Assert.AreEqual(12, new Expression("If(1 > 9, 2, 4, 5)").Evaluate());
+
+            Assert.That(() => new Expression("If(1 > 9, 2, 4, 5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "In() expects at least 2 argument(s)")]
+        [Test]
         public void InShouldHandleAtLeastTwoArguments()
         {
             Assert.AreEqual(false, new Expression("In('abc','def','ghi','jkl')").Evaluate());
-            Assert.AreEqual(1, new Expression("in(0)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
-            new Expression("In()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
+            Assert.That(
+                () => new Expression("in(0)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                Throws.InstanceOf<ExpressiveException>());
+
+            Assert.That(() => new Expression("In()").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Length() takes only 1 argument(s)")]
+        [Test]
         public void LengthShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(5, new Expression("Length('abcde')").Evaluate());
 
-            new Expression("Length()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
+            Assert.That(() => new Expression("Length()").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void LengthShouldHandleNotJustStrings()
         {
             Assert.AreEqual(3, new Expression("Length(123)").Evaluate());
             Assert.AreEqual(null, new Expression("Length(null)").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Log() takes only 2 argument(s)")]
+        [Test]
         public void LogShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(0d, new Expression("Log(1, 10)").Evaluate());
-            Assert.AreEqual(12, new Expression("Log(1,2,4,5)").Evaluate());
+            Assert.That(() => new Expression("Log(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Log10() takes only 1 argument(s)")]
+        [Test]
         public void Log10ShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Log10(1)").Evaluate());
-            Assert.AreEqual(12, new Expression("Log10(1,2,4,5)").Evaluate());
+            Assert.That(() => new Expression("Log10(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Max() expects at least 1 argument(s)")]
+        [Test]
         public void MaxShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3, new Expression("Max(3, 2)").Evaluate());
-            Assert.AreEqual(12, new Expression("Max()").Evaluate());
+            Assert.That(() => new Expression("Max()").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void MaxShouldHandleIEnumerable()
         {
             Assert.AreEqual(50, new Expression("Max(1,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 50 } }));
         }
 
-        [TestMethod]
+        [Test]
         public void MaxShouldIgnoreNull()
         {
             Assert.AreEqual(null, new Expression("Max(null,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 50 } }));
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Mean() expects at least 1 argument(s)")]
+        [Test]
         public void MeanShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3d, new Expression("Mean(1,2,4,5)").Evaluate());
             Assert.AreEqual(1d, new Expression("mean(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(12.5, new Expression("Mean(10, 20, 5, 15)").Evaluate());
 
-            new Expression("mean()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
+            Assert.That(
+                () => new Expression("mean()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void MeanShouldHandleIEnumerable()
         {
             Assert.AreEqual(3d, new Expression("Mean(1,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 5 } }));
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Median() expects at least 1 argument(s)")]
+        [Test]
         public void MedianShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(3.0M, new Expression("Median(1,2,4,5)").Evaluate());
             Assert.AreEqual(1.0M, new Expression("median(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(12.5M, new Expression("Median(10, 20, 5, 15)").Evaluate());
 
-            new Expression("median()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
+            Assert.That(
+                () => new Expression("median()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Min() expects at least 1 argument(s)")]
+        [Test]
         public void MinShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(2, new Expression("Min(3, 2)").Evaluate());
-            Assert.AreEqual(12, new Expression("Min()").Evaluate());
+            Assert.That(() => new Expression("Min()").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void MinShouldHandleIEnumerable()
         {
             Assert.AreEqual(1, new Expression("Min(1,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 50 } }));
         }
 
-        [TestMethod]
+        [Test]
         public void MinShouldIgnoreNull()
         {
             Assert.AreEqual(null, new Expression("Min(null,2,4,5,[array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 1, 2, 4, 50 } }));
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Mode() expects at least 1 argument(s)")]
+        [Test]
         public void ModeShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(2, new Expression("Mode(1,2,4,5,2)").Evaluate());
             Assert.AreEqual(1, new Expression("mode(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(10, new Expression("Mode(10, 20, 5, 15)").Evaluate());
 
-            new Expression("mode()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
+            Assert.That(
+                () => new Expression("mode()", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(),
+                Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "PadLeft() takes only 3 argument(s)")]
+        [Test]
         public void PadLeftShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual("0000abc", new Expression("PadLeft('abc', 7, '0')").Evaluate());
@@ -419,10 +438,11 @@ namespace Expressive.Tests
             Assert.AreEqual(null, new Expression("PadLeft(null, 7, '0')").Evaluate());
             Assert.AreEqual(null, new Expression("PadLeft('abcdefghi', null, '0')").Evaluate());
             Assert.AreEqual("   abcd", new Expression("PadLeft('abcd', 7, null)").Evaluate());
-            Assert.AreEqual(12, new Expression("PadLeft(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("PadLeft(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "PadRight() takes only 3 argument(s)")]
+        [Test]
         public void PadRightShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual("abc0000", new Expression("PadRight('abc', 7, '0')").Evaluate());
@@ -430,71 +450,77 @@ namespace Expressive.Tests
             Assert.AreEqual(null, new Expression("PadRight(null, 7, '0')").Evaluate());
             Assert.AreEqual(null, new Expression("PadRight('abcdefghi', null, '0')").Evaluate());
             Assert.AreEqual("abcd   ", new Expression("PadRight('abcd', 7, null)").Evaluate());
-            Assert.AreEqual(12, new Expression("PadRight(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("PadRight(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Pow() takes only 2 argument(s)")]
+        [Test]
         public void PowShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(9d, new Expression("Pow(3, 2)").Evaluate());
-            Assert.AreEqual(12, new Expression("Pow(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("Pow(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Regex() takes only 2 argument(s)")]
+        [Test]
         public void RegexShouldHandleOnlyTwoArguments()
         {
             Expression expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$')");
             Assert.AreEqual(false, expression.Evaluate());
 
             expression = new Expression(@"Regex('text', '^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$', '')");
-            Assert.AreEqual(false, expression.Evaluate());
+            Assert.That(() => expression.Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Round() takes only 2 argument(s)")]
+        [Test]
         public void RoundShouldHandleOnlyTwoArguments()
         {
             Assert.AreEqual(3.22d, new Expression("Round(3.222222, 2)").Evaluate());
-            Assert.AreEqual(12, new Expression("Round(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("Round(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Sign() takes only 1 argument(s)")]
+        [Test]
         public void SignShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(-1, new Expression("Sign(-10)").Evaluate());
-            Assert.AreEqual(12, new Expression("Sign(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("Sign(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Sin() takes only 1 argument(s)")]
+        [Test]
         public void SinShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Sin(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("Sin(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("Sin(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Sqrt() takes only 1 argument(s)")]
+        [Test]
         public void SqrtShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(5d, new Expression("Sqrt(25)").Evaluate());
-            Assert.AreEqual(12, new Expression("Sqrt(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("Sqrt(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Sum() expects at least 1 argument(s)")]
+        [Test]
         public void SumShouldHandleAtLeastOneArgument()
         {
             Assert.AreEqual(12, new Expression("Sum(1,2,4,5)").Evaluate());
             Assert.AreEqual(1, new Expression("sum(1)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
             Assert.AreEqual(72, new Expression("sum(1,2,4,5,10,20,30)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
 
-            new Expression("Sum()").Evaluate();
+            Assert.That(() => new Expression("Sum()").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void SumShouldHandleIEnumerable()
         {
             Assert.AreEqual(10, new Expression("Sum([array])").Evaluate(new Dictionary<string, object> { ["array"] = new[] { 0, 1, 2, 3, 4 } }));
         }
 
-        [TestMethod]
+        [Test]
         public void SumShouldHandleIEnumerableWithNulls()
         {
             var arguments = new Dictionary<string, object>
@@ -506,11 +532,11 @@ namespace Expressive.Tests
 
             var result = expression.Evaluate(arguments);
 
-            Assert.IsInstanceOfType(result, typeof(decimal?));
+            Assert.That(result, Is.InstanceOf(typeof(decimal?)));
             Assert.AreEqual(6.5m, result);
         }
 
-        [TestMethod]
+        [Test]
         public void SumShouldUseZeroInsteadOfNull()
         {
             var arguments = new Dictionary<string, object>
@@ -522,25 +548,27 @@ namespace Expressive.Tests
 
             var result = expression.Evaluate(arguments);
 
-            Assert.IsInstanceOfType(result, typeof(decimal?));
+            Assert.That(result, Is.InstanceOf(typeof(decimal?)));
             Assert.AreEqual(1.1m, result);
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Tan() takes only 1 argument(s)")]
+        [Test]
         public void TanShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(0d, new Expression("Tan(0)").Evaluate());
-            Assert.AreEqual(12, new Expression("Tan(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("Tan(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Truncate() takes only 1 argument(s)")]
+        [Test]
         public void TruncateShouldHandleOnlyOneArgument()
         {
             Assert.AreEqual(1d, new Expression("Truncate(1.7)").Evaluate());
-            Assert.AreEqual(12, new Expression("Truncate(1,2,4,5)").Evaluate());
+
+            Assert.That(() => new Expression("Truncate(1,2,4,5)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void CustomFunctionsWithLambda()
         {
             var exp = new Expression("myfunc('abc')");
@@ -552,130 +580,9 @@ namespace Expressive.Tests
             Assert.AreEqual(1, exp.Evaluate());
         }
 
-        #region Date Functions
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddDays() takes only 2 argument(s)")]
-        public void AddDaysShouldHandleOnlyTwoArguments()
-        {
-            Assert.AreEqual(new DateTime(2016, 01, 03), new Expression("AddDays(#2016-01-01#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2016, 01, 03), new Expression("addDays(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("AddDays()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddHours() takes only 2 argument(s)")]
-        public void AddHoursShouldHandleOnlyTwoArguments()
-        {
-            Assert.AreEqual(new DateTime(2016, 01, 01, 02, 00, 00), new Expression("AddHours(#2016-01-01 00:00:00#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2016, 01, 01, 02, 00, 00), new Expression("addhours(#2016-01-01 00:00:00#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("AddHours()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddMinutes() takes only 2 argument(s)")]
-        public void AddMinutesShouldHandleOnlyTwoArguments()
-        {
-            Assert.AreEqual(new DateTime(2016, 01, 01, 00, 02, 00), new Expression("AddMinutes(#2016-01-01 00:00:00#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2016, 01, 01, 00, 02, 00), new Expression("addminutes(#2016-01-01 00:00:00#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("AddMinutes()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddMonths() takes only 2 argument(s)")]
-        public void AddMonthsShouldHandleOnlyTwoArguments()
-        {
-            Assert.AreEqual(new DateTime(2016, 03, 01), new Expression("AddMonths(#2016-01-01#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2016, 03, 01), new Expression("addmonths(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("AddMonths()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "AddYears() takes only 2 argument(s)")]
-        public void AddYearsShouldHandleOnlyTwoArguments()
-        {
-            Assert.AreEqual(new DateTime(2018, 01, 01), new Expression("AddYears(#2016-01-01#, 2)").Evaluate());
-            Assert.AreEqual(new DateTime(2018, 01, 01), new Expression("addyears(#2016-01-01#, 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("AddYears()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "DayOf() takes only 1 argument(s)")]
-        public void DayOfShouldHandleOnlyOneArgument()
-        {
-            Assert.AreEqual(1, new Expression("DayOf(#2016-01-01#)").Evaluate());
-            Assert.AreEqual(12, new Expression("dayof(#2016-01-12#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("DayOf()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "DaysBetween() takes only 2 argument(s)")]
-        public void DaysBetweenShouldHandleOnlyTwoArguments()
-        {
-            Assert.AreEqual((new DateTime(2016, 01, 12) - new DateTime(2016, 01, 01)).TotalDays, new Expression("DaysBetween(#2016-01-01#, #2016-01-12#)").Evaluate());
-            Assert.AreEqual((new DateTime(2016, 12, 01) - new DateTime(2016, 01, 01)).TotalDays, new Expression("daysbetween(#2016-01-01#, #2016-12-01#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("DaysBetween()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "HourOf() takes only 1 argument(s)")]
-        public void HourOfShouldHandleOnlyOneArgument()
-        {
-            Assert.AreEqual(2, new Expression("HourOf(#2016-01-01 02:00:00#)").Evaluate());
-            Assert.AreEqual(2, new Expression("hourof(#2016-01-12 02:00:00#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("HourOf()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "HoursBetween() takes only 2 argument(s)")]
-        public void HoursBetweenShouldHandleOnlyTwoArguments()
-        {
-            Assert.AreEqual((new DateTime(2016, 01, 01, 23, 00, 00) - new DateTime(2016, 01, 01)).TotalHours, new Expression("HoursBetween(#2016-01-01#, #2016-01-01 23:00:00#)").Evaluate());
-            Assert.AreEqual((new DateTime(2016, 12, 01, 23, 00, 00) - new DateTime(2016, 01, 01)).TotalHours, new Expression("hoursbetween(#2016-01-01#, #2016-12-01 23:00:00#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("HoursBetween()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "MinuteOf() takes only 1 argument(s)")]
-        public void MinuteOfShouldHandleOnlyOneArgument()
-        {
-            Assert.AreEqual(55, new Expression("MinuteOf(#2016-01-01 02:55:00#)").Evaluate());
-            Assert.AreEqual(12, new Expression("minuteof(#2016-01-12 02:12:00#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("MinuteOf()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "MinutesBetween() takes only 2 argument(s)")]
-        public void MinutesBetweenShouldHandleOnlyTwoArguments()
-        {
-            Assert.AreEqual((new DateTime(2016, 01, 01, 23, 12, 00) - new DateTime(2016, 01, 01)).TotalMinutes, new Expression("MinutesBetween(#2016-01-01#, #2016-01-01 23:12:00#)").Evaluate());
-            Assert.AreEqual((new DateTime(2016, 12, 01, 23, 32, 00) - new DateTime(2016, 01, 01)).TotalMinutes, new Expression("minutesbetween(#2016-01-01#, #2016-12-01 23:32:00#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("MinutesBetween()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "MonthOf() takes only 1 argument(s)")]
-        public void MonthOfShouldHandleOnlyOneArgument()
-        {
-            Assert.AreEqual(01, new Expression("MonthOf(#2016-01-01#)").Evaluate());
-            Assert.AreEqual(06, new Expression("monthof(#2016-06-12#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("MonthOf()").Evaluate();
-        }
-
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "YearOf() takes only 1 argument(s)")]
-        public void YearOfShouldHandleOnlyOneArgument()
-        {
-            Assert.AreEqual(2016, new Expression("YearOf(#2016-01-01#)").Evaluate());
-            Assert.AreEqual(2016, new Expression("yearof(#2016-01-12#)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate());
-
-            new Expression("YearOf()").Evaluate();
-        }
-
-        #endregion
-
         #region Conversion Functions
 
-        [TestMethod]
+        [Test]
         public void ShouldConvertToDate()
         {
             var arguments = new Dictionary<string, object>
@@ -690,7 +597,7 @@ namespace Expressive.Tests
             Assert.AreEqual(new DateTime(2018, 10, 01), (DateTime)expression.Evaluate(arguments));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldConvertToDecimal()
         {
             var arguments = new Dictionary<string, object>
@@ -710,7 +617,7 @@ namespace Expressive.Tests
             Assert.AreEqual(4.4M, (decimal)expression.Evaluate(arguments));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldConvertToDouble()
         {
             var arguments = new Dictionary<string, object>
@@ -730,7 +637,7 @@ namespace Expressive.Tests
             Assert.AreEqual(4d, (double)expression.Evaluate(arguments));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldConvertToInteger()
         {
             var arguments = new Dictionary<string, object>
@@ -750,7 +657,7 @@ namespace Expressive.Tests
             Assert.AreEqual(4, (int)expression.Evaluate(arguments));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldConvertToLong()
         {
             var arguments = new Dictionary<string, object>
@@ -770,7 +677,7 @@ namespace Expressive.Tests
             Assert.AreEqual(4L, (long)expression.Evaluate(arguments));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldConvertToString()
         {
             var arguments = new Dictionary<string, object>
@@ -798,7 +705,7 @@ namespace Expressive.Tests
 
         #region General
 
-        //[TestMethod]
+        //[Test]
         //public void TestAsync()
         //{
         //    Expression expression = new Expression("1+3");
@@ -818,7 +725,7 @@ namespace Expressive.Tests
         //    Assert.AreEqual(4, result);
         //}
 
-        //[TestMethod]
+        //[Test]
         //public void TestAsyncSafety()
         //{
         //    Expression expression = new Expression("1+3+[abc]");
@@ -838,16 +745,18 @@ namespace Expressive.Tests
         //    Assert.IsNull(result);
         //}
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "There aren't enough ')' symbols. Expected 2 but there is only 1")]
+        [Test]
         public void ShouldIdentifyParenthesisMismatch()
         {
             Expression expression = new Expression("(a + b) * (4 - 2");
 
-            object value = expression.Evaluate(new Dictionary<string, object> { { "a", 2 }, { "b", 3 } });
+            Assert.That(
+                () => expression.Evaluate(new Dictionary<string, object> { { "a", 2 }, { "b", 3 } }),
+                Throws.InstanceOf<ExpressiveException>());
         }
 
         // Expressions currently no longer short circuit at this level given the new feature of allowing aggregates in operations.
-        //[TestMethod]
+        //[Test]
         //public void ShouldShortCircuitBooleanExpressions()
         //{
         //    var expression = new Expression("([a] != 0) && ([b]/[a]>2)");
@@ -855,14 +764,14 @@ namespace Expressive.Tests
         //    Assert.AreEqual(false, expression.Evaluate(new Dictionary<string, object> { { "a", 0 } }));
         //}
 
-        [TestMethod]
+        [Test]
         public void ShouldCompareDates()
         {
             Assert.AreEqual(true, new Expression("#1/1/2009#==#1/1/2009#").Evaluate());
             Assert.AreEqual(false, new Expression("#2/1/2009#==#1/1/2009#").Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldEvaluateSubExpressions()
         {
             var volume = new Expression("[surface] * [h]");
@@ -871,7 +780,7 @@ namespace Expressive.Tests
             Assert.AreEqual(6, volume.Evaluate(new Dictionary<string, object> { { "surface", surface }, { "h", 3 }, { "l", 1 }, { "K", 2 } }));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldParseValues()
         {
             Assert.AreEqual(123456, new Expression("123456").Evaluate());
@@ -882,7 +791,7 @@ namespace Expressive.Tests
             Assert.AreEqual("qwerty", new Expression("'qwerty'").Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldEscapeCharacters()
         {
             Assert.AreEqual("'hello'", new Expression(@"'\'hello\''").Evaluate());
@@ -892,7 +801,7 @@ namespace Expressive.Tests
             Assert.AreEqual("hel\nlo", new Expression(@"'hel\nlo'").Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldHandleOperatorsPriority()
         {
             Assert.AreEqual(8, new Expression("2+2+2+2").Evaluate());
@@ -904,39 +813,36 @@ namespace Expressive.Tests
             Assert.AreEqual(13.5d, new Expression("18.0/2.0/2.0*3.0").Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldNotLosePrecision()
         {
             Assert.AreEqual(0.5, new Expression("3/6").Evaluate());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "Unrecognised token 'blarsh'")]
+        [Test]
         public void ShouldFailOnUnrecognisedToken()
         {
-            Assert.AreEqual(0.5, new Expression("1 + blarsh + 4").Evaluate());
+            Assert.That(
+                () => new Expression("1 + blarsh + 4").Evaluate(),
+                Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod, ExpectedException(typeof(ExpressiveException), "The variable 'a' has not been supplied.")]
+        [Test]
         public void ShouldHandleCaseSensitivity()
         {
             new Expression("([a] + [b]) * (4 - 2)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(new Dictionary<string, object> { { "A", 2 }, { "b", 3 } });
             new Expression("IF(true, true, false)", ExpressiveOptions.IgnoreCaseForParsing).Evaluate();
 
-            try
-            {
-                new Expression("IF(true, true, false)").Evaluate();
-            }
-            catch (UnrecognisedTokenException ute)
-            {
-                Assert.AreEqual("Unrecognised token 'IF'", ute.Message);
-            }
+            Assert.That(() => new Expression("IF(true, true, false)").Evaluate(), Throws.InstanceOf<ExpressiveException>());
 
             Expression expression = new Expression("([a] + [b]) * (4 - 2)");
 
-            object value = expression.Evaluate(new Dictionary<string, object> { { "A", 2 }, { "b", 3 } });
+            Assert.That(
+                () => expression.Evaluate(new Dictionary<string, object> { { "A", 2 }, { "b", 3 } }),
+                Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldReturnCorrectVariables()
         {
             var expression = new Expression("([a] + [b] * [c]) + ([a] * [b])");
@@ -944,7 +850,7 @@ namespace Expressive.Tests
             Assert.AreEqual(3, expression.ReferencedVariables.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void CheckNullValuesAreHandledCorrectly()
         {
             Assert.IsNull(new Expression("2 + [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
@@ -954,7 +860,7 @@ namespace Expressive.Tests
             Assert.IsNull(new Expression("2 % [a]").Evaluate(new Dictionary<string, object> { ["a"] = null }));
         }
 
-        [TestMethod]
+        [Test]
         public void CheckNaNIsHandledCorrectly()
         {
             Assert.AreEqual(double.NaN, new Expression("2 + [a]").Evaluate(new Dictionary<string, object> { ["a"] = double.NaN }));
@@ -964,7 +870,7 @@ namespace Expressive.Tests
             Assert.AreEqual(double.NaN, new Expression("2 % [a]").Evaluate(new Dictionary<string, object> { ["a"] = double.NaN }));
         }
 
-        [TestMethod]
+        [Test]
         public void CheckComplicatedDepth()
         {
             // This was a previous bug (Issue #6) so this is in place to make sure it does not re-occur.
@@ -975,29 +881,14 @@ namespace Expressive.Tests
             Assert.AreEqual(25d, value);
         }
 
-        [TestMethod]
-        public void ShouldThrowExceptionIfEitherSideIsMissing()
+        [TestCase("<= #today#")]
+        [TestCase("#today# <=")]
+        public void ShouldThrowExceptionIfEitherSideIsMissing(string expression)
         {
-            try
-            {
-                new Expression("<= #today#").Evaluate();
-            }
-            catch (ExpressiveException ee)
-            {
-                Assert.AreEqual("The left hand side of the operation is missing.", ee.Message);
-            }
-
-            try
-            {
-                new Expression("#today# <=").Evaluate();
-            }
-            catch (ExpressiveException ee)
-            {
-                Assert.AreEqual("The right hand side of the operation is missing.", ee.Message);
-            }
+            Assert.That(() => new Expression(expression).Evaluate(), Throws.InstanceOf<ExpressiveException>());
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldThrowExceptionIfNoContents()
         {
             try
@@ -1019,14 +910,14 @@ namespace Expressive.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldMatchStringToBooleanTrue()
         {
             Assert.IsTrue((bool)new Expression("'True' && true").Evaluate());
             Assert.IsFalse((bool)new Expression("'False' && true").Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldHandleCommaDecimalSeparatorForEuropeanCultures()
         {
             //Rule('a60f99fa-21ee-4dfa-b8c1-80ffaa3a83de', 10, 20)
@@ -1034,7 +925,7 @@ namespace Expressive.Tests
             Assert.AreEqual(20, invariantExpression.Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldHandlePartiallyMatchingCustomFunctionNames()
         {
             var expression = new Expression("CountInstances()");
@@ -1053,7 +944,7 @@ namespace Expressive.Tests
 
         #endregion
 
-        [TestMethod]
+        [Test]
         public void ShouldHandleBugTwentyTwo()
         {
             // Not working
@@ -1094,7 +985,7 @@ namespace Expressive.Tests
             Assert.AreEqual(2.0f, (float)expression.Evaluate(arguments));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldHandleBugTwentyThree()
         {
             var arguments = new Dictionary<string, object>
@@ -1105,7 +996,7 @@ namespace Expressive.Tests
             Assert.AreEqual("Date Needed", new Expression("if([plate.datecontrol] = NULL, 'Date Needed', 'Date Entered')", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(arguments));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldHandleBugTwentyFour()
         {
             var arguments = new Dictionary<string, object>
@@ -1117,7 +1008,7 @@ namespace Expressive.Tests
             Assert.AreEqual(true, new Expression("[DischargeStatus1_Value] > 00 AND[DischargeStatus2_Value] = 00", ExpressiveOptions.IgnoreCaseForParsing).Evaluate(arguments));
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldIgnoreCurrentCulture()
         {
             ExecuteUnderCulture("de-DE", () =>
@@ -1129,7 +1020,7 @@ namespace Expressive.Tests
 
         #region Actual unit tests for the Expression class to remain.
 
-        [TestMethod]
+        [Test]
         public void ShouldEvaluateT()
         {
             var expression = new Expression("1 + 2.0 + 3 * 4.0");
@@ -1183,7 +1074,7 @@ namespace Expressive.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ShouldRethrowOnInvalidEvaluateT()
         {
             var expression = new Expression("1 + 2.0 + 3 * 4.0");
@@ -1200,7 +1091,7 @@ namespace Expressive.Tests
                 }
             }
 
-            Assert.Fail("Invalid handling of exceptions.");
+            Assert.Fail();
         }
 
         #endregion

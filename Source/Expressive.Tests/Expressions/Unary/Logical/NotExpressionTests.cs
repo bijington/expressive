@@ -2,57 +2,52 @@
 using System.Collections.Generic;
 using Expressive.Expressions;
 using Expressive.Expressions.Unary.Logical;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Moq;
 
 namespace Expressive.Tests.Expressions.Unary.Logical
 {
-    [TestClass]
+    [TestFixture]
     public class NotExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestNull()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(null));
 
             Assert.IsNull(expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestFalse()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(false));
 
             Assert.IsTrue((bool)expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestTrue()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(true));
 
             Assert.IsFalse((bool)expression.Evaluate(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestInteger()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(1));
 
             Assert.IsFalse((bool)expression.Evaluate(null));
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestInvalid()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)DateTime.Now));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(DateTime.Now));
 
-            Assert.IsFalse((bool)expression.Evaluate(null));
+            Assert.That(() => expression.Evaluate(null), Throws.InstanceOf<InvalidCastException>());
         }
     }
 }
