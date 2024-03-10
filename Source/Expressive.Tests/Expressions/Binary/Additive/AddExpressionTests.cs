@@ -3,6 +3,7 @@ using Expressive.Expressions;
 using Expressive.Expressions.Binary.Additive;
 using NUnit.Framework;
 using Moq;
+using System;
 
 namespace Expressive.Tests.Expressions.Binary.Additive
 {
@@ -13,8 +14,8 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         public void TestEvaluate()
         {
             var expression = new AddExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
+                MockExpression.ThatEvaluatesTo(1),
+                MockExpression.ThatEvaluatesTo(2),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(3, expression.Evaluate(null));
@@ -24,8 +25,8 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         public void TestEvaluateWithDifferentSizedArrays()
         {
             var expression = new AddExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1 }),
+                MockExpression.ThatEvaluatesTo(new[] { 1, 2, 3 }),
+                MockExpression.ThatEvaluatesTo(new[] { 1 }),
                 new Context(ExpressiveOptions.None));
 
             Assert.IsNull(expression.Evaluate(null));
@@ -34,12 +35,10 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         [Test]
         public void TestEvaluateWithEmptyLeftArray()
         {
-#pragma warning disable CA1825 // Avoid zero-length array allocations. - Array.Empty does not exist in net 4.5
             var expression = new AddExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new int[0]),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
+                MockExpression.ThatEvaluatesTo(Array.Empty<int>()),
+                MockExpression.ThatEvaluatesTo(new[] { 1, 2, 3 }),
                 new Context(ExpressiveOptions.None));
-#pragma warning restore CA1825 // Avoid zero-length array allocations.
 
             var result = (object[])expression.Evaluate(null);
             Assert.IsTrue(result.Length == 3);
@@ -54,8 +53,8 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         public void TestEvaluateWithOneSidedArray()
         {
             var expression = new AddExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
+                MockExpression.ThatEvaluatesTo(new[] { 1, 2, 3 }),
+                MockExpression.ThatEvaluatesTo(2),
                 new Context(ExpressiveOptions.None));
 
             var result = (object[])expression.Evaluate(null);
@@ -69,8 +68,8 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         public void TestEvaluateWithSameSizedArrays()
         {
             var expression = new AddExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)new[] { 1, 2, 3 }),
+                MockExpression.ThatEvaluatesTo(new[] { 1, 2, 3 }),
+                MockExpression.ThatEvaluatesTo(new[] { 1, 2, 3 }),
                 new Context(ExpressiveOptions.None));
 
             var result = (object[])expression.Evaluate(null);
@@ -84,8 +83,8 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         public void TestStringAddition()
         {
             var expression = new AddExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)"1"),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
+                MockExpression.ThatEvaluatesTo("1"),
+                MockExpression.ThatEvaluatesTo(2),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual("12", expression.Evaluate(null));

@@ -1,12 +1,9 @@
-﻿using Expressive.Expressions;
-using Expressive.Expressions.Binary.Additive;
+﻿using Expressive.Expressions.Binary.Additive;
 using Expressive.Expressions.Unary.Additive;
 using Expressive.Operators;
 using Expressive.Operators.Additive;
 using NUnit.Framework;
-using Moq;
 using System;
-using System.Collections.Generic;
 
 namespace Expressive.Tests.Operators.Additive
 {
@@ -52,8 +49,8 @@ namespace Expressive.Tests.Operators.Additive
                 new Token("+", 1),
                 new[]
                 {
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null),
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
+                    MockExpression.ThatEvaluatesTo(null),
+                    MockExpression.ThatEvaluatesTo(null)
                 },
                 new Context(ExpressiveOptions.None));
 
@@ -70,7 +67,7 @@ namespace Expressive.Tests.Operators.Additive
                 new[]
                 {
                     null,
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
+                    MockExpression.ThatEvaluatesTo(null)
                 },
                 new Context(ExpressiveOptions.None));
 

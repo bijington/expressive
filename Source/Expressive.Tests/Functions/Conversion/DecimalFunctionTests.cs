@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Expressive.Exceptions;
-using Expressive.Expressions;
 using Expressive.Functions;
 using Expressive.Functions.Conversion;
 using NUnit.Framework;
-using Moq;
 
 namespace Expressive.Tests.Functions.Conversion
 {
@@ -69,7 +66,7 @@ namespace Expressive.Tests.Functions.Conversion
 
             var result = function.Evaluate(new[]
                 {
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)longValue)
+                    MockExpression.ThatEvaluatesTo(longValue)
                 },
                 new Context(ExpressiveOptions.None));
 

@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using Expressive.Expressions;
-using Expressive.Expressions.Binary.Additive;
+﻿using Expressive.Expressions.Binary.Additive;
 using NUnit.Framework;
-using Moq;
 
 namespace Expressive.Tests.Expressions.Binary.Additive
 {
@@ -13,8 +10,8 @@ namespace Expressive.Tests.Expressions.Binary.Additive
         public void TestEvaluate()
         {
             var expression = new SubtractExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)2),
+                MockExpression.ThatEvaluatesTo(1),
+                MockExpression.ThatEvaluatesTo(2),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(-1, expression.Evaluate(null));

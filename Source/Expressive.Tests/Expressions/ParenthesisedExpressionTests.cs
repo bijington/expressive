@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using Expressive.Exceptions;
+﻿using Expressive.Exceptions;
 using Expressive.Expressions;
 using NUnit.Framework;
-using Moq;
 
 namespace Expressive.Tests.Expressions
 {
@@ -12,9 +10,7 @@ namespace Expressive.Tests.Expressions
         [Test]
         public void TestEvaluate()
         {
-            var mockExpression = Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1);
-
-            var expression = new ParenthesisedExpression(mockExpression);
+            var expression = new ParenthesisedExpression(MockExpression.ThatEvaluatesTo(1));
 
             Assert.AreEqual(1, expression.Evaluate(null));
         }

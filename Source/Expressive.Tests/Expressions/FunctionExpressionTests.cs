@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿
 using Expressive.Expressions;
 using NUnit.Framework;
-using Moq;
+using System;
 
 namespace Expressive.Tests.Expressions
 {
@@ -14,7 +14,7 @@ namespace Expressive.Tests.Expressions
             var expression = new FunctionExpression(
                 "testFunc",
                 (p,a) => 123,
-                new []{ Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1) });
+                Array.Empty<IExpression>());
 
             Assert.AreEqual(123, expression.Evaluate(null));
         }

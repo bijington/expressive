@@ -13,8 +13,8 @@ namespace Expressive.Tests.Expressions.Binary.Logical
         public void TestBothTrueEvaluate()
         {
             var expression = new OrExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
+                MockExpression.ThatEvaluatesTo(true),
+                MockExpression.ThatEvaluatesTo(true),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
@@ -24,8 +24,8 @@ namespace Expressive.Tests.Expressions.Binary.Logical
         public void TestLeftTrueEvaluate()
         {
             var expression = new OrExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
+                MockExpression.ThatEvaluatesTo(true),
+                MockExpression.ThatEvaluatesTo(false),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
@@ -35,8 +35,8 @@ namespace Expressive.Tests.Expressions.Binary.Logical
         public void TestNeitherTrueEvaluate()
         {
             var expression = new OrExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
+                MockExpression.ThatEvaluatesTo(false),
+                MockExpression.ThatEvaluatesTo(false),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(false, expression.Evaluate(null));
@@ -46,8 +46,8 @@ namespace Expressive.Tests.Expressions.Binary.Logical
         public void TestRightTrueEvaluate()
         {
             var expression = new OrExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
+                MockExpression.ThatEvaluatesTo(false),
+                MockExpression.ThatEvaluatesTo(true),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(true, expression.Evaluate(null));
@@ -59,7 +59,7 @@ namespace Expressive.Tests.Expressions.Binary.Logical
             var rightHandMock = new Mock<IExpression>();
 
             var expression = new OrExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true),
+                MockExpression.ThatEvaluatesTo(true),
                 rightHandMock.Object,
                 new Context(ExpressiveOptions.None));
 

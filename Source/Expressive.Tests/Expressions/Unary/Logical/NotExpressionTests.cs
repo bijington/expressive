@@ -13,8 +13,7 @@ namespace Expressive.Tests.Expressions.Unary.Logical
         [Test]
         public void TestNull()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(null));
 
             Assert.IsNull(expression.Evaluate(null));
         }
@@ -22,8 +21,7 @@ namespace Expressive.Tests.Expressions.Unary.Logical
         [Test]
         public void TestFalse()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)false));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(false));
 
             Assert.IsTrue((bool)expression.Evaluate(null));
         }
@@ -31,8 +29,7 @@ namespace Expressive.Tests.Expressions.Unary.Logical
         [Test]
         public void TestTrue()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)true));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(true));
 
             Assert.IsFalse((bool)expression.Evaluate(null));
         }
@@ -40,8 +37,7 @@ namespace Expressive.Tests.Expressions.Unary.Logical
         [Test]
         public void TestInteger()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(1));
 
             Assert.IsFalse((bool)expression.Evaluate(null));
         }
@@ -49,8 +45,7 @@ namespace Expressive.Tests.Expressions.Unary.Logical
         [Test]
         public void TestInvalid()
         {
-            var expression = new NotExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)DateTime.Now));
+            var expression = new NotExpression(MockExpression.ThatEvaluatesTo(DateTime.Now));
 
             Assert.That(() => expression.Evaluate(null), Throws.InstanceOf<InvalidCastException>());
         }

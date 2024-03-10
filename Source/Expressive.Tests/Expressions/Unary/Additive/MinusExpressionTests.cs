@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using Expressive.Expressions;
 using Expressive.Expressions.Unary.Additive;
 using NUnit.Framework;
-using Moq;
 
 namespace Expressive.Tests.Expressions.Unary.Additive
 {
@@ -13,8 +10,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
         [Test]
         public void TestNull()
         {
-            var expression = new MinusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)null));
+            var expression = new MinusExpression(MockExpression.ThatEvaluatesTo(null));
 
             Assert.IsNull(expression.Evaluate(null));
         }
@@ -22,8 +18,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
         [Test]
         public void TestInteger()
         {
-            var expression = new MinusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)12));
+            var expression = new MinusExpression(MockExpression.ThatEvaluatesTo(12));
 
             Assert.AreEqual(-12, expression.Evaluate(null));
         }
@@ -31,8 +26,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
         [Test]
         public void TestDouble()
         {
-            var expression = new MinusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)13.5d));
+            var expression = new MinusExpression(MockExpression.ThatEvaluatesTo(13.5d));
 
             Assert.AreEqual(-13.5d, expression.Evaluate(null));
         }
@@ -40,8 +34,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
         [Test]
         public void TestDecimal()
         {
-            var expression = new MinusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)12.4M));
+            var expression = new MinusExpression(MockExpression.ThatEvaluatesTo(12.4M));
 
             Assert.AreEqual(-12.4M, expression.Evaluate(null));
         }
@@ -49,8 +42,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
         [Test]
         public void TestString()
         {
-            var expression = new MinusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)"12"));
+            var expression = new MinusExpression(MockExpression.ThatEvaluatesTo("12"));
 
             Assert.AreEqual(-12M, expression.Evaluate(null));
         }
@@ -58,8 +50,7 @@ namespace Expressive.Tests.Expressions.Unary.Additive
         [Test]
         public void TestInvalid()
         {
-            var expression = new MinusExpression(Mock.Of<IExpression>(e =>
-                e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)DateTime.Now));
+            var expression = new MinusExpression(MockExpression.ThatEvaluatesTo(DateTime.Now));
 
             Assert.IsNull(expression.Evaluate(null));
         }

@@ -1,7 +1,5 @@
-﻿using Expressive.Expressions;
-using Expressive.Operators;
+﻿using Expressive.Operators;
 using NUnit.Framework;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,8 +41,8 @@ namespace Expressive.Tests.Operators
                 new Token("1", 1),
                 new[]
                 {
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null),
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object) null)
+                    MockExpression.ThatEvaluatesTo(null),
+                    MockExpression.ThatEvaluatesTo(null)
                 },
                 new Context(ExpressiveOptions.None));
 

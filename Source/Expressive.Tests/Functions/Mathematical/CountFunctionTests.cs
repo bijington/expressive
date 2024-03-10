@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Expressive.Expressions;
 using Expressive.Functions;
 using Expressive.Functions.Mathematical;
-using Moq;
 using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Mathematical
@@ -46,7 +44,7 @@ namespace Expressive.Tests.Functions.Mathematical
         private static object Evaluate(IFunction function, params object[] values)
         {
             return function.Evaluate(
-                values.Select(v => Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == v)).ToArray(),
+                values.Select(v => MockExpression.ThatEvaluatesTo(v)).ToArray(),
                 new Context(ExpressiveOptions.None));
         }
     }
