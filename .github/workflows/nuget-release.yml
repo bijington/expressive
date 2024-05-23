@@ -25,7 +25,7 @@ jobs:
         run: dotnet restore .\Source\Expressive\Expressive.csproj
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore .\Source\Expressive\Expressive.csproj /p:Version=${{ steps.get_version.outputs.version-without-v }}
+        run: dotnet build --configuration Release --no-restore .\Source\Expressive\Expressive.csproj /p:Version=${{ steps.get_version.outputs.version-without-v }} /p:AssemblyVersion=${{ steps.get_version.outputs.version-without-v }} /p:FileVersion=${{ steps.get_version.outputs.version-without-v }}
 
       - name: Pack
         run: dotnet pack .\Source\Expressive\Expressive.csproj -c Release /p:Version=${{ steps.get_version.outputs.version-without-v }} --no-build --output .
