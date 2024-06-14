@@ -1,66 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
 using Expressive.Exceptions;
-using Expressive.Expressions;
 using Expressive.Functions;
 using Expressive.Functions.Conversion;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Conversion
 {
-    [TestClass]
+    [TestFixture]
     public class DecimalFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("Decimal", this.ActualFunction.Name);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestEvaluateWithDateTime()
         {
-            this.Evaluate(DateTime.Now);
+            Assert.That(() => this.Evaluate(DateTime.Now), Throws.InstanceOf<InvalidCastException>());
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDecimal()
         {
             Assert.AreEqual(12345M, this.Evaluate(12345M));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDouble()
         {
             Assert.AreEqual(12345M, this.Evaluate(12345d));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithFloat()
         {
             Assert.AreEqual(12345M, this.Evaluate(12345f));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithInteger()
         {
             Assert.AreEqual(12345M, this.Evaluate(12345));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithNull()
         {
             Assert.IsNull(this.Evaluate(new object[] { null }));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithString()
         {
             Assert.AreEqual(12345M, this.Evaluate("12345"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithLong()
         {
             var function = new DecimalFunction();
@@ -69,14 +66,14 @@ namespace Expressive.Tests.Functions.Conversion
 
             var result = function.Evaluate(new[]
                 {
-                    Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)longValue)
+                    MockExpression.ThatEvaluatesTo(longValue)
                 },
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(12345M, result);
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "Decimal() takes only 1 argument(s)");

@@ -2,11 +2,11 @@
 using Expressive.Expressions.Binary.Logical;
 using Expressive.Operators;
 using Expressive.Operators.Logical;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Operators.Logical
 {
-    [TestClass]
+    [TestFixture]
     public class AndOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members

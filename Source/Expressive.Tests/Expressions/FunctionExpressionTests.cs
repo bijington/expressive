@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
+﻿
 using Expressive.Expressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NUnit.Framework;
+using System;
 
 namespace Expressive.Tests.Expressions
 {
-    [TestClass]
+    [TestFixture]
     public class FunctionExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             var expression = new FunctionExpression(
                 "testFunc",
                 (p,a) => 123,
-                new []{ Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1) });
+                Array.Empty<IExpression>());
 
             Assert.AreEqual(123, expression.Evaluate(null));
         }

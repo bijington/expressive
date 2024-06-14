@@ -2,11 +2,11 @@
 using Expressive.Expressions.Binary.Bitwise;
 using Expressive.Operators;
 using Expressive.Operators.Bitwise;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Operators.Bitwise
 {
-    [TestClass]
+    [TestFixture]
     public class LeftShiftOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members
