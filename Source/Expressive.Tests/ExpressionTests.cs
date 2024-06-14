@@ -162,6 +162,10 @@ namespace Expressive.Tests
             Assert.AreEqual(true, new Expression("1 <= 2").Evaluate());
             Assert.AreEqual(false, new Expression("7 < 2").Evaluate());
             Assert.AreEqual(true, new Expression("1 < 2").Evaluate());
+            Assert.AreEqual(true, new Expression("[var1] < 1").Evaluate(new Dictionary<string, object> { ["var1"] = null}));
+            Assert.AreEqual(false, new Expression("[var1] > 1").Evaluate(new Dictionary<string, object> { ["var1"] = null}));
+            Assert.AreEqual(false, new Expression("[var1] < 1", ExpressiveOptions.Strict).Evaluate(new Dictionary<string, object> { ["var1"] = null}));
+            Assert.AreEqual(false, new Expression("[var1] > 1", ExpressiveOptions.Strict).Evaluate(new Dictionary<string, object> { ["var1"] = null}));
 
             // Dates can be parsed to string.
             Assert.AreEqual(true, new Expression("[date1] == '2016-01-01'").Evaluate(new Dictionary<string, object> { ["date1"] = new DateTime(2016, 01, 01) }));
