@@ -11,6 +11,12 @@ var expression = new Expression("1+2");
 var result = expression.Evaluate();
 ```
 
+## Another usage Example ( Inject your expression object where you want and evaluate formulas supplying them as argument of the "Evaluate" method )
+```c
+var expression = new Expression();
+var result = expression.Evaluate("1+2");
+```
+
 For further detail of usage please see the ([Usage wiki page](https://github.com/bijington/expressive/wiki/Usage))
 
 ## Playground

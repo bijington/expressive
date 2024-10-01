@@ -150,86 +150,32 @@ namespace Expressive
             #endregion
 
             #region Functions
-            // Conversion
-            this.RegisterFunction(new DateFunction());
-            this.RegisterFunction(new DecimalFunction());
-            this.RegisterFunction(new DoubleFunction());
-            this.RegisterFunction(new IntegerFunction());
-            this.RegisterFunction(new LongFunction());
-            this.RegisterFunction(new StringFunction());
-            // Date
-            this.RegisterFunction(new AddDaysFunction());
-            this.RegisterFunction(new AddHoursFunction());
-            this.RegisterFunction(new AddMillisecondsFunction());
-            this.RegisterFunction(new AddMinutesFunction());
-            this.RegisterFunction(new AddMonthsFunction());
-            this.RegisterFunction(new AddSecondsFunction());
-            this.RegisterFunction(new AddYearsFunction());
-            this.RegisterFunction(new DayOfFunction());
-            this.RegisterFunction(new DaysBetweenFunction());
-            this.RegisterFunction(new HourOfFunction());
-            this.RegisterFunction(new HoursBetweenFunction());
-            this.RegisterFunction(new MillisecondOfFunction());
-            this.RegisterFunction(new MillisecondsBetweenFunction());
-            this.RegisterFunction(new MinuteOfFunction());
-            this.RegisterFunction(new MinutesBetweenFunction());
-            this.RegisterFunction(new MonthOfFunction());
-            this.RegisterFunction(new SecondOfFunction());
-            this.RegisterFunction(new SecondsBetweenFunction());
-            this.RegisterFunction(new YearOfFunction());
-            // Mathematical
-            this.RegisterFunction(new AbsFunction());
-            this.RegisterFunction(new AcosFunction());
-            this.RegisterFunction(new AsinFunction());
-            this.RegisterFunction(new AtanFunction());
-            this.RegisterFunction(new CeilingFunction());
-            this.RegisterFunction(new CosFunction());
-            this.RegisterFunction(new CountFunction());
-            this.RegisterFunction(new ExpFunction());
-            this.RegisterFunction(new FloorFunction());
-            this.RegisterFunction(new IEEERemainderFunction());
-            this.RegisterFunction(new Log10Function());
-            this.RegisterFunction(new LogFunction());
-            this.RegisterFunction(new PowFunction());
-            this.RegisterFunction(new RandomFunction());
-            this.RegisterFunction(new RoundFunction());
-            this.RegisterFunction(new SignFunction());
-            this.RegisterFunction(new SinFunction());
-            this.RegisterFunction(new SqrtFunction());
-            this.RegisterFunction(new SumFunction());
-            this.RegisterFunction(new TanFunction());
-            this.RegisterFunction(new TruncateFunction());
-            // Mathematical Constants
-            this.RegisterFunction(new EFunction());
-            this.RegisterFunction(new PIFunction());
-            // Logical
-            this.RegisterFunction(new IfFunction());
-            this.RegisterFunction(new InFunction());
-            // Relational
-            this.RegisterFunction(new MaxFunction());
-            this.RegisterFunction(new MinFunction());
-            // Statistical
-            this.RegisterFunction(new AverageFunction());
-            this.RegisterFunction(new MeanFunction());
-            this.RegisterFunction(new MedianFunction());
-            this.RegisterFunction(new ModeFunction());
-            // String
-            this.RegisterFunction(new ContainsFunction());
-            this.RegisterFunction(new EndsWithFunction());
-            this.RegisterFunction(new LengthFunction());
-            this.RegisterFunction(new PadLeftFunction());
-            this.RegisterFunction(new PadRightFunction());
-            this.RegisterFunction(new RegexFunction());
-            this.RegisterFunction(new StartsWithFunction());
-            this.RegisterFunction(new SubstringFunction());
-            this.RegisterFunction(new ConcatFunction());
-            this.RegisterFunction(new IndexOfFunction());
+            // Getting all types implementing "IFunction" interface
+            var functionTypeInfos = Utils.Reflective.GetClassesImplementingInterface(typeof(IFunction));
+            // Getting our instances from types 
+            var functions = Utils.Reflective.GetInstances<IFunction>(functionTypeInfos).Select(element => (IFunction)element).ToList();
+            // Register our functions
+            this.RegisterFunctions(functions);
             #endregion
         }
 
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Registers the supplied <paramref name="functions"/> for use within compiling and evaluating an <see cref="Expression"/>.
+        /// </summary>
+        /// <param name="functions">The list of <see cref="IFunction"/> to perform the function evaluation.</param>
+        /// <param name="force">Whether to forcefully override any existing function.</param>
+        public void RegisterFunctions(List<IFunction> functions, bool force = false)
+        {
+            if (functions is null)
+            {
+                throw new ArgumentNullException(nameof(functions));
+            }
+            functions.ForEach(function => RegisterFunction(function, force));
+        }
 
         /// <summary>
         /// Registers the supplied <paramref name="function"/> for use within compiling and evaluating an <see cref="Expression"/>.
