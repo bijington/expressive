@@ -4,6 +4,16 @@ using System.Globalization;
 
 namespace Expressive.Functions.Conversion
 {
+    // begin-snippet: DateFunction
+    //Converts and returns the parameter as a DateTime.
+
+    //Date(value)
+
+    //or
+
+    //Date(value, format)
+    // end-snippet
+
     internal sealed class DateFunction : FunctionBase
     {
         #region FunctionBase Members
