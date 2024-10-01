@@ -1,13 +1,13 @@
 ﻿using System.Globalization;
 using Expressive.Tokenisation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Tokenisation
 {
-    [TestClass]
+    [TestFixture]
     public class NumericTokenExtractorTests
     {
-        [TestMethod]
+        [Test]
         public void TestWithDecimalPlace()
         {
             var extractor = new NumericTokenExtractor();
@@ -18,7 +18,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("123.45", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithDecimalPlaceLeading()
         {
             var extractor = new NumericTokenExtractor();
@@ -29,7 +29,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual(".45", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithDecimalPlaceAndNegativeSign()
         {
             var extractor = new NumericTokenExtractor();
@@ -40,7 +40,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("-123.45", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithDecimalPlaceAndPositiveSign()
         {
             var extractor = new NumericTokenExtractor();
@@ -51,7 +51,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("+123.45", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithInteger()
         {
             var extractor = new NumericTokenExtractor();
@@ -62,7 +62,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("123", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithIntegerAndNegativeSign()
         {
             var extractor = new NumericTokenExtractor();
@@ -73,7 +73,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("-123", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithIntegerAndPositiveSign()
         {
             var extractor = new NumericTokenExtractor();
@@ -84,7 +84,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("+123", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithInvalidNumber()
         {
             var extractor = new NumericTokenExtractor();
@@ -94,7 +94,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.IsNull(token);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithMultipleDecimalPlaces()
         {
             var extractor = new NumericTokenExtractor();
@@ -105,7 +105,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("123.45", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithScientificNotationAndNoOrderOfMagnitude()
         {
             var extractor = new NumericTokenExtractor();
@@ -116,7 +116,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("1.23", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithScientificNotation()
         {
             var extractor = new NumericTokenExtractor();
@@ -127,7 +127,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("1.23e2", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithScientificNotationAndNegativeSign()
         {
             var extractor = new NumericTokenExtractor();
@@ -138,7 +138,7 @@ namespace Expressive.Tests.Tokenisation
             Assert.AreEqual("1.23e-2", token.CurrentToken);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithScientificNotationAndPositiveSign()
         {
             var extractor = new NumericTokenExtractor();

@@ -1,20 +1,20 @@
 ﻿using System;
 using Expressive.Functions;
 using Expressive.Functions.String;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.String
 {
-    [TestClass]
+    [TestFixture]
     public class IndexOfFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("IndexOf", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithStartString()
         {
             var left = "left";
@@ -25,7 +25,7 @@ namespace Expressive.Tests.Functions.String
             
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithMidString()
         {
             var left = "left";
@@ -34,7 +34,7 @@ namespace Expressive.Tests.Functions.String
             Assert.AreEqual(2, this.Evaluate(left, right));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithNotFound()
         {
             var left = "left";
@@ -43,7 +43,7 @@ namespace Expressive.Tests.Functions.String
             Assert.AreEqual(-1, this.Evaluate(left, right));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithArray()
         {
             var left =  new object[] { "left", 12, "right" };

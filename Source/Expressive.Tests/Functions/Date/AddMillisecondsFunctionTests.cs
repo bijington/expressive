@@ -2,45 +2,45 @@
 using Expressive.Exceptions;
 using Expressive.Functions;
 using Expressive.Functions.Date;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Date
 {
-    [TestClass]
+    [TestFixture]
     public class AddMillisecondsFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("AddMilliseconds", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestLeapYear()
         {
             Assert.AreEqual(new DateTime(2016, 02, 29, 00, 00, 01),
                 this.Evaluate(new DateTime(2016, 02, 28, 23, 59, 59), 2000));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithBothNull()
         {
             Assert.IsNull(this.Evaluate(null, null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithFirstNull()
         {
             Assert.IsNull(this.Evaluate(null, 123));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithSecondNull()
         {
             Assert.IsNull(this.Evaluate(DateTime.Now, null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "AddMilliseconds() takes only 2 argument(s)");

@@ -2,11 +2,11 @@
 using Expressive.Expressions;
 using Expressive.Operators;
 using Expressive.Operators.Grouping;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Operators.Grouping
 {
-    [TestClass]
+    [TestFixture]
     public class ParenthesisCloseOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members

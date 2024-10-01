@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
-using Expressive.Expressions;
-using Expressive.Expressions.Binary.Bitwise;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+﻿using Expressive.Expressions.Binary.Bitwise;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Expressions.Binary.Bitwise
 {
-    [TestClass]
+    [TestFixture]
     public class BitwiseOrExpressionTests
     {
-        [TestMethod]
+        [Test]
         public void TestEvaluate()
         {
             var expression = new BitwiseOrExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)1001),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == (object)0001),
+                MockExpression.ThatEvaluatesTo(1001),
+                MockExpression.ThatEvaluatesTo(0001),
                 new Context(ExpressiveOptions.None));
 
             Assert.AreEqual(1001, expression.Evaluate(null));

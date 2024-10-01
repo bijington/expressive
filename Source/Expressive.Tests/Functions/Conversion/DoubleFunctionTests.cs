@@ -2,68 +2,68 @@
 using Expressive.Exceptions;
 using Expressive.Functions;
 using Expressive.Functions.Conversion;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Conversion
 {
-    [TestClass]
+    [TestFixture]
     public class DoubleFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("Double", this.ActualFunction.Name);
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestEvaluateWithDateTime()
         {
-            this.Evaluate(DateTime.Now);
+            Assert.That(() => this.Evaluate(DateTime.Now), Throws.InstanceOf<InvalidCastException>());
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDecimal()
         {
             Assert.AreEqual(12345d, this.Evaluate(12345M));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithDouble()
         {
             Assert.AreEqual(12345d, this.Evaluate(12345d));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithFloat()
         {
             Assert.AreEqual(12345d, this.Evaluate(12345f));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithInteger()
         {
             Assert.AreEqual(12345d, this.Evaluate(12345));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithLong()
         {
             Assert.AreEqual(12345d, this.Evaluate(12345L));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithNull()
         {
             Assert.IsNull(this.Evaluate(new object[] { null }));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEvaluateWithString()
         {
             Assert.AreEqual(12345d, this.Evaluate("12345"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "Double() takes only 1 argument(s)");

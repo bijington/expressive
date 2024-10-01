@@ -2,20 +2,20 @@
 using Expressive.Exceptions;
 using Expressive.Functions;
 using Expressive.Functions.Date;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Date
 {
-    [TestClass]
+    [TestFixture]
     public class MillisecondsBetweenFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void TestName()
         {
             Assert.AreEqual("MillisecondsBetween", this.ActualFunction.Name);
         }
 
-        [TestMethod]
+        [Test]
         public void TestValidValues()
         {
             Assert.AreEqual(750d,
@@ -23,25 +23,25 @@ namespace Expressive.Tests.Functions.Date
                     new DateTime(2016, 02, 27, 12, 00, 00).AddMilliseconds(750)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithBothNull()
         {
             Assert.IsNull(this.Evaluate(null, null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithFirstNull()
         {
             Assert.IsNull(this.Evaluate(null, 123));
         }
 
-        [TestMethod]
+        [Test]
         public void TestWithSecondNull()
         {
             Assert.IsNull(this.Evaluate(DateTime.Now, null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestExpectedParameterCount()
         {
             this.AssertException(typeof(ParameterCountMismatchException), "MillisecondsBetween() takes only 2 argument(s)");

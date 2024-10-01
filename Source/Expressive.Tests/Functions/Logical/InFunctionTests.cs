@@ -1,13 +1,13 @@
 ﻿using Expressive.Functions;
 using Expressive.Functions.Logical;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Functions.Logical
 {
-    [TestClass]
+    [TestFixture]
     public class InFunctionTests : FunctionBaseTestBase
     {
-        [TestMethod]
+        [Test]
         public void ShouldReturnTrueIfItemIsInTheList() => Assert.IsTrue((bool)this.Evaluate(new object[] { "a", "b", "c", "a" }));
 
         #region FunctionBaseTests Members

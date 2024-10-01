@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Expressive.Expressions;
-using Expressive.Expressions.Binary.Relational;
-using Moq;
+﻿using Expressive.Expressions.Binary.Relational;
 using NUnit.Framework;
 
 namespace Expressive.Tests.Expressions.Binary.Relational
@@ -29,8 +26,8 @@ namespace Expressive.Tests.Expressions.Binary.Relational
         public static void TestEvaluate(object lhs, object rhs, object expectedValue)
         {
             var expression = new EqualExpression(
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == lhs),
-                Mock.Of<IExpression>(e => e.Evaluate(It.IsAny<IDictionary<string, object>>()) == rhs),
+                MockExpression.ThatEvaluatesTo(lhs),
+                MockExpression.ThatEvaluatesTo(rhs),
                 new Context(ExpressiveOptions.None));
 
             Assert.That(expression.Evaluate(null), Is.EqualTo(expectedValue));

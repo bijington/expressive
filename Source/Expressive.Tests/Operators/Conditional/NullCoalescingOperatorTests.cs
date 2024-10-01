@@ -2,11 +2,11 @@
 using Expressive.Expressions.Binary.Conditional;
 using Expressive.Operators;
 using Expressive.Operators.Conditional;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Expressive.Tests.Operators.Conditional
 {
-    [TestClass]
+    [TestFixture]
     public class NullCoalescingOperatorTests : OperatorBaseTests
     {
         #region OperatorBaseTests Members
