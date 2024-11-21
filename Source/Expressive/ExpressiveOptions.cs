@@ -45,10 +45,17 @@ namespace Expressive
         IgnoreCaseAll = IgnoreCaseForParsing | IgnoreCaseForEquality,
 
         /// <summary>
+        /// Specifies we're using strict mode for comparison
+        /// `False` will be returned if value `null` is a side expression for most of cases
+        /// e.g.: (null &lt; 1) = False; (null &gt; 1) = False; (null &gt; "abc") = False; (null &lt; "abc") = False;
+        /// </summary>
+        Strict = 64,
+
+        /// <summary>
         /// All options are used.
         /// </summary>
 #pragma warning disable 618 // As it is our own warning this is safe enough until we actually get rid
-        All = IgnoreCase | NoCache | RoundAwayFromZero | IgnoreCaseAll
+        All = IgnoreCase | NoCache | RoundAwayFromZero | IgnoreCaseAll | Strict
 #pragma warning restore 618
     }
 }
